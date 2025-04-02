@@ -6,12 +6,12 @@
 #    By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/03/09 20:26:19 by mzhivoto         ###   ########.fr        #
+#    Updated: 2025/04/02 17:49:28 by mzhivoto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Library name
-NAME = push_swap
+NAME = minishell
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes/ -g2
@@ -23,17 +23,7 @@ LIBFT_PATH = ./libft
 # Source files and object files
 LIBFT = $(LIBFT_PATH)/libft.a
 SRC = $(SRCS_PATH)/main.c \
-	$(SRCS_PATH)/parse_input.c \
-	$(SRCS_PATH)/check_input.c \
-	$(SRCS_PATH)/helpers_function.c \
-	$(SRCS_PATH)/sorting_small.c \
-	$(SRCS_PATH)/sorting_large.c \
-	$(SRCS_PATH)/moves_ps.c \
-	$(SRCS_PATH)/moves_reverse.c \
-	$(SRCS_PATH)/moves_rotate.c \
-	$(SRCS_PATH)/ranking.c \
-	$(SRCS_PATH)/free.c \
-	$(SRCS_PATH)/chunk_utils.c \
+	
 	
 
 OBJ := $(patsubst $(SRCS_PATH)/%.c, $(OBJS_PATH)/%.o, $(SRC))
