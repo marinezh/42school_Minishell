@@ -6,18 +6,33 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/03 18:02:19 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:55:23 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+#include <unistd.h>
+#include <stdio.h> // for printf
 
+int getpwd(void)
+{
+    char *pwd;
+    
+    pwd = getcwd(NULL, 0);
+    printf("%s\n", pwd);
+    return (0);
+}
 int main(int ac, char **av, char **env)
 {
 	char *input;
+	
 
 	(void)av;
+	(void)env;
+	if (ac < 1)
+		return 1;
+	
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -28,11 +43,16 @@ int main(int ac, char **av, char **env)
 		
 		if (*input)
 		{
+			
+			if (strcmp(input,"pwd") == 0)
+				getpwd();
 			add_history(input);
-			printf("%s\n", input);
+			//printf("this is your input%s\n", input);
 		}
+		
 		free(input);
 	}
+
 	return 0;
 }
 
