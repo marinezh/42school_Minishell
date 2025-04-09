@@ -6,23 +6,16 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/08 18:55:23 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:51:10 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-#include <unistd.h>
-#include <stdio.h> // for printf
+// #include <unistd.h>
+// #include <stdio.h> // for printf
 
-int getpwd(void)
-{
-    char *pwd;
-    
-    pwd = getcwd(NULL, 0);
-    printf("%s\n", pwd);
-    return (0);
-}
+
 int main(int ac, char **av, char **env)
 {
 	char *input;

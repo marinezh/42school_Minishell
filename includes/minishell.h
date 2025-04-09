@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/03 17:06:52 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:50:51 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@
 # define BOLD		"\033[1m"
 #define PROMPT	"\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
 
+int getpwd(void);
 
 #endif
