@@ -6,60 +6,100 @@
 #    By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/09 17:55:04 by mzhivoto         ###   ########.fr        #
+#    Updated: 2025/04/10 19:25:57 by mzhivoto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Library name
 NAME = minishell
+
+#Color scheme
+COLOUR_GREEN=\033[0;32m
+COLOUR_RED=\033[0;31m
+COLOUR_BLUE=\033[0;34m
+COLOUR_YELLOW = \033[0;33m
+COLOUR_CYAN = \033[0;36m
+COLOUR_END=\033[0m
+COLOUR_MAGENTA = \033[0;35m
+COLOUR_BRIGHT_RED = \033[1;31m
+COLOUR_BRIGHT_GREEN = \033[1;32m
+COLOUR_BRIGHT_YELLOW = \033[1;33m
+COLOUR_BRIGHT_BLUE = \033[1;34m
+COLOUR_BRIGHT_MAGENTA = \033[1;35m
+COLOUR_BRIGHT_CYAN = \033[1;36m
+
 # Compiler and flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I./includes/
 READLINE = -lreadline
 
-SRCS_PATH = ./src
-OBJS_PATH = ./obj
-LIBFT_PATH = ./libft
-BUILTINS_PATH = ./builtins
+# Base Paths
+SRCS_PATH = src
+OBJS_PATH = obj
+LIBFT_PATH = libft
 
+#Subdirectories
+BUILTINS_PATH = $(SRCS_PATH)/builtins
+PARSING_PATH = $(SRCS_PATH)/parser
+
+# Files
+MAIN = main.c
 BUILTINS = pwd.c
-# Source files and object files
-LIBFT = $(LIBFT_PATH)/libft.a
-SRC = $(SRCS_PATH)/main.c \
-		$(addprefix $(BUILTINS_PATH), $(BUILTINS))
-	
-	
+PARSING = parser.c
 
-OBJ := $(patsubst $(SRCS_PATH)/%.c, $(OBJS_PATH)/%.o, $(SRC))
+LIBFT := $(LIBFT_PATH)/libft.a
 
+# Full paths to source files
+SRC = $(addprefix $(SRCS_PATH)/, $(MAIN)) \
+		$(addprefix $(BUILTINS_PATH)/, $(BUILTINS)) \
+		$(addprefix $(PARSING_PATH)/, $(PARSING))
 
-# Default rule to create the library
+# Flatten object file names into obj/
+OBJ := $(addprefix $(OBJS_PATH)/, $(notdir $(SRC:.c=.o)))
+
+# Default target
 all: $(NAME)
 
-# Rule to create the library from object files
+# Link the final executable
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
+	@echo -e "$(COLOUR_BRIGHT_GREEN)$@ created$(COLOUR_END)"
 
-$(OBJS_PATH):
-	mkdir -p $(OBJS_PATH)
-
-# Compile each .c file into a .o file
+# Rule to compile all .c → obj/.o
 $(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c | $(OBJS_PATH)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
 
+$(OBJS_PATH)/%.o: $(BUILTINS_PATH)/%.c | $(OBJS_PATH)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
+
+$(OBJS_PATH)/%.o: $(PARSING_PATH)/%.c | $(OBJS_PATH)
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
+
+# Create obj directory
+$(OBJS_PATH):
+	@mkdir -p $(OBJS_PATH)
+	@echo -e "$(COLOUR_BRIGHT_MAGENTA)obj directory created $(COLOUR_END)"
+
+# Build libft
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_PATH)
+	@$(MAKE) -C $(LIBFT_PATH) > /dev/null 2>&1
+	@echo -e "$(COLOUR_GREEN)libft library created$(COLOUR_END)"
 
-$(OBJS_PATH)%.o: $(BUILTINS_PATH)%.c
-	@(CC) $(FLAGS) -c $< -o $@ 
-# Clean rule to remove object files and the library
+# Cleaning rules
 clean:
-	@rm -rf $(OBJS_PATH)
-	@$(MAKE) -C $(LIBFT_PATH) clean
+	@rm -rf $(OBJS_PATH) > /dev/null 2>&1
+	@echo -e "$(COLOUR_BRIGHT_YELLOW)object directory cleaned$(COLOUR_END)"
+	@$(MAKE) -C $(LIBFT_PATH) clean > /dev/null 2>&1
+	@echo -e "$(COLOUR_BRIGHT_YELLOW)libft object files cleaned$(COLOUR_END)"
 
 fclean: clean
-	/bin/rm -f $(NAME)
-	@$(MAKE) -C $(LIBFT_PATH) fclean
+	@rm -f $(NAME) > /dev/null 2>&1
+	@$(MAKE) -C $(LIBFT_PATH) fclean > /dev/null 2>&1
+	@echo -e "$(COLOUR_BRIGHT_RED)libft.a removed$(COLOUR_END)"
+	@echo -e "$(COLOUR_BRIGHT_RED)$(NAME) removed$(COLOUR_END)"
 
 re: fclean all
 
