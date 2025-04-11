@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/10 16:04:56 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/11 14:24:04 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 // #include <stdio.h> // for printf
 
 
+
+
 int main(int ac, char **av, char **env)
 {
-	char *input;
+	t_data data;
 	
-
 	(void)av;
 	(void)env;
 	if (ac < 1)
@@ -28,24 +29,22 @@ int main(int ac, char **av, char **env)
 	
 	while (1)
 	{
-		input = readline("minishell$ ");
-
-	 
-		if (!input)
+		if (print_promp(&data) < 0)
 			continue;
 		
-		if (*input)
+		if (data.input)
 		{
 			
-			if (strcmp(input,"pwd") == 0)
+			if (strcmp(data.input,"pwd") == 0)
 				getpwd();
-			add_history(input);
+			add_history(data.input);
 			//printf("this is your input%s\n", input);
 		}
-		
-		free(input);
+		parsing(&data);
+		free(data.input);
 	}
-	parsing();
+
+	
 	return 0;
 }
 

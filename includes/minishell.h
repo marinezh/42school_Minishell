@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/10 16:04:37 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:12:04 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
+# include "libft.h"
 
 # define RESET		"\033[0m"
 # define BLACK		"\033[30m"
@@ -34,7 +35,14 @@
 # define BOLD		"\033[1m"
 #define PROMPT	"\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
 
+typedef struct s_data
+{
+    char *input;
+    //t_list  env; // need to do linkedlist part in libft
+
+} t_data;
+
 int getpwd(void);
-int parsing(void);
+int parsing(t_data *data);
 
 #endif
