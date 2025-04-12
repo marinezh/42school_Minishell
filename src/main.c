@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/11 14:24:04 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/12 13:46:01 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int main(int ac, char **av, char **env)
 	
 	while (1)
 	{
-		if (print_promp(&data) < 0)
+		if (print_prompt(&data) < 0)
 			continue;
 		
 		if (data.input)
