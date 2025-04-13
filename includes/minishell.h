@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/12 13:45:42 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/13 16:46:31 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@
 
 typedef struct s_data
 {
-    char *input;
-    //t_list  env; // need to do linkedlist part in libft
+	char	*input;
+	int		len;
+	//t_list  env; // need to do linkedlist part in libft
 
 } t_data;
 
