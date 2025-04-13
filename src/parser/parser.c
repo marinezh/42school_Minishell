@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/13 17:55:32 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/14 00:55:20 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,63 +41,91 @@ int	print_prompt(t_data *data)
 // 			}
 
 // 		}
-// 	return new_input;
+// 	return (new_input);
 // }
 
-char *add_space(t_data *data)
+int	handle_quotes(char *input, char *new_input, int *i, int *j)
 {
-	int i;
-	int j;
-	char *input;
-	char *new_input;
-	
+	char	quote;
+
+	quote = input[*i];
+	new_input[*j] = input[*i];
+	(*j)++;
+	(*i)++;
+	while (input[*i] && input[*i] != quote)
+	{
+		new_input[*j] = input[*i];
+		(*j)++;
+		(*i)++;
+	}
+	if (input[*i] != quote)
+	{
+		printf("quotes not closed\n");
+		return (-1);
+	}
+	new_input[*j] = input[*i];
+	(*j)++;
+	(*i)++;
+	return (0);
+}
+char	*add_space(t_data *data)
+{
+	int		i;
+	int		j;
+	char	*input;
+	char	*new_input;
+
 	input = data->input;
 	data->len = ft_strlen(data->input);
 	new_input = malloc(data->len * 4 + 1);
 	i = 0;
 	j = 0;
-	while(i < data->len)
+	while (i < data->len)
 	{
-		check_quotes(data);
-		// if (input[i] == '\'')
-		// {
-		// 	new_input[j++] = input[i++];
-		// 	while(input[i] && input[i] != '\'')
-		// 	{
-		// 		new_input[j++] = input[i++];
-		// 	}
-		// 	if(input[i] != '\'')
-		// 		printf("quotes not closed\n");
-		// 	else
-		// 		new_input[j++] = input[i++];
-		// }
-		// if (input[i] == '\"') // need to expand$
-		// {
-		// 	new_input[j++] = input[i++];
-		// 	while(input[i] && input[i] != '\"')
-		// 	{
-		// 		new_input[j++] = input[i++];
-		// 	}
-		// 	if(input[i] != '\"')
-		// 		printf("quotes not closed\n");
-		// 	else
-		// 		new_input[j++] = input[i++];
-		// }
-		
-		if (i + 2 < data->len && (input[i] == '<' && input[i + 1] == '<' && input[i + 2] == '<'))
+		if (input[i] == '\'' || input[i] == '\"')
+		{
+			if (handle_quotes(input, new_input, &i, &j) == -1)
+				break ;
+		}
+		//  if (input[i] == '\'')
+		//  {
+		//  	new_input[j++] = input[i++];
+		//  	while(input[i] && input[i] != '\'')
+		//  	{
+		//  		new_input[j++] = input[i++];
+		//  	}
+		//  	if(input[i] != '\'')
+		//  		printf("quotes not closed\n");
+		//  	else
+		//  		new_input[j++] = input[i++];
+		//  }
+		//  if (input[i] == '\"') // need to expand$
+		//  {
+		//  	new_input[j++] = input[i++];
+		//  	while(input[i] && input[i] != '\"')
+		//  	{
+		//  		new_input[j++] = input[i++];
+		//  	}
+		//  	if(input[i] != '\"')
+		//  		printf("quotes not closed\n");
+		//  	else
+		//  		new_input[j++] = input[i++];
+		//  }
+		if (i + 2 < data->len && (input[i] == '<' && input[i + 1] == '<'
+				&& input[i + 2] == '<'))
 		{
 			new_input[j++] = ' ';
-			new_input[j++] = input[i];;
+			new_input[j++] = input[i];
+			;
 			new_input[j++] = input[i + 1];
 			new_input[j++] = input[i + 2];
 			new_input[j++] = ' ';
 			i += 3;
 		}
-		else if (i + 1 < data->len && (
-			(input[i] == '>' && input[i + 1] == '>') ||
-			(input[i] == '<' && input[i + 1] == '<') ||
-			(input[i] == '&' && input[i + 1] == '&') ||
-			(input[i] == '|' && input[i + 1] == '|')))
+		else if (i + 1 < data->len && ((input[i] == '>' && input[i + 1] == '>')
+				|| (input[i] == '<' && input[i + 1] == '<') || (input[i] == '&'
+					&& input[i + 1] == '&') || (input[i] == '|' && input[i
+					+ 1] == '|')))
 		{
 			new_input[j++] = ' ';
 			new_input[j++] = input[i];
@@ -105,7 +133,8 @@ char *add_space(t_data *data)
 			new_input[j++] = ' ';
 			i += 2;
 		}
-		else if (input[i] == '|' || input[i] == '&'|| input[i] == '<' || input[i] == '>')
+		else if (input[i] == '|' || input[i] == '&' || input[i] == '<'
+			|| input[i] == '>')
 		{
 			new_input[j++] = ' ';
 			new_input[j++] = input[i];
@@ -119,26 +148,25 @@ char *add_space(t_data *data)
 		}
 	}
 	new_input[j] = '\0';
-	return new_input;
+	return (new_input);
 }
 
 int	parsing(t_data *data)
 {
-	char **tokens;
-	char *new_input;
-	int i = 0;
+	char	**tokens;
+	char	*new_input;
+	int		i;
 
+	i = 0;
 	new_input = add_space(data);
 	printf("new input: %s\n", new_input);
 	tokens = ft_split(new_input, ' ');
-	
-
-	printf("%s\n",data->input);
+	printf("%s\n", data->input);
 	while (tokens[i])
 	{
-		printf("%s\n",tokens[i]);
+		printf("%s\n", tokens[i]);
 		i++;
 	}
-	free(new_input); 
+	free(new_input);
 	return (0);
 }
