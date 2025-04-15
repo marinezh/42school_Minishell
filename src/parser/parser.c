@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/14 00:55:20 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/15 16:47:26 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,19 @@ int	handle_quotes(char *input, char *new_input, int *i, int *j)
 	char	quote;
 
 	quote = input[*i];
+	printf("quote is %c\n", quote);
 	new_input[*j] = input[*i];
-	(*j)++;
-	(*i)++;
+	printf("j - %c and i - %c\n", input[*i], new_input[*j]);
+	// (*j)++;
+	// (*i)++;
+	printf("j - %c and i - %c\n", input[*i], new_input[*j]);
 	while (input[*i] && input[*i] != quote)
 	{
+		printf("HERE, j - %c and i - %c\n",input[*i], new_input[*j]);
 		new_input[*j] = input[*i];
 		(*j)++;
 		(*i)++;
+		//printf("j - %c and i - %c\n", input[*j], new_input[*j]);
 	}
 	if (input[*i] != quote)
 	{
@@ -64,8 +69,8 @@ int	handle_quotes(char *input, char *new_input, int *i, int *j)
 		return (-1);
 	}
 	new_input[*j] = input[*i];
-	(*j)++;
-	(*i)++;
+	// (*j)++;
+	// (*i)++;
 	return (0);
 }
 char	*add_space(t_data *data)

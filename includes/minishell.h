@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/14 00:07:32 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/15 15:47:18 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "libft.h"
 # include <limits.h>
+# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
