@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/15 16:47:26 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:25:41 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,49 +19,20 @@ int	print_prompt(t_data *data)
 		return (-1);
 	return (1);
 }
-// char *check_quotes(t_data *data)
-// {
-// 	//data->len = ft_strlen(data->input);
-// 	char *input;
-// 	char *new_input;
-// 	int i = 0;
-// 	int j = 0;
-// 	input = data->input;
-
-// 		if (input[i] == '\'')
-// 		{
-// 			new_input[j++] = input[i++];
-// 			while (input[i] && input[i] != '\'')
-// 			{
-// 				new_input[j++] = input[i++];
-// 				if (input[i] == '\'')
-// 					printf("quotes error");
-// 				else
-// 					new_input[j++] = input[i++];
-// 			}
-
-// 		}
-// 	return (new_input);
-// }
 
 int	handle_quotes(char *input, char *new_input, int *i, int *j)
 {
 	char	quote;
 
 	quote = input[*i];
-	printf("quote is %c\n", quote);
 	new_input[*j] = input[*i];
-	printf("j - %c and i - %c\n", input[*i], new_input[*j]);
-	// (*j)++;
-	// (*i)++;
-	printf("j - %c and i - %c\n", input[*i], new_input[*j]);
+	(*j)++;
+	(*i)++;
 	while (input[*i] && input[*i] != quote)
 	{
-		printf("HERE, j - %c and i - %c\n",input[*i], new_input[*j]);
 		new_input[*j] = input[*i];
 		(*j)++;
 		(*i)++;
-		//printf("j - %c and i - %c\n", input[*j], new_input[*j]);
 	}
 	if (input[*i] != quote)
 	{
@@ -69,8 +40,8 @@ int	handle_quotes(char *input, char *new_input, int *i, int *j)
 		return (-1);
 	}
 	new_input[*j] = input[*i];
-	// (*j)++;
-	// (*i)++;
+	(*j)++;
+	(*i)++;
 	return (0);
 }
 char	*add_space(t_data *data)
@@ -92,30 +63,6 @@ char	*add_space(t_data *data)
 			if (handle_quotes(input, new_input, &i, &j) == -1)
 				break ;
 		}
-		//  if (input[i] == '\'')
-		//  {
-		//  	new_input[j++] = input[i++];
-		//  	while(input[i] && input[i] != '\'')
-		//  	{
-		//  		new_input[j++] = input[i++];
-		//  	}
-		//  	if(input[i] != '\'')
-		//  		printf("quotes not closed\n");
-		//  	else
-		//  		new_input[j++] = input[i++];
-		//  }
-		//  if (input[i] == '\"') // need to expand$
-		//  {
-		//  	new_input[j++] = input[i++];
-		//  	while(input[i] && input[i] != '\"')
-		//  	{
-		//  		new_input[j++] = input[i++];
-		//  	}
-		//  	if(input[i] != '\"')
-		//  		printf("quotes not closed\n");
-		//  	else
-		//  		new_input[j++] = input[i++];
-		//  }
 		if (i + 2 < data->len && (input[i] == '<' && input[i + 1] == '<'
 				&& input[i + 2] == '<'))
 		{
