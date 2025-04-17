@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+         #
+#    By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/03/03 12:41:21 by mzhivoto         ###   ########.fr        #
+#    Updated: 2025/04/17 13:09:22 by ikozhina         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,14 @@ SRC = ft_bzero.c\
 	ft_printf.c\
 	get_next_line.c\
 	get_next_line_utils.c\
-	
+	ft_lstnew.c \
+	ft_lstsize.c\
+	ft_lstlast.c\
+	ft_lstdelone.c\
+	ft_lstclear.c\
+	ft_lstadd_front.c\
+	ft_lstadd_back.c\
+
 
 OBJ = $(SRC:.c=.o)
 

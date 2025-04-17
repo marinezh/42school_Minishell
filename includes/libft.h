@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:21:28 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/02/28 16:07:11 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/17 13:13:01 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
 # endif
+
+typedef struct s_list
+{
+	void			*content;
+	struct s_list	*next;
+}	t_list;
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
@@ -73,5 +79,14 @@ char	*str_join(char *s1, const char *s2);
 char	*find_newline(const char *str);
 char	*extract_line(char **buffer);
 char	*read_to_buffer(int fd, char *buffer);
+
+//linked list functions
+int	ft_lstsize(t_list *lst);
+t_list	*ft_lstnew(void *content);
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstdelone(t_list *lst, void (*del)(void *));
+void	ft_lstclear(t_list **lst, void (*del)(void *));
+void	ft_lstadd_front(t_list **lst, t_list *new);
+void	ft_lstadd_back(t_list **lst, t_list *new);
 
 #endif
