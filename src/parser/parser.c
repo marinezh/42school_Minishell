@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/16 15:25:41 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:50:32 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,6 @@ int	print_prompt(t_data *data)
 	return (1);
 }
 
-int	handle_quotes(char *input, char *new_input, int *i, int *j)
-{
-	char	quote;
-
-	quote = input[*i];
-	new_input[*j] = input[*i];
-	(*j)++;
-	(*i)++;
-	while (input[*i] && input[*i] != quote)
-	{
-		new_input[*j] = input[*i];
-		(*j)++;
-		(*i)++;
-	}
-	if (input[*i] != quote)
-	{
-		printf("quotes not closed\n");
-		return (-1);
-	}
-	new_input[*j] = input[*i];
-	(*j)++;
-	(*i)++;
-	return (0);
-}
 char	*add_space(t_data *data)
 {
 	int		i;
@@ -60,7 +36,7 @@ char	*add_space(t_data *data)
 	{
 		if (input[i] == '\'' || input[i] == '\"')
 		{
-			if (handle_quotes(input, new_input, &i, &j) == -1)
+			if (process_quotes(input, new_input, &i, &j, 1) == -1)
 				break ;
 		}
 		if (i + 2 < data->len && (input[i] == '<' && input[i + 1] == '<'
@@ -112,7 +88,7 @@ int	parsing(t_data *data)
 	i = 0;
 	new_input = add_space(data);
 	printf("new input: %s\n", new_input);
-	tokens = ft_split(new_input, ' ');
+	tokens = ft_split_2(new_input, ' ');
 	printf("%s\n", data->input);
 	while (tokens[i])
 	{

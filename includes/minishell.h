@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/15 15:47:18 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:52:51 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "libft.h"
 # include <limits.h>
-# include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
@@ -45,5 +45,8 @@ typedef struct s_data
 int			getpwd(void);
 int			parsing(t_data *data);
 int			print_prompt(t_data *data);
+// char	**ft_split_2(char *str);
+char		**ft_split_2(char *str, char delimiter);
+int			process_quotes(char *input, char *output, int *i, int *j, int copy);
 
 #endif

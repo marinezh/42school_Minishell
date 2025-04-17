@@ -6,7 +6,7 @@
 #    By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/10 19:25:57 by mzhivoto         ###   ########.fr        #
+#    Updated: 2025/04/17 17:22:39 by mzhivoto         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ PARSING_PATH = $(SRCS_PATH)/parser
 # Files
 MAIN = main.c
 BUILTINS = pwd.c
-PARSING = parser.c
+PARSING = parser.c split.c utils.c
+
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
