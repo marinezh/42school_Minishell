@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+         #
+#    By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/10 19:25:57 by mzhivoto         ###   ########.fr        #
+#    Updated: 2025/04/17 13:36:38 by ikozhina         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,18 +41,22 @@ LIBFT_PATH = libft
 #Subdirectories
 BUILTINS_PATH = $(SRCS_PATH)/builtins
 PARSING_PATH = $(SRCS_PATH)/parser
+EXEC_PATH = $(SRCS_PATH)/exec
+VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(PARSING_PATH) $(EXEC_PATH)
 
 # Files
 MAIN = main.c
 BUILTINS = pwd.c
 PARSING = parser.c
+EXEC = exec.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
 # Full paths to source files
 SRC = $(addprefix $(SRCS_PATH)/, $(MAIN)) \
 		$(addprefix $(BUILTINS_PATH)/, $(BUILTINS)) \
-		$(addprefix $(PARSING_PATH)/, $(PARSING))
+		$(addprefix $(PARSING_PATH)/, $(PARSING)) \
+		$(addprefix $(EXEC_PATH)/, $(EXEC))
 
 # Flatten object file names into obj/
 OBJ := $(addprefix $(OBJS_PATH)/, $(notdir $(SRC:.c=.o)))
@@ -66,15 +70,7 @@ $(NAME): $(OBJ) $(LIBFT)
 	@echo -e "$(COLOUR_BRIGHT_GREEN)$@ created$(COLOUR_END)"
 
 # Rule to compile all .c → obj/.o
-$(OBJS_PATH)/%.o: $(SRCS_PATH)/%.c | $(OBJS_PATH)
-	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
-
-$(OBJS_PATH)/%.o: $(BUILTINS_PATH)/%.c | $(OBJS_PATH)
-	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
-
-$(OBJS_PATH)/%.o: $(PARSING_PATH)/%.c | $(OBJS_PATH)
+$(OBJS_PATH)/%.o: %.c | $(OBJS_PATH)
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo -e "$(COLOUR_BRIGHT_BLUE)$@ created$(COLOUR_END)"
 
