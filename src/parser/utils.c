@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int	process_quotes(char *input, char *output, int *i, int *j, int copy)
+int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
 {
 	char quote; 
 	

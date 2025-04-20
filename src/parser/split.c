@@ -71,7 +71,7 @@ char **ft_split_2(char *str, char delimiter)
 			int start = j;
 			if (str[j] == '\'' || str[j] == '\"')
 			{
-				if (process_quotes(str, NULL, &j, NULL, 0) == -1)
+				if (fmt_quotes(str, NULL, &j, NULL, 0) == -1)
 					break ;
 			}
 			else 
