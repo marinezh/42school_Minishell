@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/21 16:15:54 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:51:00 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "lexer.h"
 # include "libft.h"
 # include <limits.h>
+# include <stdio.h>
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>

@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "minishell.h"
 
 void	process_one(char *input, char *output, int *i, int *j)
 {

@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/21 16:40:01 by mzhivoto         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	print_prompt(t_cmd_input *cmd)
@@ -60,7 +48,7 @@ int	run_lexer(t_cmd_input *cmd)
 	i = 0;
 	new_input = add_space(cmd);
 	printf("new input: %s\n", new_input);
-	tokens = ft_split_2(new_input, ' ');
+	tokens = quote_safe_split(new_input, ' ');
 	printf("%s\n", cmd->input);
 	while (tokens[i])
 	{
