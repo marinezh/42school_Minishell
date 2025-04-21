@@ -1,0 +1,35 @@
+# Suppressions for known readline memory issues
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:_rl_add_history
+   ...
+}
+
+{
+   glibc_issue
+   Memcheck:Cond
+   fun:__GI___libc_free
+   fun:__libc_freeres
+}
+
+{
+   termcap_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:tgetent
+   fun:setupterm
+   ...
+}
+
+{
+   ignore_getenv_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:getenv
+   ...
+}
