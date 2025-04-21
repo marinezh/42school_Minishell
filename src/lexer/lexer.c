@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/21 15:36:12 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:40:01 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,62 +21,6 @@ int	print_prompt(t_cmd_input *cmd)
 		return (-1);
 	}
 	return (1);
-}
-
-void	process_one(char *input, char *output, int *i, int *j)
-{
-	output[(*j)++] = ' ';
-	output[(*j)++] = input[*i];
-	output[(*j)++] = ' ';
-	(*i)++;
-}
-
-void	process_two(char *input, char *output, int *i, int *j)
-{
-	output[(*j)++] = ' ';
-	output[(*j)++] = input[*i];
-	output[(*j)++] = input[*i + 1];
-	output[(*j)++] = ' ';
-	(*i) += 2;
-}
-
-void	process_three(char *input, char *output, int *i, int *j)
-{
-	output[(*j)++] = ' ';
-	output[(*j)++] = input[*i];
-	output[(*j)++] = input[*i + 1];
-	output[(*j)++] = input[*i + 2];
-	output[(*j)++] = ' ';
-	(*i) += 3;
-}
-
-int	is_single_op(char *input, int i)
-{
-	if (input[i] == '|' || input[i] == '&' || input[i] == '<'
-		|| input[i] == '>')
-		return (1);
-	return (-1);
-}
-
-int	is_dbl_op(char *input, int i)
-{
-	if (!input[i + 1])
-		return (-1);
-	if ((input[i] == '>' && input[i + 1] == '>') 
-			|| (input[i] == '<' && input[i + 1] == '<')
-			|| (input[i] == '&' && input[i + 1] == '&')
-			|| (input[i] == '|' && input[i + 1] == '|'))
-		return (1);
-	return (-1);
-}
-
-int	is_triple_op(char *input, int i)
-{
-	if (!input[i + 1] || !input[i + 2])
-		return (-1);
-	if ((input[i] == '<' && input[i + 1] == '<' && input[i + 2] == '<'))
-		return (1);
-	return (-1);
 }
 
 char	*add_space(t_cmd_input *cmd)
@@ -107,17 +51,17 @@ char	*add_space(t_cmd_input *cmd)
 	return (cmd->spaced);
 }
 
-int	parsing(t_cmd_input *data)
+int	run_lexer(t_cmd_input *cmd)
 {
 	char	**tokens;
 	char	*new_input;
 	int		i;
 
 	i = 0;
-	new_input = add_space(data);
+	new_input = add_space(cmd);
 	printf("new input: %s\n", new_input);
 	tokens = ft_split_2(new_input, ' ');
-	printf("%s\n", data->input);
+	printf("%s\n", cmd->input);
 	while (tokens[i])
 	{
 		printf("%s\n", tokens[i]);

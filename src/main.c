@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/15 15:45:52 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:01:10 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int ac, char **av, char **env)
 {
-	t_data	data;
+	t_cmd_input	cmd;
 
 	(void)av;
 	(void)env;
@@ -22,17 +22,17 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	while (1)
 	{
-		if (print_prompt(&data) < 0)
+		if (print_prompt(&cmd) < 0)
 			continue ;
-		if (data.input)
+		if (cmd.input)
 		{
-			if (strcmp(data.input, "pwd") == 0)
+			if (strcmp(cmd.input, "pwd") == 0)
 				getpwd();
-			add_history(data.input);
+			add_history(cmd.input);
 			// printf("this is your input%s\n", input);
 		}
-		parsing(&data);
-		free(data.input);
+		parsing(&cmd);
+		free(cmd.input);
 	}
 	return (0);
 }

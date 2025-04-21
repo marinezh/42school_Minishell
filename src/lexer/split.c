@@ -53,7 +53,7 @@ int skip_quotes(char *str, int *j)
 	return 0;
 }
 
-char **ft_split_2(char *str, char delimiter)
+char **quote_safe_split(char *str, char delimiter)
 {
 	int words = word_count(str, ' ');
 	char **result = (char **)malloc(sizeof(char *) * (words + 1));

@@ -6,13 +6,14 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/21 14:23:34 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 16:15:54 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "lexer.h"
 # include "libft.h"
 # include <limits.h>
 # include <stdio.h>
@@ -34,23 +35,6 @@
 # define BOLD "\033[1m"
 # define PROMPT "\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
 
-#define SPACING_FACTOR 4
 
-typedef struct s_cmd_input
-{
-	char	*input;
-	char	*spaced;
-	int		len;
-	int		i;
-	int		j;
-	// t_list  env; // need to do linkedlist part in libft
-}			t_cmd_input;
-
-int			getpwd(void);
-int			parsing(t_cmd_input *data);
-int			print_prompt(t_cmd_input *data);
-// char	**ft_split_2(char *str);
-char		**ft_split_2(char *str, char delimiter);
-int			fmt_quotes(char *input, char *output, int *i, int *j, int copy);
 
 #endif
