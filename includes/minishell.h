@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/20 20:03:57 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 14:23:34 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@
 # define WHITE "\033[37m"
 # define BOLD "\033[1m"
 # define PROMPT "\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
+
+#define SPACING_FACTOR 4
 
 typedef struct s_cmd_input
 {

@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 16:02:40 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/20 20:07:01 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:36:12 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ int	print_prompt(t_cmd_input *cmd)
 {
 	cmd->input = readline("minishell$ ");
 	if (!cmd->input)
+	{
+		printf("exit\n");
 		return (-1);
+	}
 	return (1);
 }
 
@@ -55,17 +58,22 @@ int	is_single_op(char *input, int i)
 	return (-1);
 }
 
-int	is_double_op(char *input, int i)
+int	is_dbl_op(char *input, int i)
 {
-	if ((input[i] == '>' && input[i + 1] == '>') || (input[i] == '<'
-		&& input[i + 1] == '<') || (input[i] == '&' && input[i + 1] == '&')
-		|| (input[i] == '|' && input[i + 1] == '|'))
+	if (!input[i + 1])
+		return (-1);
+	if ((input[i] == '>' && input[i + 1] == '>') 
+			|| (input[i] == '<' && input[i + 1] == '<')
+			|| (input[i] == '&' && input[i + 1] == '&')
+			|| (input[i] == '|' && input[i + 1] == '|'))
 		return (1);
 	return (-1);
 }
 
 int	is_triple_op(char *input, int i)
 {
+	if (!input[i + 1] || !input[i + 2])
+		return (-1);
 	if ((input[i] == '<' && input[i + 1] == '<' && input[i + 2] == '<'))
 		return (1);
 	return (-1);
@@ -76,7 +84,7 @@ char	*add_space(t_cmd_input *cmd)
 	cmd->i = 0;
 	cmd->j = 0;
 	cmd->len = ft_strlen(cmd->input);
-	cmd->spaced = malloc(cmd->len * 4 + 1);
+	cmd->spaced = malloc(cmd->len * SPACING_FACTOR + 1);
 	if (!cmd->spaced)
 		return (NULL);
 	while (cmd->i < cmd->len)
@@ -88,8 +96,8 @@ char	*add_space(t_cmd_input *cmd)
 		}
 		if (cmd->i + 2 < cmd->len && is_triple_op(cmd->input, cmd->i) == 1)
 			process_three(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
-		else if (cmd->i + 1 < cmd->len && is_double_op(cmd->input, cmd->i) == 1)
-			process_two(cmd->input,  cmd->spaced, &cmd->i, &cmd->j);
+		else if (cmd->i + 1 < cmd->len && is_dbl_op(cmd->input, cmd->i) == 1)
+			process_two(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
 		else if (is_single_op(cmd->input, cmd->i) == 1)
 			process_one(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
 		else
@@ -115,6 +123,9 @@ int	parsing(t_cmd_input *data)
 		printf("%s\n", tokens[i]);
 		i++;
 	}
+	while (tokens[i])
+		free(tokens[i++]);
 	free(new_input);
+	free(tokens);
 	return (0);
 }
