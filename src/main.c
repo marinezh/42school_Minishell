@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/21 16:46:25 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/21 17:08:40 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int ac, char **av, char **env)
 			add_history(cmd.input);
 			// printf("this is your input%s\n", input);
 		}
-		parsing(&cmd);
+		run_lexer(&cmd);
 		free(cmd.input);
 	}
 	return (0);

@@ -14,7 +14,7 @@ typedef struct s_cmd_input
 }			t_cmd_input;
 
 int			getpwd(void);
-int			parsing(t_cmd_input *data);
+int			run_lexer(t_cmd_input *cmd);
 int			print_prompt(t_cmd_input *data);
 
 char		**quote_safe_split(char *str, char delimiter);
