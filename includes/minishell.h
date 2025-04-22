@@ -1,6 +1,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
+# include "structs.h"
 # include "lexer.h"
 # include "libft.h"
 # include <limits.h>

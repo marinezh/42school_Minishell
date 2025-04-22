@@ -3,15 +3,16 @@
 
 # define SPACING_FACTOR 4
 
-typedef struct s_cmd_input
-{
-	char	*input;
-	char	*spaced;
-	int		len;
-	int		i;
-	int		j;
-	// t_list  env; // need to do linkedlist part in libft
-}			t_cmd_input;
+#include "minishell.h"
+// typedef struct s_cmd_input
+// {
+// 	char	*input;
+// 	char	*spaced;
+// 	int		len;
+// 	int		i;
+// 	int		j;
+// 	// t_list  env; // need to do linkedlist part in libft
+// }			t_cmd_input;
 
 int			getpwd(void);
 int			run_lexer(t_cmd_input *cmd);
