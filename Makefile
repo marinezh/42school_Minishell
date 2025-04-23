@@ -6,7 +6,7 @@
 #    By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/17 13:36:38 by ikozhina         ###   ########.fr        #
+#    Updated: 2025/04/23 16:13:54 by ikozhina         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,9 +46,9 @@ VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(PARSING_PATH) $(EXEC_PATH)
 
 # Files
 MAIN = main.c
-BUILTINS = pwd.c
+BUILTINS = ft_pwd.c
 PARSING = parser.c
-EXEC = exec.c
+EXEC = init_data.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
