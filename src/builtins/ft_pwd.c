@@ -1,11 +1,10 @@
 #include "minishell.h"
 
-int ft_pwd(t_llist *list, t_edata edata)
+int ft_pwd(t_data data)
 {
 	char *pwd;
-	
-    (void)edata;
-    (void)list;
+
+    (void)data;
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
     {

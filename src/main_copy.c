@@ -1,51 +1,38 @@
 #include "minishell.h"
 
-int	run_bltin(t_llist list, t_edata edata)
+int	run_bltin(char *str_in, t_data data)
 {
 	int i;
 
 	i = 0;
-	if (ft_strcmp("cmd", list.value) == 0)
+	while (i < 7)
 	{
-		while (i < 7)
+		if (data.cmd_names[i] && ft_strcmp(str_in, data.cmd_names[i]) == 0)
 		{
-			if (ft_strcmp(list.key, edata.cmd_names[i]) == 0)
-				break ;
-			i++;
+			data.builtins[i](data);
+			return (0);
 		}
+		i++;
 	}
-	edata.builtins[i](NULL, edata);
-	return(0);
+	return(1);
 }
 
 int	main(int ac, char **av, char **env)
 {
+	t_cmd_input	cmd;
 	t_data	data;
-	t_edata	edata;
-	t_llist list;
 
 	(void)av;
 	(void)env;
-	if (ac < 1)
-		return (1);
-	init_data(&edata);
+	(void)ac;
+	init_data(&data);
 	while (1)
 	{
-		if (print_prompt(&data) < 0)
+		if (print_prompt(&cmd) < 0)
 			continue ;
-
-		list.key = data.input;
-		list.value = "cmd";
-		run_bltin(list, edata);
-		// if (data.input)
-		// {
-		// 	if (strcmp(data.input, "pwd") == 0)
-		// 		getpwd();
-		// 	add_history(data.input);
-		// 	// printf("this is your input%s\n", input);
-		// }
-		parsing(&data);
-		free(data.input);
+		run_lexer(&cmd);
+		run_bltin(cmd.input, data);
+		free(cmd.input);
 	}
 	return (0);
 }
