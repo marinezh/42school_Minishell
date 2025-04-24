@@ -1,4 +1,3 @@
-
 # Library name
 NAME = minishell
 
@@ -35,9 +34,9 @@ VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH)
 
 # Files
 MAIN = main.c
-BUILTINS = pwd.c
+BUILTINS = ft_pwd.c
 LEXER = lexer.c lexer_format.c operator_check.c split.c utils.c
-EXEC = exec.c
+EXEC = init_data.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
