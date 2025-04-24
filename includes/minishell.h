@@ -1,21 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/06 13:20:43 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/23 15:49:47 by ikozhina         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+
+# include "structs.h"
+# include "lexer.h"
 # include "libft.h"
 # include "exec.h"
 # include <limits.h>
+# include <stdio.h>
 # include <stdio.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -35,16 +27,6 @@
 # define BOLD "\033[1m"
 # define PROMPT "\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
 
-typedef struct s_data
-{
-	char	*input;
-	int		len;
-	// t_list  env; // need to do linkedlist part in libft
 
-}			t_data;
-
-int			getpwd(void);
-int			parsing(t_data *data);
-int			print_prompt(t_data *data);
 
 #endif

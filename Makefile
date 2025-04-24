@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/23 16:13:54 by ikozhina         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # Library name
 NAME = minishell
 
@@ -40,14 +28,14 @@ LIBFT_PATH = libft
 
 #Subdirectories
 BUILTINS_PATH = $(SRCS_PATH)/builtins
-PARSING_PATH = $(SRCS_PATH)/parser
+LEXER_PATH = $(SRCS_PATH)/lexer
 EXEC_PATH = $(SRCS_PATH)/exec
-VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(PARSING_PATH) $(EXEC_PATH)
+VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH)
 
 # Files
 MAIN = main.c
 BUILTINS = ft_pwd.c
-PARSING = parser.c
+LEXER = lexer.c lexer_format.c operator_check.c split.c utils.c
 EXEC = init_data.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
@@ -55,7 +43,7 @@ LIBFT := $(LIBFT_PATH)/libft.a
 # Full paths to source files
 SRC = $(addprefix $(SRCS_PATH)/, $(MAIN)) \
 		$(addprefix $(BUILTINS_PATH)/, $(BUILTINS)) \
-		$(addprefix $(PARSING_PATH)/, $(PARSING)) \
+		$(addprefix $(LEXER_PATH)/, $(LEXER)) \
 		$(addprefix $(EXEC_PATH)/, $(EXEC))
 
 # Flatten object file names into obj/
@@ -82,7 +70,7 @@ $(OBJS_PATH):
 # Build libft
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_PATH) > /dev/null 2>&1
-	@echo -e "$(COLOUR_GREEN)libft library created$(COLOUR_END)"
+	@echo -e "$(COLOUR_BRIGHT_GREEN)libft library created$(COLOUR_END)"
 
 # Cleaning rules
 clean:
