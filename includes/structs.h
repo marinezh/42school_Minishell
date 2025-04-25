@@ -48,9 +48,26 @@ struct					s_data
 	t_bltin				builtins[7];
 	char				**envp;
 	t_env				*envp_list;
-	// char        envp_f;
+	char        envp_f;
 	// char        exit_t;
 	// int         status;
 };
+
+// pattens of logical command split by pipe connected in linke list
+typedef	struct s_cmd_node
+{
+	int	key;
+	char *value;
+	struct s_cmd_node	*next;
+} t_cmd_node;
+
+// linked list of structs split by pipe
+typedef	struct s_command
+{
+	int index;
+	char	**value;
+	t_cmd_node *cmd_nodes;
+	struct s_command *next;
+} t_command;
 
 #endif
