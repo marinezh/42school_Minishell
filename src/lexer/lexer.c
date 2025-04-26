@@ -39,25 +39,24 @@ char	*add_space(t_cmd_input *cmd)
 	return (cmd->spaced);
 }
 
-int	run_lexer(t_cmd_input *cmd)
+char	**run_lexer(t_cmd_input *cmd)
 {
 	char	**tokens;
-	char	*new_input;
-	int		i;
-
-	i = 0;
-	new_input = add_space(cmd);
-	printf("new input: %s\n", new_input);
-	tokens = quote_safe_split(new_input, ' ');
+	char	*spaced_input;
+	// int		i;
+	// i = 0;
+	
+	spaced_input = add_space(cmd);
+	if (!spaced_input)
+		return (NULL);
 	printf("%s\n", cmd->input);
-	while (tokens[i])
-	{
-		printf("%s\n", tokens[i]);
-		i++;
-	}
-	while (tokens[i])
-		free(tokens[i++]);
-	free(new_input);
-	free(tokens);
-	return (0);
+	printf("new input: %s\n", spaced_input);
+	tokens = quote_safe_split(spaced_input, ' ');
+	
+	// while (tokens[i])
+	// {
+	// 	printf("%s\n", tokens[i]);
+	// 	i++;
+	// }
+	return (tokens);
 }

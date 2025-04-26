@@ -15,7 +15,7 @@
 // }			t_cmd_input;
 
 int			getpwd(void);
-int			run_lexer(t_cmd_input *cmd);
+char		**run_lexer(t_cmd_input *cmd);
 int			print_prompt(t_cmd_input *data);
 
 char		**quote_safe_split(char *str, char delimiter);

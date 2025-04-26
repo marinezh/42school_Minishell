@@ -4,6 +4,8 @@
 
 # include "structs.h"
 # include "lexer.h"
+# include "parser.h"
+# include "utils.h"
 # include "libft.h"
 # include <limits.h>
 # include <stdio.h>
