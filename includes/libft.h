@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 18:21:28 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/23 13:32:17 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/04/29 11:56:27 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memchr(const void *s, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 char	*ft_strdup(const char *src);
+char 	*ft_strndup(const char *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_atoi(const char *str);
 void	ft_putchar_fd(char c, int fd);
