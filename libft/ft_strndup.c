@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 21:14:21 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/29 11:58:59 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:23:31 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@ char *ft_strndup(const char *s, size_t n)
 {
 	char	*dest;
 	size_t		len;
-	size_t		i;
 
 	len = 0;
-	i = 0;
-	while(s[i] && i < n)
+	while(s[len] && len < n)
 		len++;
-
-	dest = (char *)malloc(sizeof(char) * (len + 1));
+	dest = malloc(sizeof(char) * (len + 1));
 	if (dest == NULL)
 		return (NULL);
+	ft_memcpy(dest, s, len);
 	dest[len] = '\0';
-	ft_memcpy(dest, s, n);
 	return (dest);
 }
 

@@ -19,23 +19,21 @@ int	run_bltin(char *str_in, t_data *data)
 
 int	main(int ac, char **av, char **env)
 {
-	// t_cmd_input	cmd;
+	t_cmd_input	cmd;
 	t_data	data;
 
 	(void)av;
 	(void)env;
 	(void)ac;
-	printf("here");
 	init_data(&data, env);
-	printf("here2");
-	// while (1)
-	// {
-	// 	if (print_prompt(&cmd) < 0)
-	// 		continue ;
-	// 	run_lexer(&cmd);
-	// 	run_bltin(cmd.input, &data);
-	// 	free(cmd.input);
+	while (1)
+	{
+		if (print_prompt(&cmd) < 0)
+			continue ;
+		run_lexer(&cmd);
+		run_bltin(cmd.input, &data);
+		free(cmd.input);
+	}
 
-	// }
 	return (0);
 }
