@@ -5,26 +5,28 @@ typedef enum e_token_type
 {
 	WORD,
 	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	HEREDOC
+	REDIR_IN, // <
+	REDIR_OUT, // >
+	REDIR_APPEND, // >>
+	HEREDOC // <<
 }						t_token_type;
-typedef enum e_redirection
-{
-	STD, // standart in/out
-	REDIR_IN, 
-	REDIR_OUT,
-	REDIR_APPEND,
-	HEREDOC
-}						t_redirection;
 
 typedef struct s_token
 {
-	char				*value;
 	t_token_type		type;
+	char				*value;
 	struct s_token		*next;
 }						t_token;
+
+// typedef enum e_redirection
+// {
+// 	STD, // standart in/out
+// 	REDIR_IN, 
+// 	REDIR_OUT,
+// 	REDIR_APPEND,
+// 	HEREDOC
+// }						t_redirection;
+
 
 // typedef struct s_command
 // {
@@ -37,12 +39,12 @@ typedef struct s_token
 // }						t_command;
 
 // linked list of structs split by pipe
-typedef struct s_files
-{
-	int	fd;
-	char	*name;
-	t_redirection 	red_types;  //  < << >> > 
-} t_files;
+// typedef struct s_files
+// {
+// 	int	fd;
+// 	char	*name;
+// 	t_redirection 	red_types;  //  < << >> > 
+// } t_files;
 
 typedef struct s_command
 {
@@ -52,8 +54,10 @@ typedef struct s_command
 	char *outfile;		// for > or >>
 	int append;			// 1 if >>, 0 if >
 	int pipe;			// 1 if followed by |
-	t_token				*tokens;
-	t_files				**redirections;
+	t_token				*tokens; // linked list of tokens
+	//t_files				**redirections;
+	//t_files				in; // name of last in including << and <
+	//t_files				out;// name of last out > or >>
 	struct s_command	*next;
 }						t_command;
 

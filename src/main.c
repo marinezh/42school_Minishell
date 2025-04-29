@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/26 15:50:06 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/29 22:48:11 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 int	shell_loop(void)
 {
 	t_cmd_input	cmd_input;
-	char		**tokens;
+	//t_token		*tokens_lexer = NULL; //need to fix this
+	t_token		*tokens = NULL;
 	t_command	*commands;
-	int i = 0;
+	//int i = 0;
 
 	while (1)
 	{
 		if (print_prompt(&cmd_input) == -1)
 			break;
 
-		tokens = run_lexer(&cmd_input);
+		// tokens_lexer = run_lexer(&cmd_input); FIX THIS
+		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
-		while (tokens[i])
-			printf("tokens %s\n", tokens[i++]);
+		print_tokens(tokens); 
+		// while (tokens[i])
+		// 	printf("tokens %s\n", tokens[i++]);
 		commands = parse_tokens(tokens);
 		t_command *curr = commands;
 
@@ -51,9 +54,10 @@ int	shell_loop(void)
 		//execute_commands(commands); future function
 
 		// Cleanup
-		//free_command_list(commands); future function
-		//free_tokens(tokens);
 		//free(cmd_input.input);
+		//free_tokens(tokens);  // Free the tokens list
+        //free(args);  // Free the args array
+        //free_command_list(commands);  // Free the commands list, need to create this function
 	}
 	return (0);
 }

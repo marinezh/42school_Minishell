@@ -16,7 +16,7 @@ int word_count(char *str, char delimeter)
 		}
 		i++;
 	}
-	printf("count %d\n", count);
+	//printf("count %d\n", count);
 	return count;
 }
 static char *word_dup(char *str, int len)

@@ -5,7 +5,7 @@ void	print_command_debug(t_command *cmd)
 	int i = 0;
 
 	printf("====== COMMAND ======\n");
-
+	printf("index is %d\n", cmd->index);
 	if (cmd->args)
 	{
 		printf("Args: ");
@@ -49,33 +49,42 @@ static t_command	*init_command(void)
 	return (cmd);
 }
 
-t_command	*parse_tokens(char **tokens)
-{
-	t_command	*head = init_command();
-	t_command	*current = head;
-	int			i = 0;
-	int 		j = 0;
-	int			count;
 
-	while (tokens[i])
+
+t_command *parse_tokens(t_token *tokens)
+{
+	t_command *head = init_command();
+	t_command *current = head;
+	int count;
+	int index = 0;
+	
+	printf("check current index %d\n", index);
+	printf("2check current index %d\n", current->index);
+
+	current->index = index++; // post-increment
+	printf("3check current index %d\n", current->index);
+	while (tokens != NULL)
 	{
-		if (strcmp(tokens[i], "|") == 0)
+		// Pipe handling
+		if (tokens->type == PIPE)
 		{
 			current->pipe = 1;
-			current->next = init_command();
-			current = current->next; // add if current->next  == NULL
-			i++;
+			current->next = init_command();  // Create a new command for the next token
+			current = current->next;  // Move to the new command
+			current->index = index++; // post-increment
 		}
-		else if (strcmp(tokens[i], "<") == 0)
+		// Input redirection handling
+		else if (tokens->type == REDIR_IN)
 		{
-			i++;
-			current->infile = ft_strdup(tokens[i++]);
+			tokens = tokens->next;  // Move to the next token (the file name)
+			current->infile = ft_strdup(tokens->value);
 		}
-		else if (strcmp(tokens[i], ">") == 0 || strcmp(tokens[i], ">>") == 0)
+		// Output redirection handling (>) and append redirection (>>)
+		else if (tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND)
 		{
-			current->append = strcmp(tokens[i], ">>") == 0;
-			i++;
-			current->outfile = ft_strdup(tokens[i++]);
+			current->append = (tokens->type == REDIR_APPEND);  // Set append if it's ">>"
+			tokens = tokens->next;  // Move to the next token (the file name)
+			current->outfile = ft_strdup(tokens->value);
 		}
 		else
 		{
@@ -83,18 +92,23 @@ t_command	*parse_tokens(char **tokens)
 			count = 0;
 			while (current->args && current->args[count])
 				count++;
+
 			char **new_args = malloc(sizeof(char *) * (count + 2));
-			j = 0;
-			while(j < count)
+			int j = 0;
+			while (j < count)
 			{
 				new_args[j] = current->args[j];
 				j++;
 			}
-			new_args[count] = ft_strdup(tokens[i++]);
+			new_args[count] = ft_strdup(tokens->value);  // Add the current token's value
 			new_args[count + 1] = NULL;
-			free(current->args);
-			current->args = new_args;
+
+			free(current->args);  // Free the old args array
+			current->args = new_args;  // Set the new args array
 		}
+
+		tokens = tokens->next;  // Move to the next token in the linked list
 	}
-	return (head);
+	return head;
 }
+
