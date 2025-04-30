@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_calloc.c                                        :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/09 16:18:41 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/30 12:46:20 by ikozhina         ###   ########.fr       */
+/*   Created: 2024/07/15 21:14:21 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/04/29 22:23:31 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char *ft_strndup(const char *s, size_t n)
 {
-	size_t	total_size;
-	void	*ptr;
+	char	*dest;
+	size_t		len;
 
-	if (nmemb != 0 && SIZE_MAX / size < nmemb)
+	len = 0;
+	while(s[len] && len < n)
+		len++;
+	dest = malloc(sizeof(char) * (len + 1));
+	if (dest == NULL)
 		return (NULL);
-	total_size = nmemb * size;
-	ptr = malloc(total_size);
-	if (ptr == NULL)
-		return (NULL);
-	ft_memset(ptr, 0, total_size);
-	return (ptr);
+	ft_memcpy(dest, s, len);
+	dest[len] = '\0';
+	return (dest);
 }
+
+// The strndup() function is similar to strdup(), but copies at most n bytes.  If s is
+// longer than n, only n bytes are copied, and  a  terminating  null  byte
+// ('\0') is added.
