@@ -30,13 +30,17 @@ LIBFT_PATH = libft
 BUILTINS_PATH = $(SRCS_PATH)/builtins
 LEXER_PATH = $(SRCS_PATH)/lexer
 EXEC_PATH = $(SRCS_PATH)/exec
-VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH)
+PARSER_PATH = $(SRCS_PATH)/parser
+UTILS_PATH = $(SRCS_PATH)/utils
+VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) $(UTILS_PATH)
 
 # Files
 MAIN = main.c
 BUILTINS = ft_pwd.c
 LEXER = lexer.c lexer_format.c operator_check.c split.c utils.c
 EXEC = init_data.c free_data.c
+PARSER = parser.c tokenization.c
+UTILS = free.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
@@ -44,7 +48,9 @@ LIBFT := $(LIBFT_PATH)/libft.a
 SRC = $(addprefix $(SRCS_PATH)/, $(MAIN)) \
 		$(addprefix $(BUILTINS_PATH)/, $(BUILTINS)) \
 		$(addprefix $(LEXER_PATH)/, $(LEXER)) \
-		$(addprefix $(EXEC_PATH)/, $(EXEC))
+		$(addprefix $(EXEC_PATH)/, $(EXEC)) \
+		$(addprefix $(PARSER_PATH)/, $(PARSER)) \
+		$(addprefix $(PARSER_UTILS)/, $(UTILS))
 
 # Flatten object file names into obj/
 OBJ := $(addprefix $(OBJS_PATH)/, $(notdir $(SRC:.c=.o)))
