@@ -31,7 +31,7 @@ typedef struct s_cmd_input
 // declaration of main exection struct
 typedef struct s_data	t_data;
 // function pointer type declaration
-typedef int				(*t_bltin)(t_data);
+typedef int				(*t_bltin)(t_data *);
 
 // struct for one environment variable (as linked list)
 typedef struct s_env

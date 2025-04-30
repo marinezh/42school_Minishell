@@ -6,7 +6,7 @@
 #    By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/10 14:19:08 by mzhivoto          #+#    #+#              #
-#    Updated: 2025/04/23 13:39:48 by ikozhina         ###   ########.fr        #
+#    Updated: 2025/04/29 11:54:48 by ikozhina         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,8 @@ SRC = ft_bzero.c\
 	ft_lstclear.c\
 	ft_lstadd_front.c\
 	ft_lstadd_back.c\
-	ft_strcmp.c 
+	ft_strcmp.c\
+	ft_strndup.c\
 
 OBJ = $(SRC:.c=.o)
 
