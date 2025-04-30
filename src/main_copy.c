@@ -23,7 +23,7 @@ int	main(int ac, char **av, char **env)
 	t_data	data;
 
 	(void)av;
-	(void)env;
+	// (void)env;
 	(void)ac;
 	init_data(&data, env);
 	while (1)
@@ -34,6 +34,7 @@ int	main(int ac, char **av, char **env)
 		run_bltin(cmd.input, &data);
 		free(cmd.input);
 	}
-
+	free_env_list(data.envp_list);
+	free_envp_array(data.envp);
 	return (0);
 }

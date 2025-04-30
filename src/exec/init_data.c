@@ -4,7 +4,7 @@ t_env	*init_node(char *key, char *value)
 {
 	t_env	*ptr;
 
-	ptr = malloc(sizeof(t_env));
+	ptr = calloc(1, sizeof(t_env));
 	if (!ptr)
 		return (NULL);
 	ptr->key = key;
@@ -84,9 +84,60 @@ void	print_envp_list(t_env *envp_list)
 	}
 }
 
+
+
+int	env_list_size(t_env *env)
+{
+	int	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
+
+void	update_envp_array(t_data *data, t_env *envp_list)
+{
+	int	l_size;
+	char	**ar_ptr;
+	char	*tmp;
+	int	i;
+	t_env	*current;
+
+	current = envp_list;
+	i = 0;
+	l_size = env_list_size(envp_list);
+	ar_ptr = calloc(l_size + 1, sizeof(char *));
+	if (!ar_ptr)
+		return ;
+	ar_ptr[l_size] = NULL;
+	while (current != NULL && i < l_size)
+	{
+
+		tmp = ft_strjoin(current->key, "=");
+		if(!tmp)
+		{
+			free_envp_array(ar_ptr);
+			return ;
+		}
+		ar_ptr[i] = ft_strjoin(tmp, current->value);
+		free(tmp);
+		if (!ar_ptr[i])
+		{
+			free_envp_array(ar_ptr);
+			return ;
+		}
+		i++;
+		current = current->next;
+	}
+	if (data->envp)
+		free_envp_array(data->envp);
+	data->envp = ar_ptr;
+}
+
 void	init_data(t_data *data, char **env)
 {
-	
 	data->cmd_names[0] = "pwd";
 	data->builtins[0] = ft_pwd;
 
@@ -98,6 +149,14 @@ void	init_data(t_data *data, char **env)
 		i++;
 	}
 	data->envp_list = NULL;
+	data->envp = NULL;
 	init_envp_list(data, env);
+	if (data->envp_list)
+		update_envp_array(data, data->envp_list);
 	// print_envp_list(data->envp_list);
+	// int j = 0;
+	// while (data->envp[j])
+	// {
+	// 	printf("%s\n", data->envp[j++]);
+	// }
 }
