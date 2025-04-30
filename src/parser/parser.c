@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+//////////////////////////////////////////////////////////////////////
+//FOR DEBUGGING, DELETE
 void	print_command_debug(t_command *cmd)
 {
 	int i = 0;
@@ -20,20 +22,12 @@ void	print_command_debug(t_command *cmd)
 		printf("Infile: %s\n", cmd->infile);
 	if (cmd->outfile)
 		printf("Outfile: %s (append: %d)\n", cmd->outfile, cmd->append);
-
 	if (cmd->pipe)
 		printf("Pipe to next: yes\n");
-
-	// if (cmd->heredoc)
-	// 	printf("Heredoc: %s (type: %d)\n", cmd->heredoc, cmd->heredoc_type);
-
-	// if (cmd->logic_op == LOGIC_AND)
-	// 	printf("Logic op: &&\n");
-	// else if (cmd->logic_op == LOGIC_OR)
-	// 	printf("Logic op: ||\n");
-
 	printf("=====================\n");
 }
+///////////////////////////////////////////////////////////////////////
+
 
 static t_command	*init_command(void)
 {
@@ -49,20 +43,14 @@ static t_command	*init_command(void)
 	return (cmd);
 }
 
-
-
 t_command *parse_tokens(t_token *tokens)
 {
 	t_command *head = init_command();
 	t_command *current = head;
 	int count;
 	int index = 0;
-	
-	printf("check current index %d\n", index);
-	printf("2check current index %d\n", current->index);
 
 	current->index = index++; // post-increment
-	printf("3check current index %d\n", current->index);
 	while (tokens != NULL)
 	{
 		// Pipe handling
@@ -73,13 +61,13 @@ t_command *parse_tokens(t_token *tokens)
 			current = current->next;  // Move to the new command
 			current->index = index++; // post-increment
 		}
-		// Input redirection handling
+		// Input red-n handling
 		else if (tokens->type == REDIR_IN)
 		{
 			tokens = tokens->next;  // Move to the next token (the file name)
 			current->infile = ft_strdup(tokens->value);
 		}
-		// Output redirection handling (>) and append redirection (>>)
+		// Output red-n handling (>) and append redirection (>>)
 		else if (tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND)
 		{
 			current->append = (tokens->type == REDIR_APPEND);  // Set append if it's ">>"

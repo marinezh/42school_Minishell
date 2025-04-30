@@ -16,7 +16,7 @@ char	*add_space(t_cmd_input *cmd)
 	cmd->i = 0;
 	cmd->j = 0;
 	cmd->len = ft_strlen(cmd->input);
-	cmd->spaced = malloc(cmd->len * SPACING_FACTOR + 1);
+	cmd->spaced = malloc(cmd->len * 10 + 1);
 	if (!cmd->spaced)
 		return (NULL);
 	while (cmd->i < cmd->len)
@@ -25,6 +25,7 @@ char	*add_space(t_cmd_input *cmd)
 		{
 			if (fmt_quotes(cmd->input, cmd->spaced, &cmd->i, &cmd->j, 1) == -1)
 				break ;
+			continue;
 		}
 		if (cmd->i + 2 < cmd->len && is_triple_op(cmd->input, cmd->i) == 1)
 			process_three(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
@@ -36,6 +37,7 @@ char	*add_space(t_cmd_input *cmd)
 			cmd->spaced[cmd->j++] = cmd->input[cmd->i++];
 	}
 	cmd->spaced[cmd->j] = '\0';
+	printf("DEBUG spaced: [%s]\n", cmd->spaced);
 	return (cmd->spaced);
 }
 

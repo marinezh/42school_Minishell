@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/29 22:48:11 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:29:32 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	shell_loop(void)
 		}
 		// if (strcmp(cmd_input.input,"pwd") == 0) // after adding this one i have got a sig fault, need to check why
  		// 		getpwd();
-		// add_history(cmd_input.input);
+		add_history(cmd_input.input);
 		
 		// if (!commands)
 		// {
@@ -73,5 +73,3 @@ int	main(int ac, char **av, char **env)
 	shell_loop();
 	return (0);
 }
-
-// if input exists check it for errros and tokenize it with linked list
