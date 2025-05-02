@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/05/02 12:00:02 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:23:34 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	shell_loop(t_data	*data)
 		// }
 
 		//execute_commands(commands); future function
-		run_bltin(commands->args, data);
+		run_bltin(data, commands);
 		// Cleanup
 		//free(cmd_input.input);
 		//free_tokens(tokens);  // Free the tokens list

@@ -139,9 +139,11 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 void	init_data(t_data *data, char **env)
 {
 	data->cmd_names[0] = "pwd";
+	data->cmd_names[1] = "echo";
 	data->builtins[0] = ft_pwd;
+	data->builtins[1] = ft_echo;
 
-	int i = 1;
+	int i = 2;
 	while (i < 7)
 	{
 		data->cmd_names[i] = NULL;

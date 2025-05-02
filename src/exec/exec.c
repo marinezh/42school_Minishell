@@ -1,24 +1,22 @@
 #include "minishell.h"
 #include "exec.h"
 
-int	run_bltin(char **args, t_data *data)
+int	run_bltin(t_data *data, t_command *cmd)
 {
 	int i;
+	char	**args;
 
 	i = 0;
+	args = cmd->args;
 	while (i < 7)
 	{
 		if (data->cmd_names[i] && ft_strcmp(args[0], data->cmd_names[i]) == 0)
 		{
-			data->builtins[i](data);
+			data->builtins[i](data, cmd);
 			return (0);
-		}
-		else
-		{
-			printf("builtin doesn't exit\n");
-			return(1);
 		}
 		i++;
 	}
+	printf("builtin doesn't exit\n");
 	return(1);
 }
