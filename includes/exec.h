@@ -5,6 +5,7 @@ void 	init_data(t_data *data, char **env);
 int 	ft_pwd(t_data *data, t_command *cmd);
 int		ft_echo(t_data *data, t_command *cmd);
 int     ft_env(t_data *data, t_command *cmd);
+int     ft_export(t_data *data, t_command *cmd);
 void	free_envp_array(char **envp);
 void	free_env_list(t_env *env);
 int		run_bltin(t_data *data, t_command *cmd);

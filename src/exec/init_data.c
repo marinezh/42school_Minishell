@@ -141,11 +141,13 @@ void	init_data(t_data *data, char **env)
 	data->cmd_names[0] = "pwd";
 	data->cmd_names[1] = "echo";
 	data->cmd_names[2] = "env";
+	data->cmd_names[3] = "export";
 	data->builtins[0] = ft_pwd;
 	data->builtins[1] = ft_echo;
 	data->builtins[2] = ft_env;
+	data->builtins[3] = ft_export;
 
-	int i = 3;
+	int i = 4;
 	while (i < 7)
 	{
 		data->cmd_names[i] = NULL;

@@ -22,3 +22,5 @@ int ft_env(t_data *data, t_command *cmd)
     return(0);
 }
 //print only variables with value? or all?
+//if anything is typied after env
+//order - printed as they are created, right? (not alphabetic)
