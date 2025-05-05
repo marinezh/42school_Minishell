@@ -11,7 +11,7 @@ int ft_env(t_data *data, t_command *cmd)
         update_envp_array(data, data->envp_list);
         data->envp_f = 0;
     }
-    if (data->envp)    
+    if (data->envp)
     {
         while (data->envp[i])
         {
@@ -21,6 +21,6 @@ int ft_env(t_data *data, t_command *cmd)
     }
     return(0);
 }
-//print only variables with value? or all?
-//if anything is typied after env
-//order - printed as they are created, right? (not alphabetic)
+//print only variables with value, don't print empty variables
+//if anything is typied after env - no other parameters are allowed after env only |
+//order - printed as they are created!
