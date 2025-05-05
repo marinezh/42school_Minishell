@@ -1,102 +1,211 @@
 #include "minishell.h"
 
 //////////////////////////////////////////////////////////////////////
-//FOR DEBUGGING, DELETE
-void	print_command_debug(t_command *cmd)
-{
-	int i = 0;
+// // FOR DEBUGGING, DELETE
+// void	print_command_debug(t_command *cmd)
+// {
+// 	int	i;
 
-	printf("====== COMMAND ======\n");
-	printf("index is %d\n", cmd->index);
-	if (cmd->args)
-	{
-		printf("Args: ");
-		while (cmd->args[i])
-		{
-			printf("'%s' ", cmd->args[i]);
-			i++;
-		}
-		printf("\n");
-	}
-	if (cmd->infile)
-		printf("Infile: %s\n", cmd->infile);
-	if (cmd->outfile)
-		printf("Outfile: %s (append: %d)\n", cmd->outfile, cmd->append);
-	if (cmd->pipe)
-		printf("Pipe to next: yes\n");
-	printf("=====================\n");
-}
+// 	i = 0;
+// 	printf("====== COMMAND ======\n");
+// 	printf("index is %d\n", cmd->index);
+// 	if (cmd->args)
+// 	{
+// 		printf("Args: ");
+// 		while (cmd->args[i])
+// 		{
+// 			printf("'%s' ", cmd->args[i]);
+// 			i++;
+// 		}
+// 		printf("\n");
+// 	}
+// 	if (cmd->infile)
+// 		printf("Infile: %s\n", cmd->infile);
+// 	if (cmd->outfile)
+// 		printf("Outfile: %s (append: %d)\n", cmd->outfile, cmd->append);
+// 	if (cmd->pipe)
+// 		printf("Pipe to next: yes\n");
+// 	printf("=====================\n");
+// }
 ///////////////////////////////////////////////////////////////////////
-
 
 static t_command	*init_command(void)
 {
-	t_command *cmd = malloc(sizeof(t_command));
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	cmd->pipe = 0;
+	cmd->index = 0;
+	cmd->tokens = NULL;
+	// cmd->infile = NULL;
+	// cmd->outfile = NULL;
+	// cmd->append = 0;
+	// cmd->pipe = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-t_command *parse_tokens(t_token *tokens)
-{
-	t_command *head = init_command();
-	t_command *current = head;
-	int count;
-	int index = 0;
+// t_command	*parse_tokens(t_token *tokens)
+// {
+// 	t_command	*head;
+// 	t_command	*current;
+// 	int			count;
+// 	int			index;
+// 	char		**new_args;
+// 	int			j;
 
+// 	head = init_command();
+// 	if (!head)
+// 	{
+// 		fprintf(stderr, "Error: failed to allocate memory for command\n");
+// 		return (NULL);
+// 	}
+// 	current = head;
+// 	index = 0;
+// 	current->index = index++; // post-increment
+// 	while (tokens != NULL)
+// 	{
+// 		// Pipe handling
+// 		if (tokens->type == PIPE)
+// 		{
+// 			current->pipe = 1;
+// 			current->next = init_command();
+// 			// Create a new command for the next token
+// 			current = current->next;  // Move to the new command
+// 			current->index = index++; // post-increment
+// 		}
+// 		// Input red-n handling
+// 		else if (tokens->type == REDIR_IN)
+// 		{
+// 			tokens = tokens->next; // Move to the next token (the file name)
+// 			current->infile = ft_strdup(tokens->value);
+// 		}
+// 		// Output red-n handling (>) and append redirection (>>)
+// 		else if (tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND)
+// 		{
+// 			current->append = (tokens->type == REDIR_APPEND);
+// 			// Set append if it's ">>"
+// 			tokens = tokens->next;
+// 			// Move to the next token (the file name)
+// 			current->outfile = ft_strdup(tokens->value);
+// 		}
+// 		else
+// 		{
+// 			// Add token to args list
+// 			count = 0;
+// 			while (current->args && current->args[count])
+// 				count++;
+// 			new_args = malloc(sizeof(char *) * (count + 2));
+// 			j = 0;
+// 			while (j < count)
+// 			{
+// 				new_args[j] = current->args[j];
+// 				j++;
+// 			}
+// 			new_args[count] = ft_strdup(tokens->value);
+// 			// Add the current token's value
+// 			new_args[count + 1] = NULL;
+// 			free(current->args);      // Free the old args array
+// 			current->args = new_args; // Set the new args array
+// 		}
+// 		tokens = tokens->next; // Move to the next token in the linked list
+// 	}
+// 	return (head);
+// }
+
+t_command	*parse_tokens(t_token *tokens)
+{
+	t_command	*head;
+	t_command	*current;
+	int			index;
+	t_token		*new_token;
+	t_token		*temp;
+
+	head = init_command();
+	if (!head)
+	{
+		fprintf(stderr, "Error: failed to allocate memory for command\n");
+		return (NULL);
+	}
+	current = head;
+	index = 0;
 	current->index = index++; // post-increment
 	while (tokens != NULL)
 	{
 		// Pipe handling
 		if (tokens->type == PIPE)
 		{
-			current->pipe = 1;
-			current->next = init_command();  // Create a new command for the next token
-			current = current->next;  // Move to the new command
+			current->next = init_command();
+			current = current->next;
 			current->index = index++; // post-increment
 		}
-		// Input red-n handling
+		// Input redirection handling (<)
 		else if (tokens->type == REDIR_IN)
 		{
-			tokens = tokens->next;  // Move to the next token (the file name)
-			current->infile = ft_strdup(tokens->value);
+			// Move to the next token (which should be the filename)
+			if (tokens->next != NULL)
+			{
+				tokens = tokens->next;
+				// Process the input redirection filename here
+			}
 		}
-		// Output red-n handling (>) and append redirection (>>)
-		else if (tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND)
+		// Output redirection handling (>)
+		else if (tokens->type == REDIR_OUT)
 		{
-			current->append = (tokens->type == REDIR_APPEND);  // Set append if it's ">>"
-			tokens = tokens->next;  // Move to the next token (the file name)
-			current->outfile = ft_strdup(tokens->value);
+			// Move to the next token (which should be the filename)
+			if (tokens->next != NULL)
+			{
+				tokens = tokens->next;
+				// Process the output redirection filename here
+			}
+		}
+		// Append redirection (>>)
+		else if (tokens->type == REDIR_APPEND)
+		{
+			// Move to the next token (which should be the filename)
+			if (tokens->next != NULL)
+			{
+				tokens = tokens->next;
+				// Process the append redirection filename here
+			}
+		}
+		// Handle HEREDOC (<<)
+		else if (tokens->type == HEREDOC)
+		{
+			// The next token should be the delimiter (e.g., EOF)
+			if (tokens->next != NULL)
+			{
+				tokens = tokens->next;
+				// Process the delimiter for the here document
+				// You would typically store this delimiter to handle the here document content
+			}
 		}
 		else
 		{
-			// Add token to args list
-			count = 0;
-			while (current->args && current->args[count])
-				count++;
-
-			char **new_args = malloc(sizeof(char *) * (count + 2));
-			int j = 0;
-			while (j < count)
+			// Add token to the current command's tokens list
+			new_token = malloc(sizeof(t_token));
+			if (!new_token)
 			{
-				new_args[j] = current->args[j];
-				j++;
+				fprintf(stderr, "Error: failed to allocate memory for token\n");
+				return (NULL);
 			}
-			new_args[count] = ft_strdup(tokens->value);  // Add the current token's value
-			new_args[count + 1] = NULL;
-
-			free(current->args);  // Free the old args array
-			current->args = new_args;  // Set the new args array
+			*new_token = *tokens; // Copy token data (including type and value)
+			// Add this new token to the command's token list
+			if (current->tokens == NULL)
+			{
+				current->tokens = new_token;
+			}
+			else
+			{
+				temp = current->tokens;
+				while (temp->next != NULL)
+					temp = temp->next;
+				temp->next = new_token;
+			}
 		}
-
-		tokens = tokens->next;  // Move to the next token in the linked list
+		tokens = tokens->next; // Move to the next token
 	}
-	return head;
+	return (head);
 }
-
