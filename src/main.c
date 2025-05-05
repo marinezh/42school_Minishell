@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/30 16:29:32 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/05/05 20:31:38 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	shell_loop(void)
 		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
-		print_tokens(tokens); 
+		//print_tokens(tokens); 
 		// while (tokens[i])
 		// 	printf("tokens %s\n", tokens[i++]);
 		commands = parse_tokens(tokens);

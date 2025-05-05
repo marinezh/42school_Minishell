@@ -63,33 +63,33 @@ t_token *tokenize_input(char *input)
 	}
 	return head;  // Return the head of the linked list
 }
-void print_tokens(t_token *tokens)
-{
-	while (tokens != NULL) {
-		switch (tokens->type) {
-			case WORD:
-				printf("WORD: %s\n", tokens->value);
-				break;
-			case PIPE:
-				printf("PIPE: %s\n", tokens->value);
-				break;
-			case REDIR_IN:
-				printf("REDIR_IN: %s\n", tokens->value);
-				break;
-			case REDIR_OUT:
-				printf("REDIR_OUT: %s\n", tokens->value);
-				break;
-			case REDIR_APPEND:
-				printf("REDIR_APPEND: %s\n", tokens->value);
-				break;
-			case HEREDOC:
-				printf("HEREDOC: %s\n", tokens->value);
-				break;
-			default:
-				printf("Unknown token type\n");
-				break;
-		}
-		tokens = tokens->next;  // Move to the next token in the linked list
-	}
-}
+// void print_tokens(t_token *tokens)
+// {
+// 	while (tokens != NULL) {
+// 		switch (tokens->type) {
+// 			case WORD:
+// 				printf("WORD: %s\n", tokens->value);
+// 				break;
+// 			case PIPE:
+// 				printf("PIPE: %s\n", tokens->value);
+// 				break;
+// 			case REDIR_IN:
+// 				printf("REDIR_IN: %s\n", tokens->value);
+// 				break;
+// 			case REDIR_OUT:
+// 				printf("REDIR_OUT: %s\n", tokens->value);
+// 				break;
+// 			case REDIR_APPEND:
+// 				printf("REDIR_APPEND: %s\n", tokens->value);
+// 				break;
+// 			case HEREDOC:
+// 				printf("HEREDOC: %s\n", tokens->value);
+// 				break;
+// 			default:
+// 				printf("Unknown token type\n");
+// 				break;
+// 		}
+// 		tokens = tokens->next;  // Move to the next token in the linked list
+// 	}
+// }
 

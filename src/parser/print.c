@@ -65,24 +65,79 @@
 // 		printf("Pipe to next: yes\n");
 // 	printf("=====================\n");
 // }
-void	print_command_debug(t_command *cmd)
-{
-	t_token	*current_token;
+// void	print_command_debug(t_command *cmd)
+// {
+// 	t_token	*current_token;
 
-	printf("====== COMMAND ======\n");
-	printf("index is %d\n", cmd->index);
-	if (cmd->tokens)
-	{
-		printf("Tokens: ");
-		current_token = cmd->tokens;
-		while (current_token)
-		{
-			printf("'%s' ", current_token->value);
-			current_token = current_token->next;
-		}
-		printf("\n");
-	}
-	if (cmd->next)
-		printf("Pipe to next command: yes\n");
-	printf("=====================\n");
+// 	printf("====== COMMAND ======\n");
+// 	printf("index is %d\n", cmd->index);
+// 	if (cmd->tokens)
+// 	{
+// 		printf("Tokens: ");
+// 		current_token = cmd->tokens;
+// 		while (current_token)
+// 		{
+// 			printf("'%s' ", current_token->value);
+// 			current_token = current_token->next;
+// 		}
+// 		printf("\n");
+// 	}
+// 	if (cmd->next)
+// 		printf("Pipe to next command: yes\n");
+// 	printf("=====================\n");
+// }
+void print_command_debug(t_command *cmd)
+{
+    t_token *current_token;
+
+    printf("====== COMMAND ======\n");
+    printf("index is %d\n", cmd->index);
+
+    // Check if there are any tokens in the current command
+    if (cmd->tokens)
+    {
+        printf("Tokens: ");
+        current_token = cmd->tokens;
+
+        // Iterate through all tokens in the current command
+        while (current_token != NULL)
+        {
+            // Print the token type and value
+            switch (current_token->type)
+            {
+                case WORD:
+                    printf("WORD('%s') ", current_token->value);
+                    break;
+                case PIPE:
+                    printf("PIPE('%s') ", current_token->value);
+                    break;
+                case REDIR_OUT:
+                    printf("REDIR_OUT('%s') ", current_token->value);
+                    break;
+                case REDIR_APPEND:
+                    printf("REDIR_APPEND('%s') ", current_token->value);
+                    break;
+                case REDIR_IN:
+                    printf("REDIR_IN('%s') ", current_token->value);
+                    break;
+                case HEREDOC:
+                    printf("HEREDOC('%s') ", current_token->value);
+                    break;
+                default:
+                    printf("UNKNOWN('%s') ", current_token->value);
+                    break;
+            }
+
+            current_token = current_token->next;
+        }
+        printf("\n");
+    }
+
+    // Print the next command (if any)
+    if (cmd->next)
+    {
+        printf("Next command exists: yes\n");
+    }
+
+    printf("=====================\n");
 }

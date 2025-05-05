@@ -47,6 +47,110 @@ static t_command	*init_command(void)
 	return (cmd);
 }
 
+t_command *parse_tokens(t_token *tokens)
+{
+    t_command *head;
+    t_command *current;
+    int index;
+    t_token *new_token;
+    t_token *temp;
+
+    head = init_command();
+    if (!head)
+    {
+        fprintf(stderr, "Error: failed to allocate memory for command\n");
+        return (NULL);
+    }
+    current = head;
+    index = 0;
+    current->index = index++; // post-increment
+
+    while (tokens != NULL)
+    {
+        // Pipe handling
+        if (tokens->type == PIPE)
+        {
+            // Create a new command when a pipe is encountered
+            current->next = init_command();
+            current = current->next;
+            current->index = index++; // post-increment
+        }
+        // Redirection handling
+        else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND || tokens->type == HEREDOC)
+        {
+            // Add the redirection token to the current command's token list
+            new_token = malloc(sizeof(t_token));
+            if (!new_token)
+            {
+                fprintf(stderr, "Error: failed to allocate memory for token\n");
+                return (NULL);
+            }
+            *new_token = *tokens;  // Copy token data (including type and value)
+            
+            // Add the redirection token to the current command's token list
+            if (current->tokens == NULL)
+            {
+                current->tokens = new_token;
+            }
+            else
+            {
+                temp = current->tokens;
+                while (temp->next != NULL)
+                    temp = temp->next;
+                temp->next = new_token;
+            }
+
+            // Move to the next token (which should be the filename or delimiter)
+            if (tokens->next != NULL)
+            {
+                tokens = tokens->next;
+                new_token = malloc(sizeof(t_token));
+                if (!new_token)
+                {
+                    fprintf(stderr, "Error: failed to allocate memory for token\n");
+                    return (NULL);
+                }
+                *new_token = *tokens;  // Copy the next token (the filename or delimiter)
+
+                // Add the filename or delimiter to the token list
+                temp = current->tokens;
+                while (temp->next != NULL)
+                    temp = temp->next;
+                temp->next = new_token;
+            }
+        }
+        else
+        {
+            // Add regular token (command or argument) to the current command's token list
+            new_token = malloc(sizeof(t_token));
+            if (!new_token)
+            {
+                fprintf(stderr, "Error: failed to allocate memory for token\n");
+                return (NULL);
+            }
+            *new_token = *tokens; // Copy token data (including type and value)
+
+            // Add this new token to the command's token list
+            if (current->tokens == NULL)
+            {
+                current->tokens = new_token;
+            }
+            else
+            {
+                temp = current->tokens;
+                while (temp->next != NULL)
+                    temp = temp->next;
+                temp->next = new_token;
+            }
+        }
+
+        tokens = tokens->next;  // Move to the next token
+    }
+
+    return (head);
+}
+
+
 // t_command	*parse_tokens(t_token *tokens)
 // {
 // 	t_command	*head;
@@ -114,98 +218,3 @@ static t_command	*init_command(void)
 // 	}
 // 	return (head);
 // }
-
-t_command	*parse_tokens(t_token *tokens)
-{
-	t_command	*head;
-	t_command	*current;
-	int			index;
-	t_token		*new_token;
-	t_token		*temp;
-
-	head = init_command();
-	if (!head)
-	{
-		fprintf(stderr, "Error: failed to allocate memory for command\n");
-		return (NULL);
-	}
-	current = head;
-	index = 0;
-	current->index = index++; // post-increment
-	while (tokens != NULL)
-	{
-		// Pipe handling
-		if (tokens->type == PIPE)
-		{
-			current->next = init_command();
-			current = current->next;
-			current->index = index++; // post-increment
-		}
-		// Input redirection handling (<)
-		else if (tokens->type == REDIR_IN)
-		{
-			// Move to the next token (which should be the filename)
-			if (tokens->next != NULL)
-			{
-				tokens = tokens->next;
-				// Process the input redirection filename here
-			}
-		}
-		// Output redirection handling (>)
-		else if (tokens->type == REDIR_OUT)
-		{
-			// Move to the next token (which should be the filename)
-			if (tokens->next != NULL)
-			{
-				tokens = tokens->next;
-				// Process the output redirection filename here
-			}
-		}
-		// Append redirection (>>)
-		else if (tokens->type == REDIR_APPEND)
-		{
-			// Move to the next token (which should be the filename)
-			if (tokens->next != NULL)
-			{
-				tokens = tokens->next;
-				// Process the append redirection filename here
-			}
-		}
-		// Handle HEREDOC (<<)
-		else if (tokens->type == HEREDOC)
-		{
-			// The next token should be the delimiter (e.g., EOF)
-			if (tokens->next != NULL)
-			{
-				tokens = tokens->next;
-				// Process the delimiter for the here document
-				// You would typically store this delimiter to handle the here document content
-			}
-		}
-		else
-		{
-			// Add token to the current command's tokens list
-			new_token = malloc(sizeof(t_token));
-			if (!new_token)
-			{
-				fprintf(stderr, "Error: failed to allocate memory for token\n");
-				return (NULL);
-			}
-			*new_token = *tokens; // Copy token data (including type and value)
-			// Add this new token to the command's token list
-			if (current->tokens == NULL)
-			{
-				current->tokens = new_token;
-			}
-			else
-			{
-				temp = current->tokens;
-				while (temp->next != NULL)
-					temp = temp->next;
-				temp->next = new_token;
-			}
-		}
-		tokens = tokens->next; // Move to the next token
-	}
-	return (head);
-}
