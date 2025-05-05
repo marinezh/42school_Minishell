@@ -12,25 +12,40 @@ t_env	*init_node(char *key, char *value)
 	ptr->next = NULL;
 	return (ptr);
 }
-t_env   *create_env_node(char *str)
+t_env	*create_env_node(char *str)
 {
     char	*ptr;
 	char	*key;
 	char	*value;
     t_env   *node;
+	size_t	len;
+	char *src;
 
     ptr = ft_strchr(str, '=');
-    if (!ptr)
-        return (NULL);
-    key = ft_strndup(str, ptr - str);
+    if (ptr)
+	{
+        len = ptr - str;
+		src = ptr + 1;
+	}
+	else
+	{
+		len = ft_strlen(str);
+		src = NULL;
+	}
+    key = ft_strndup(str, len);
     if(!key)
         return (NULL);
-    value = ft_strdup(ptr + 1);
-    if (!value)
+    if (src)
     {
-        free(key);
-        return(NULL);
+		value = ft_strdup(src);
+		if (!value)
+		{
+        	free(key);
+        	return(NULL);
+		}
     }
+	else
+		value = NULL;
     node = init_node(key, value);
     if (!node)
     {
