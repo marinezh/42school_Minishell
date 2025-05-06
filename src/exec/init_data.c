@@ -26,17 +26,6 @@ void	print_envp_list(t_env *envp_list)
 	}
 }
 
-int	env_list_size(t_env *env)
-{
-	int	count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return (count);
-}
-
 void	update_envp_array(t_data *data, t_env *envp_list)
 {
 	int	list_size;

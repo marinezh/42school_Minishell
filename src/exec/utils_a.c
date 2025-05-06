@@ -73,3 +73,14 @@ void	node_add_last(t_env **envp_list, t_env *new_node)
 		ptr = ptr->next;
 	ptr->next = new_node;
 }
+
+int	env_list_size(t_env *env)
+{
+	int	count = 0;
+	while (env)
+	{
+		count++;
+		env = env->next;
+	}
+	return (count);
+}
