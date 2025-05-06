@@ -1,78 +1,5 @@
 #include "minishell.h"
 
-t_env	*init_node(char *key, char *value)
-{
-	t_env	*ptr;
-
-	ptr = calloc(1, sizeof(t_env));
-	if (!ptr)
-		return (NULL);
-	ptr->key = key;
-	ptr->value = value;
-	ptr->next = NULL;
-	return (ptr);
-}
-t_env	*create_env_node(char *str)
-{
-    char	*ptr;
-	char	*key;
-	char	*value;
-    t_env   *node;
-	size_t	len;
-	char *src;
-
-    ptr = ft_strchr(str, '=');
-    if (ptr)
-	{
-        len = ptr - str;
-		src = ptr + 1;
-	}
-	else
-	{
-		len = ft_strlen(str);
-		src = NULL;
-	}
-    key = ft_strndup(str, len);
-    if(!key)
-        return (NULL);
-    if (src)
-    {
-		value = ft_strdup(src);
-		if (!value)
-		{
-        	free(key);
-        	return(NULL);
-		}
-    }
-	else
-		value = NULL;
-    node = init_node(key, value);
-    if (!node)
-    {
-        free(key);
-        free(value);
-        return(NULL);
-    }
-    return (node);
-}
-
-void	node_add_last(t_env **envp_list, t_env *new_node)
-{
-	t_env	*ptr;
-
-	ptr = *envp_list;
-	if (!envp_list || !new_node)
-		return ;
-	if (*envp_list == NULL)
-	{
-		*envp_list = new_node;
-		return ;
-	}
-	while (ptr->next != NULL)
-		ptr = ptr->next;
-	ptr->next = new_node;
-}
-
 void	init_envp_list(t_data *data, char **env)
 {
 	t_env	*node;
@@ -81,9 +8,9 @@ void	init_envp_list(t_data *data, char **env)
 	i = 0;
 	while (env[i])
 	{
-        node = create_env_node(env[i]);
-        if (node)
-		    node_add_last(&data->envp_list, node);
+		node = create_env_node(env[i]);
+		if (node)
+			node_add_last(&data->envp_list, node);
 		i++;
 	}
 }
@@ -99,8 +26,6 @@ void	print_envp_list(t_env *envp_list)
 	}
 }
 
-
-
 int	env_list_size(t_env *env)
 {
 	int	count = 0;
@@ -114,30 +39,24 @@ int	env_list_size(t_env *env)
 
 void	update_envp_array(t_data *data, t_env *envp_list)
 {
-	int	l_size;
+	int	list_size;
 	char	**ar_ptr;
-	char	*tmp;
-	int	i;
+	int		i;
 	t_env	*current;
 
 	current = envp_list;
 	i = 0;
-	l_size = env_list_size(envp_list);
-	ar_ptr = calloc(l_size + 1, sizeof(char *));
+	list_size = env_list_size(envp_list);
+	ar_ptr = calloc(list_size + 1, sizeof(char *));
 	if (!ar_ptr)
 		return ;
-	ar_ptr[l_size] = NULL;
-	while (current != NULL && i < l_size)
+	ar_ptr[list_size] = NULL;
+	while (current != NULL && i < list_size)
 	{
-
-		tmp = ft_strjoin(current->key, "=");
-		if(!tmp)
-		{
-			free_envp_array(ar_ptr);
-			return ;
-		}
-		ar_ptr[i] = ft_strjoin(tmp, current->value);
-		free(tmp);
+		if (current->value)
+			ar_ptr[i] = ft_strjoin(current->key, current->value);
+		else
+			ar_ptr[i] = ft_strdup(current->key);
 		if (!ar_ptr[i])
 		{
 			free_envp_array(ar_ptr);
