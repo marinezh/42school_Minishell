@@ -48,10 +48,10 @@ typedef struct s_command
 {
 	int					index;
 	char **args; // command + arguments
-	// char *infile;    // for < or << (herdoc)
-	// char *outfile;   // for > or >>
-	// int append;      // 1 if >>, 0 if >
-	// int pipe;        // 1 if followed by |
+	char *infile;    // for < or << (herdoc)
+	char *outfile;   // for > or >>
+	int append;      // 1 if >>, 0 if >
+	int pipe;        // 1 if followed by |
 	t_token *tokens; // linked list of tokens
 	// t_files				**redirections;
 	// t_files				in; // name of last in including << and <

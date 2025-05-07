@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/05/05 20:31:38 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:37:35 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,23 @@ int	shell_loop(void)
 	{
 		if (print_prompt(&cmd_input) == -1)
 			break;
-
+		//print_tokens(tokens); 
 		// tokens_lexer = run_lexer(&cmd_input); FIX THIS
 		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
-		//print_tokens(tokens); 
+		
 		// while (tokens[i])
 		// 	printf("tokens %s\n", tokens[i++]);
 		commands = parse_tokens(tokens);
-		t_command *curr = commands;
-
-		while (curr)
-		{
-			print_command_debug(curr);
-			curr = curr->next;
-		}
+		//t_command *curr = commands;
+		print_commands(commands);
+		// while (curr)
+		// {
+		// 	//print_command_debug(curr);
+		// 	print_commands(curr);
+		// 	curr = curr->next;
+		// }
 		// if (strcmp(cmd_input.input,"pwd") == 0) // after adding this one i have got a sig fault, need to check why
  		// 		getpwd();
 		add_history(cmd_input.input);
