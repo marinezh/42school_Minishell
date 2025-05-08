@@ -1,13 +1,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-
 # include "structs.h"
 # include "lexer.h"
 # include "parser.h"
 # include "utils.h"
 # include "libft.h"
 # include "exec.h"
+# include "error_messages.h"
 # include <limits.h>
 # include <stdio.h>
 # include <stdio.h>
@@ -28,7 +28,5 @@
 # define WHITE "\033[37m"
 # define BOLD "\033[1m"
 # define PROMPT "\001" GREEN BOLD "\002minishell$ \001" RESET "\002"
-
-
 
 #endif

@@ -46,7 +46,7 @@ int	is_var_name_valid(char *arg, char **args, int *special_var)
     }
 	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
 	{
-		print_error_msg(args, ": variable name is invalid\n");
+		print_error(args, ": variable name is invalid\n");
 		return (0);
 	}
 	i = 1;
@@ -54,7 +54,7 @@ int	is_var_name_valid(char *arg, char **args, int *special_var)
 	{
 		if (!(ft_isalpha(arg[i]) || ft_isdigit(arg[i]) || arg[i] == '_'))
 		{
-			print_error_msg(args, ": variable name is invalid\n");
+			print_error(args, ": variable name is invalid\n");
 			return (0);
 		}
 		i++;
@@ -87,7 +87,7 @@ int	ft_export(t_data *data, t_command *cmd)
 		{
 			if (cmd->args[i][0] == '-')
 			{
-				print_error_msg(cmd->args, ": command with option is invalid\n");
+				print_error(cmd->args, ": command with option is invalid\n");
 				break ;
 			}
 			if (!is_var_name_valid(cmd->args[i], cmd->args, &special_var))

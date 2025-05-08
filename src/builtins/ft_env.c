@@ -7,9 +7,8 @@ int ft_env(t_data *data, t_command *cmd)
 	i = 0;
     if (cmd->args[1])
     {
-        ft_putstr_fd("minishell: env: ", STDERR_FILENO);
-        ft_putstr_fd("options or arguments are not supported\n", STDERR_FILENO);
-        return (ERROR_GENERIC);
+        print_error_msg("env", ERR_OPTS_ARGS);
+        return(ERROR_GENERIC);
     }
 	if (data->envp_f)
 	{
@@ -30,3 +29,4 @@ int ft_env(t_data *data, t_command *cmd)
 //print only variables with value, don't print empty variables
 //if anything is typied after env - no other parameters are allowed after env
 //order - printed as they are created!
+//in bash env - argv and options possible

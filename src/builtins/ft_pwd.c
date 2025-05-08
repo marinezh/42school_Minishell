@@ -6,11 +6,10 @@ int ft_pwd(t_data *data, t_command *cmd)
 	char 	*pwd;
 
     if (cmd->args[1])
-    {
-        ft_putstr_fd("minishell: pwd: ", STDERR_FILENO);
-        ft_putstr_fd("options are not supported\n", STDERR_FILENO);
-        return (ERROR_GENERIC);
-    }
+	{
+		print_error_msg("pwd", ERR_OPTIONS);
+		return(ERROR_GENERIC);
+	}
 	pwd_node = find_env_name(data, "PWD");
 	if (pwd_node && pwd_node->value)
 	{
@@ -30,3 +29,4 @@ int ft_pwd(t_data *data, t_command *cmd)
 
 //bash first checks if PWD env exit and prints it
 //if not exit then only system call getcwd
+//in bash pwd - no argv and options possible
