@@ -27,3 +27,19 @@ void	print_error_msg(char **args, char *msg)
 	}
 	printf("%s", msg);
 }
+t_env *find_env_name(t_data *data, char *env_var)
+{
+    int name_len;
+    t_env	*cur;
+    
+    name_len = var_name_len(env_var);
+    cur = data->envp_list;
+    while (cur != NULL)
+    {
+        if (ft_strncmp(cur->key, env_var, name_len) == 0 &&
+            (cur->key[name_len] == '\0' || cur->key[name_len] == '='))
+            return (cur);
+        cur = cur->next;
+    }
+    return (NULL);
+}

@@ -16,6 +16,7 @@ int		env_list_size(t_env *env);
 int     print_current_envp(t_data *data, t_command *cmd);
 int     var_name_len(char *name);
 void	print_error_msg(char **args, char *msg);
+t_env   *find_env_name(t_data *data, char *env_var);
 
 // don't forget to delete
 // this is just to print linked list

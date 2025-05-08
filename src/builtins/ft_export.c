@@ -63,27 +63,12 @@ int	is_var_name_valid(char *arg, char **args, int *special_var)
 }
 void    process_env_var(t_data *data, char *env_var)
 {
-    int name_len;
-    int found;
-    t_env	*cur;
-    
-    name_len = var_name_len(env_var);
-    found = 0;
-    cur = data->envp_list;
-    // printf("name len - %d\n", name_len);
-    while (cur != NULL)
-    {
-        if (ft_strncmp(cur->key, env_var, name_len) == 0 &&
-            (cur->key[name_len] == '\0' || cur->key[name_len] == '='))
-        {
-                // printf("the match - %s\n", cur->key);
-                update_var_value(data, cur, env_var);
-                found = 1;
-                break ;
-        }
-        cur = cur->next;
-    }
-    if (!found)
+    t_env   *cur_env;
+
+    cur_env = find_env_name(data, env_var);
+    if (cur_env)
+        update_var_value(data, cur_env, env_var);
+    else
         create_env_var(data, env_var);
 }
 
