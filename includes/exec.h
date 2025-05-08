@@ -13,7 +13,9 @@ void	update_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);
 int		env_list_size(t_env *env);
-void	print_current_envp(t_data *data, t_command *cmd);
+int     print_current_envp(t_data *data, t_command *cmd);
+int     var_name_len(char *name);
+void	print_error_msg(char **args, char *msg);
 
 // don't forget to delete
 // this is just to print linked list
