@@ -90,7 +90,7 @@ void print_commands(t_command *cmd_list)
 		t_token *tok = cmd_list->tokens;
 		while (tok)
 		{
-			printf("       [%s] \"%s\"\n", token_type_to_str(tok->type), tok->value);
+			printf("       [%s] %s\n", token_type_to_str(tok->type), tok->value);
 			tok = tok->next;
 		}
 		cmd_list = cmd_list->next;

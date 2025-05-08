@@ -28,22 +28,11 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
-// typedef struct s_files
-// {
-// 	int	fd;
-// 	char	*name;
-// 	t_redirection 	red_types;  //  < << >> >
-// } t_files;
-
 // linked list of structs split by pipe
 typedef struct s_command
 {
 	int					index;
 	char **args; // command + arguments
-	char *infile;    // for < or << (herdoc)
-	char *outfile;   // for > or >>
-	int append;      // 1 if >>, 0 if >
-	int pipe;        // 1 if followed by |
 	t_token *tokens; // linked list of tokens
 	// t_files				**redirections;
 	// t_files				in; // name of last in including << and <
