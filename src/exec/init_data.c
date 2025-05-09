@@ -33,13 +33,12 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 	int		i;
 	t_env	*current;
 
-	current = envp_list;
-	i = 0;
 	list_size = env_list_size(envp_list);
 	ar_ptr = calloc(list_size + 1, sizeof(char *));
 	if (!ar_ptr)
 		return ;
-	ar_ptr[list_size] = NULL;
+	current = envp_list;
+	i = 0;
 	while (current != NULL && i < list_size)
 	{
 		if (current->value)
@@ -49,13 +48,17 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 		if (!ar_ptr[i])
 		{
 			free_envp_array(ar_ptr);
+			ar_ptr = NULL;
 			return ;
 		}
 		i++;
 		current = current->next;
 	}
 	if (data->envp)
+	{
 		free_envp_array(data->envp);
+		data->envp = NULL;
+	}
 	data->envp = ar_ptr;
 }
 
@@ -65,12 +68,14 @@ void	init_data(t_data *data, char **env)
 	data->cmd_names[1] = "echo";
 	data->cmd_names[2] = "env";
 	data->cmd_names[3] = "export";
+	data->cmd_names[4] = "unset";
 	data->builtins[0] = ft_pwd;
 	data->builtins[1] = ft_echo;
 	data->builtins[2] = ft_env;
 	data->builtins[3] = ft_export;
+	data->builtins[4] = ft_unset;
 
-	int i = 4;
+	int i = 5;
 	while (i < 7)
 	{
 		data->cmd_names[i] = NULL;
