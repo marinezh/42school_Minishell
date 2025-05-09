@@ -1,11 +1,12 @@
 #ifndef EXEC_H
 # define EXEC_H
 
-void 	init_data(t_data *data, char **env);
-int 	ft_pwd(t_data *data, t_command *cmd);
+void	init_data(t_data *data, char **env);
+int		ft_pwd(t_data *data, t_command *cmd);
 int		ft_echo(t_data *data, t_command *cmd);
 int		ft_env(t_data *data, t_command *cmd);
 int		ft_export(t_data *data, t_command *cmd);
+int		ft_unset(t_data *data, t_command *cmd);
 void	free_envp_array(char **envp);
 void	free_env_list(t_env *env);
 int		run_bltin(t_data *data, t_command *cmd);
@@ -13,11 +14,11 @@ void	update_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);
 int		env_list_size(t_env *env);
-int     print_current_envp(t_data *data, t_command *cmd);
-int     var_name_len(char *name);
-void     print_error_msg(char *cmd, char *msg);
+int		print_current_envp(t_data *data, t_command *cmd);
+int		var_name_len(char *name);
+void	print_error_msg(char *cmd, char *msg);
 void	print_error(char **args, char *msg);
-t_env   *find_env_name(t_data *data, char *env_var);
+t_env	*find_env_name(t_data *data, char *env_var);
 
 // don't forget to delete
 // this is just to print linked list
