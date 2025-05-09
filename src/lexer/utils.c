@@ -4,7 +4,7 @@ int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
 {
 	char quote; 
 	
-    quote = input[*i]; 
+	quote = input[*i]; 
 	if (copy && output) 
 		output[*j] = input[*i];
 	(*i)++; 

@@ -2,17 +2,17 @@
 
 t_token *tokenize_input(char *input)
 {
-	t_cmd_input cmd;
+	t_cmd_input cmd = {0};
 	cmd.input = input;
 
-	char *spaced_input = add_space(&cmd);
-	if (!spaced_input) 
-	{
+	//char *spaced_input = add_space(&cmd);
+	add_space(&cmd);
+	if (!cmd.spaced) {
 		printf("Failed to add spacing to input.\n");
 		return NULL;
 	}
-	printf("new input: %s\n", spaced_input);
-	char **split_input = quote_safe_split(spaced_input, ' ');
+	printf("new input: %s\n", cmd.spaced);
+	char **split_input = quote_safe_split(cmd.spaced, ' ');
 	if (!split_input) 
 	{
 		printf("Splitting input failed.\n");
@@ -63,33 +63,5 @@ t_token *tokenize_input(char *input)
 	}
 	return head;  // Return the head of the linked list
 }
-void print_tokens(t_token *tokens)
-{
-	while (tokens != NULL) {
-		switch (tokens->type) {
-			case WORD:
-				printf("WORD: %s\n", tokens->value);
-				break;
-			case PIPE:
-				printf("PIPE: %s\n", tokens->value);
-				break;
-			case REDIR_IN:
-				printf("REDIR_IN: %s\n", tokens->value);
-				break;
-			case REDIR_OUT:
-				printf("REDIR_OUT: %s\n", tokens->value);
-				break;
-			case REDIR_APPEND:
-				printf("REDIR_APPEND: %s\n", tokens->value);
-				break;
-			case HEREDOC:
-				printf("HEREDOC: %s\n", tokens->value);
-				break;
-			default:
-				printf("Unknown token type\n");
-				break;
-		}
-		tokens = tokens->next;  // Move to the next token in the linked list
-	}
-}
+
 

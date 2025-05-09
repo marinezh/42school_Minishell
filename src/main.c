@@ -1,57 +1,24 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/28 13:10:49 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/05/02 13:23:34 by ikozhina         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	shell_loop(t_data	*data)
 {
 	t_cmd_input	cmd_input;
-	//t_token		*tokens_lexer = NULL; //need to fix this
+	//t_token		*tokens_lexer = NULL; //do i need this?
 	t_token		*tokens = NULL;
 	t_command	*commands;
-	//int i = 0;
-
+	
 	while (1)
 	{
 		if (print_prompt(&cmd_input) == -1)
 			break;
-
-		// tokens_lexer = run_lexer(&cmd_input); FIX THIS
+		// tokens_lexer = run_lexer(&cmd_input); and this?
 		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
-		print_tokens(tokens);
-		// while (tokens[i])
-		// 	printf("tokens %s\n", tokens[i++]);
 		commands = parse_tokens(tokens);
-		t_command *curr = commands;
-
-		while (curr)
-		{
-			print_command_debug(curr);
-			curr = curr->next;
-		}
-		// if (strcmp(cmd_input.input,"pwd") == 0) // after adding this one i have got a sig fault, need to check why
- 		// 		getpwd();
+		print_commands(commands);
 		add_history(cmd_input.input);
 
-		// if (!commands)
-		// {
-		// 	// handle parse error, maybe print "syntax error"
-		// 	free_tokens(tokens);
-		// 	continue;
-		// }
-
-		//execute_commands(commands); future function
 		run_bltin(data, commands);
 		// Cleanup
 		//free(cmd_input.input);

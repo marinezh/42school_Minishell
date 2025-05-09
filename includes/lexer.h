@@ -17,7 +17,8 @@
 int			getpwd(void);
 char		**run_lexer(t_cmd_input *cmd);
 int			print_prompt(t_cmd_input *data);
-char	    *add_space(t_cmd_input *cmd);
+//char	    *add_space(t_cmd_input *cmd);
+void	    add_space(t_cmd_input *cmd);
 
 char		**quote_safe_split(char *str, char delimiter);
 int			fmt_quotes(char *input, char *output, int *i, int *j, int copy);

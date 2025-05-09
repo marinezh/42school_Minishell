@@ -39,7 +39,7 @@ MAIN = main.c
 BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c utils_builtin.c ft_unset.c
 LEXER = lexer.c lexer_format.c operator_check.c split.c utils.c
 EXEC = init_data.c free_data.c exec.c utils_exec.c
-PARSER = parser.c tokenization.c
+PARSER = parser.c tokenization.c print_delete.c
 UTILS = free.c
 
 LIBFT := $(LIBFT_PATH)/libft.a

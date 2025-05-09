@@ -5,10 +5,10 @@ typedef enum e_token_type
 {
 	WORD,
 	PIPE,
-	REDIR_OUT, // >
+	REDIR_OUT,    // >
 	REDIR_APPEND, // >>
-	REDIR_IN, // <
-	HEREDOC // <<
+	REDIR_IN,     // <
+	HEREDOC       // <<
 }						t_token_type;
 
 typedef	enum e_error_code
@@ -41,26 +41,15 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
-// typedef struct s_files
-// {
-// 	int	fd;
-// 	char	*name;
-// 	t_redirection 	red_types;  //  < << >> >
-// } t_files;
-
 // linked list of structs split by pipe
 typedef struct s_command
 {
 	int					index;
-	char **args;		// command + arguments
-	char *infile;		// for < or << (herdoc)
-	char *outfile;		// for > or >>
-	int append;			// 1 if >>, 0 if >
-	int pipe;			// 1 if followed by |
-	t_token				*tokens; // linked list of tokens
-	//t_files				**redirections;
-	//t_files				in; // name of last in including << and <
-	//t_files				out;// name of last out > or >>
+	char **args; // command + arguments
+	t_token *tokens; // linked list of tokens
+	// t_files				**redirections;
+	// t_files				in; // name of last in including << and <
+	// t_files				out;// name of last out > or >>
 	struct s_command	*next;
 }						t_command;
 
@@ -90,3 +79,39 @@ struct					s_data
 };
 
 #endif
+
+// posibilities for code improvement
+// typedef struct s_files
+// {
+// 	char *name; // File name or heredoc delimiter
+// 	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT,
+// 	REDIR_APPEND
+// 	int fd;               // File descriptor for the opened file
+// 	struct s_files *next; // Pointer to the next redirection
+// }						t_files;
+
+// typedef struct s_command
+// {
+// 	int					index;
+// 	char **args;            // Command + arguments
+// 	t_files *infiles;       // Linked list of input redirections (<, <<)
+// 	t_files *outfiles;      // Linked list of output redirections (>, >>)
+// 	int pipe;               // 1 if followed by a pipe
+// 	struct s_command *next; // Pointer to the next command
+// }						t_command;
+
+// typedef struct s_command
+// {
+// 	int					index;
+// 	char **args;     // command + arguments
+// 	t_token *tokens; // linked list of tokens
+// 	struct s_command	*next;
+// }						t_command;
+
+// typedef struct s_command
+// {
+// 	int					index;
+// 	char **args;     // command + arguments
+// 	t_token *tokens; // linked list of tokens
+// 	struct s_command	*next;
+// }						t_command;

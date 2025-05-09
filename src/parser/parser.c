@@ -1,102 +1,89 @@
-#include "minishell.h"
+#include <minishell.h>
 
-//////////////////////////////////////////////////////////////////////
-//FOR DEBUGGING, DELETE
-void	print_command_debug(t_command *cmd)
-{
-	int i = 0;
-
-	printf("====== COMMAND ======\n");
-	printf("index is %d\n", cmd->index);
-	if (cmd->args)
-	{
-		printf("Args: ");
-		while (cmd->args[i])
-		{
-			printf("'%s' ", cmd->args[i]);
-			i++;
-		}
-		printf("\n");
-	}
-	if (cmd->infile)
-		printf("Infile: %s\n", cmd->infile);
-	if (cmd->outfile)
-		printf("Outfile: %s (append: %d)\n", cmd->outfile, cmd->append);
-	if (cmd->pipe)
-		printf("Pipe to next: yes\n");
-	printf("=====================\n");
-}
-///////////////////////////////////////////////////////////////////////
-
-
-static t_command	*init_command(void)
+t_command *create_new_command(int index)
 {
 	t_command *cmd = malloc(sizeof(t_command));
 	if (!cmd)
-		return (NULL);
+		return NULL;
+	cmd->index = index;
 	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	cmd->append = 0;
-	cmd->pipe = 0;
+	cmd->tokens = NULL;
 	cmd->next = NULL;
-	return (cmd);
+	return cmd;
 }
 
-t_command *parse_tokens(t_token *tokens)
+void append_token(t_token **head, t_token *token)
 {
-	t_command *head = init_command();
-	t_command *current = head;
-	int count;
-	int index = 0;
+	t_token *copy = malloc(sizeof(t_token));
+	if (!copy)
+		return;
+	copy->type = token->type;
+	copy->value = strdup(token->value);
+	copy->next = NULL;
 
-	current->index = index++; // post-increment
-	while (tokens != NULL)
+	if (!*head)
+		*head = copy;
+	else
 	{
-		// Pipe handling
-		if (tokens->type == PIPE)
-		{
-			current->pipe = 1;
-			current->next = init_command();  // Create a new command for the next token
-			current = current->next;  // Move to the new command
-			current->index = index++; // post-increment
-		}
-		// Input red-n handling
-		else if (tokens->type == REDIR_IN)
-		{
-			tokens = tokens->next;  // Move to the next token (the file name)
-			current->infile = ft_strdup(tokens->value);
-		}
-		// Output red-n handling (>) and append redirection (>>)
-		else if (tokens->type == REDIR_OUT || tokens->type == REDIR_APPEND)
-		{
-			current->append = (tokens->type == REDIR_APPEND);  // Set append if it's ">>"
-			tokens = tokens->next;  // Move to the next token (the file name)
-			current->outfile = ft_strdup(tokens->value);
-		}
-		else
-		{
-			// Add token to args list
-			count = 0;
-			while (current->args && current->args[count])
-				count++;
+		t_token *curr = *head;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = copy;
+	}
+}
 
-			char **new_args = malloc(sizeof(char *) * (count + 2));
-			int j = 0;
-			while (j < count)
-			{
-				new_args[j] = current->args[j];
-				j++;
-			}
-			new_args[count] = ft_strdup(tokens->value);  // Add the current token's value
-			new_args[count + 1] = NULL;
+char **realloc_args(char **args, int count, char *value)
+{
+	int i = 0;
 
-			free(current->args);  // Free the old args array
-			current->args = new_args;  // Set the new args array
+	char **new_args = malloc(sizeof(char *) * (count + 2));
+	if (!new_args)
+		return NULL;
+	while (i < count)
+	{
+		new_args[i] = args[i];
+		i++;
+	}
+	new_args[count] = strdup(value);
+	new_args[count + 1] = NULL;
+	free(args);
+	return new_args;
+}
+
+t_command *parse_tokens(t_token *token_list)
+{
+	t_command *head = NULL; 
+	t_command *tail = NULL;
+	t_command *current = NULL;
+	int command_index = 0;
+
+	while (token_list)
+	{
+		if (!current) // On PIPE, start a new command
+		{
+			current = create_new_command(command_index++);
+			if (!head)
+				head = current;
+			if (tail)
+				tail->next = current;
+			tail = current;
 		}
-
-		tokens = tokens->next;  // Move to the next token in the linked list
+		if (token_list->type == PIPE)
+		{
+			append_token(&current->tokens, token_list);
+			current = NULL;
+			token_list = token_list->next;
+			continue;
+		}
+		append_token(&current->tokens, token_list); // Add token to current command
+		if (token_list->type == WORD) // If it's a WORD, add to args
+		{
+			int argc = 0;
+			while (current->args && current->args[argc])
+				argc++;
+			current->args = realloc_args(current->args, argc, token_list->value);
+		}
+		token_list = token_list->next;
 	}
 	return head;
 }
-
