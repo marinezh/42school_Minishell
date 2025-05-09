@@ -36,9 +36,9 @@ VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) 
 
 # Files
 MAIN = main.c
-BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c
+BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c utils_builtin.c
 LEXER = lexer.c lexer_format.c operator_check.c split.c utils.c
-EXEC = init_data.c free_data.c exec.c utils_a.c
+EXEC = init_data.c free_data.c exec.c utils_exec.c
 PARSER = parser.c tokenization.c
 UTILS = free.c
 
