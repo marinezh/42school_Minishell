@@ -27,9 +27,7 @@ void	add_space(t_cmd_input *cmd)
 				break ;
 			continue;
 		}
-		if (cmd->i + 2 < cmd->len && is_triple_op(cmd->input, cmd->i) == 1)
-			process_three(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
-		else if (cmd->i + 1 < cmd->len && is_dbl_op(cmd->input, cmd->i) == 1)
+		if (cmd->i + 1 < cmd->len && is_dbl_op(cmd->input, cmd->i) == 1)
 			process_two(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
 		else if (is_single_op(cmd->input, cmd->i) == 1)
 			process_one(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
