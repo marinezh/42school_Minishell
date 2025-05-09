@@ -4,5 +4,6 @@
 # define ERR_OPTIONS ": options not supported\n"
 # define ERR_OPTS_ARGS ": options or arguments not supported\n"
 # define ERR_NAME_INVALID ": variable name is invalid\n"
+# define ERR_TOO_MANY_ARGS ": too many arguments\n"
 
 #endif
