@@ -13,30 +13,33 @@ int	print_prompt(t_cmd_input *cmd)
 
 void	add_space(t_cmd_input *cmd)
 {
-	cmd->i = 0;
-	cmd->j = 0;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
 	cmd->len = ft_strlen(cmd->input);
 	cmd->spaced = malloc(cmd->len * 10 + 1);
 	if (!cmd->spaced)
 		return ;
-	while (cmd->i < cmd->len)
+	while (i < cmd->len)
 	{
-		if (cmd->input[cmd->i] == '\'' || cmd->input[cmd->i] == '\"')
+		if (cmd->input[i] == '\'' || cmd->input[i] == '\"')
 		{
-			if (fmt_quotes(cmd->input, cmd->spaced, &cmd->i, &cmd->j, 1) == -1)
+			if (fmt_quotes(cmd->input, cmd->spaced, &i, &j, 1) == -1)
 				break ;
-			continue;
+			continue ;
 		}
-		if (cmd->i + 1 < cmd->len && is_dbl_op(cmd->input, cmd->i) == 1)
-			process_two(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
-		else if (is_single_op(cmd->input, cmd->i) == 1)
-			process_one(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
+		if (i + 1 < cmd->len && is_dbl_op(cmd->input, i) == 1)
+			process_two(cmd->input, cmd->spaced, &i, &j);
+		else if (is_single_op(cmd->input, i) == 1)
+			process_one(cmd->input, cmd->spaced, &i, &j);
 		else
-			cmd->spaced[cmd->j++] = cmd->input[cmd->i++];
+			cmd->spaced[j++] = cmd->input[i++];
 	}
-	cmd->spaced[cmd->j] = '\0';
+	cmd->spaced[j] = '\0';
 	printf("DEBUG spaced: [%s]\n", cmd->spaced);
-	//return (cmd->spaced);
+	// return (cmd->spaced);
 }
 
 // char	**run_lexer(t_cmd_input *cmd)
@@ -45,14 +48,14 @@ void	add_space(t_cmd_input *cmd)
 // 	char	*spaced_input;
 // 	// int		i;
 // 	// i = 0;
-	
+
 // 	spaced_input = add_space(cmd);
 // 	if (!spaced_input)
 // 		return (NULL);
 // 	printf("%s\n", cmd->input);
 // 	printf("new input: %s\n", spaced_input);
 // 	tokens = quote_safe_split(spaced_input, ' ');
-	
+
 // 	// while (tokens[i])
 // 	// {
 // 	// 	printf("%s\n", tokens[i]);

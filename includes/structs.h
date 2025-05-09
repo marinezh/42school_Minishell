@@ -29,9 +29,8 @@ typedef struct s_cmd_input
 	char				*input;
 	char				*spaced;
 	int					len;
-	int					i;
-	int					j;
-	// t_list  env; // need to do linkedlist part in libft
+	//int					i;
+	//int					j;
 }						t_cmd_input;
 
 typedef struct s_token
