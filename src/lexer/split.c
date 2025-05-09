@@ -34,25 +34,6 @@ static char *word_dup(char *str, int len)
 	return word;
 }
 
-int skip_quotes(char *str, int *j)
-{
-	
-	char quote = str[*j];
-	(*j)++;
-	while(str[*j] && str[*j] != quote)
-	{
-		(*j)++;
-	}
-	if (str[*j] != quote)
-	{
-		printf("quotes not closed\n");
-		return (-1);
-	}
-	if (str[*j] == quote)
-			(*j)++;
-	return 0;
-}
-
 char **quote_safe_split(char *str, char delimiter)
 {
 	int words = word_count(str, ' ');
@@ -76,8 +57,23 @@ char **quote_safe_split(char *str, char delimiter)
 			}
 			else 
 			{
-				while (str[j] && str[j] != delimiter)
+				int in_quote = 0;
+				char quote_char = 0;
+
+				while (str[j] && (in_quote || str[j] != delimiter))
+				{
+					if ((str[j] == '\'' || str[j] == '\"'))
+					{
+						if (!in_quote)
+						{
+							in_quote = 1;
+							quote_char = str[j];
+						}
+						else if (str[j] == quote_char)
+							in_quote = 0;
+					}
 					j++;
+				}
 			}
 			result[i++] = word_dup(&str[start], j - start); // Copy the word and store it in the array
 		}
