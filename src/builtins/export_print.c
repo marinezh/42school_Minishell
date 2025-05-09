@@ -54,7 +54,7 @@ void	print_export_format(char **envp)
 	}
 }
 
-void	print_current_envp(t_data *data, t_command *cmd)
+int	print_current_envp(t_data *data, t_command *cmd)
 {
 	(void)cmd;
 	if (data->envp_f)
@@ -69,4 +69,5 @@ void	print_current_envp(t_data *data, t_command *cmd)
 		free_envp_array(data->envp);
 		data->envp = NULL;
 	}
+	return (0);
 }
