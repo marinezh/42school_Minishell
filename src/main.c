@@ -15,6 +15,12 @@ int	shell_loop(t_data	*data)
 		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
+		if (error_check(tokens))
+		{
+    		//free_tokens(tokens);
+   			continue; // skip to next input
+		}
+
 		commands = parse_tokens(tokens);
 		print_commands(commands);
 		add_history(cmd_input.input);

@@ -87,3 +87,16 @@ t_command *parse_tokens(t_token *token_list)
 	}
 	return head;
 }
+int error_check(t_token *token)
+{
+	while(token)
+	{
+		if(token->type == PIPE && (!token->next || token->next->type == PIPE))
+		{
+			printf("syntax error\n");
+			return (1);
+		}
+		token = token->next;
+	}
+	return 0;
+}
