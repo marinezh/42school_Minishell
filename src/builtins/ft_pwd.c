@@ -28,5 +28,5 @@ int ft_pwd(t_data *data, t_command *cmd)
 }
 
 //bash first checks if PWD env exit and prints it
-//if not exit then only system call getcwd
+//if not exit then only system call getcwd()
 //in bash pwd - no argv and options possible
