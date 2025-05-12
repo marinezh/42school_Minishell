@@ -18,7 +18,7 @@ void append_token(t_token **head, t_token *token)
 	if (!copy)
 		return;
 	copy->type = token->type;
-	copy->value = strdup(token->value);
+	copy->value = ft_strdup(token->value);
 	copy->next = NULL;
 
 	if (!*head)
@@ -44,7 +44,7 @@ char **realloc_args(char **args, int count, char *value)
 		new_args[i] = args[i];
 		i++;
 	}
-	new_args[count] = strdup(value);
+	new_args[count] = ft_strdup(value);
 	new_args[count + 1] = NULL;
 	free(args);
 	return new_args;
@@ -88,4 +88,43 @@ t_command *parse_tokens(t_token *token_list)
 	return head;
 }
 
-
+int error_check(t_token *token)
+{
+	// Check if command starts with a pipe
+	if (token && token->type == PIPE)
+	{
+		printf("syntax error near unexpected token '|'\n");
+		return 1;
+	}
+	while(token)
+	{
+		if(token->type == PIPE && (!token->next || token->next->type == PIPE))
+		{
+			printf("syntax error |\n");
+			return (1);
+		}
+		else if((token->type == REDIR_APPEND || token->type == REDIR_IN || 
+			token->type == REDIR_OUT || token->type == HEREDOC) &&
+			(!token->next || token->next->type == REDIR_APPEND ||
+			token->next->type == REDIR_IN || token->next->type == REDIR_OUT ||
+			token->next->type == HEREDOC))
+		{
+			printf("syntax error >\n");
+			return (1);
+		}
+		else if((token->type == REDIR_APPEND || token->type == REDIR_IN || 
+			token->type == REDIR_OUT || token->type == HEREDOC) &&
+			(!token->next || token->next->type == PIPE ))
+		{
+			printf("syntax error > |\n");
+			return (1);
+		}
+		// else if(token->type == PIPE && (!token->prev)) // think about do i need to use double linked list here
+		// {
+		// 	printf("syntax error | ls\n");
+		// 	return (1);
+		// }
+		token = token->next;
+	}
+	return 0;
+}

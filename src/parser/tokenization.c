@@ -29,20 +29,20 @@ t_token *tokenize_input(char *input)
 			printf("Memory allocation failed for a new token.\n");
 			return NULL;
 		}
-		if (strcmp(split_input[i], "|") == 0) 
+		if (ft_strcmp(split_input[i], "|") == 0) 
 			new_token->type = PIPE;
-		else if (strcmp(split_input[i], "<") == 0) 
+		else if (ft_strcmp(split_input[i], "<") == 0) 
 			new_token->type = REDIR_IN;
-		else if (strcmp(split_input[i], ">") == 0) 
+		else if (ft_strcmp(split_input[i], ">") == 0) 
 			new_token->type = REDIR_OUT;
-		else if (strcmp(split_input[i], ">>") == 0) 
+		else if (ft_strcmp(split_input[i], ">>") == 0) 
 			new_token->type = REDIR_APPEND;
-		else if (strcmp(split_input[i], "<<") == 0) 
+		else if (ft_strcmp(split_input[i], "<<") == 0) 
 			new_token->type = HEREDOC;
 		else 
 			new_token->type = WORD;  // Default case for regular words
 
-		new_token->value = strdup(split_input[i]);  // Save the token value
+		new_token->value = ft_strdup(split_input[i]);  // Save the token value
 		if (!new_token->value) {
 			printf("Memory allocation failed for token value.\n");
 			return NULL;

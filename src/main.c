@@ -15,9 +15,11 @@ int	shell_loop(t_data	*data)
 		tokens = tokenize_input(cmd_input.input);
 		if (!tokens)
 			continue;
+		//print_tokens(tokens);
 		if (error_check(tokens))
 		{
-    		//free_tokens(tokens);
+    		free_tokens(tokens);
+			free(cmd_input.input);
    			continue; // skip to next input
 		}
 
@@ -27,10 +29,9 @@ int	shell_loop(t_data	*data)
 
 		run_bltin(data, commands);
 		// Cleanup
-		//free(cmd_input.input);
-		//free_tokens(tokens);  // Free the tokens list
-        //free(args);  // Free the args array
-        //free_command_list(commands);  // Free the commands list, need to create this function
+		free(cmd_input.input);
+		free_tokens(tokens);  // Free the tokens list
+        free_command_list(commands);  // Free the commands list, need to create this function
 	}
 	return (0);
 }

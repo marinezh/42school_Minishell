@@ -58,6 +58,14 @@
 // 		tokens = tokens->next;  // Move to the next token in the linked list
 // 	}
 // }
+void print_tokens(t_token *tok)
+{
+	while (tok)
+	{
+		printf("       [%d] %s\n", tok->type, tok->value);
+			tok = tok->next;
+	}
+}
 const char *token_type_to_str(t_token_type type)
 {
 	switch (type) {
