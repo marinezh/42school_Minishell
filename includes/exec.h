@@ -20,6 +20,7 @@ int		var_name_len(char *name);
 void	print_error_msg(char *cmd, char *msg);
 void	print_error(char **args, char *msg);
 t_env	*find_env_name(t_data *data, char *env_var);
+int		count_args(char **args);
 
 // don't forget to delete
 // this is just to print linked list

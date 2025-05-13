@@ -39,7 +39,7 @@ t_env *find_env_name(t_data *data, char *env_var)
 {
     int name_len;
     t_env	*cur;
-    
+
     name_len = var_name_len(env_var);
     cur = data->envp_list;
     while (cur != NULL)
@@ -50,4 +50,13 @@ t_env *find_env_name(t_data *data, char *env_var)
         cur = cur->next;
     }
     return (NULL);
+}
+int	count_args(char **args)
+{
+	int		count;
+
+	count = 0;
+	while (args && args[count])
+		count++;
+	return (count);
 }
