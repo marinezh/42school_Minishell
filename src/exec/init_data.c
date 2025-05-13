@@ -70,23 +70,20 @@ void	init_data(t_data *data, char **env)
 	data->cmd_names[3] = "export";
 	data->cmd_names[4] = "unset";
 	data->cmd_names[5] = "cd";
+	data->cmd_names[6] = "exit";
 	data->builtins[0] = ft_pwd;
 	data->builtins[1] = ft_echo;
 	data->builtins[2] = ft_env;
 	data->builtins[3] = ft_export;
 	data->builtins[4] = ft_unset;
 	data->builtins[5] = ft_cd;
+	data->builtins[6] = ft_exit;
 
-	int i = 6;
-	while (i < 7)
-	{
-		data->cmd_names[i] = NULL;
-		data->builtins[i] = NULL;
-		i++;
-	}
 	data->envp_list = NULL;
 	data->envp = NULL;
 	data->envp_f = 0;
+	data->exit_f = 0;
+	data->status = 0;
 	init_envp_list(data, env);
 	if (data->envp_list)
 		update_envp_array(data, data->envp_list);
