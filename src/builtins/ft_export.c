@@ -87,7 +87,7 @@ int	ft_export(t_data *data, t_command *cmd)
 		{
 			if (cmd->args[i][0] == '-')
 			{
-				print_error(cmd->args, ": command with option is invalid\n");
+				print_error(cmd->args, ERR_OPTIONS);
 				break ;
 			}
 			if (!is_var_name_valid(cmd->args[i], cmd->args, &special_var))
