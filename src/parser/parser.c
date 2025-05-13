@@ -46,7 +46,8 @@ char **realloc_args(char **args, int count, char *value)
 	}
 	new_args[count] = ft_strdup(value);
 	new_args[count + 1] = NULL;
-	free(args);
+	if(args)
+		free(args);
 	return new_args;
 }
 
