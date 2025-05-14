@@ -50,7 +50,6 @@ char **realloc_args(char **args, int count, char *value)
 		free(args);
 	return new_args;
 }
-
 t_command *parse_tokens(t_token *token_list)
 {
 	t_command *head = NULL; 
@@ -77,6 +76,7 @@ t_command *parse_tokens(t_token *token_list)
 			continue;
 		}
 		append_token(&current->tokens, token_list); // Add token to current command
+		
 		if (token_list->type == WORD) // If it's a WORD, add to args
 		{
 			int argc = 0;
@@ -88,6 +88,8 @@ t_command *parse_tokens(t_token *token_list)
 	}
 	return head;
 }
+
+
 
 int error_check(t_token *token)
 {

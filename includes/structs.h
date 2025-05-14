@@ -84,9 +84,8 @@ struct					s_data
 // posibilities for code improvement
 // typedef struct s_files
 // {
-// 	char *name; // File name or heredoc delimiter
-// 	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT,
-// 	REDIR_APPEND
+// 	char *file_name; // File name or heredoc delimiter
+// 	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT, APPEND
 // 	int fd;               // File descriptor for the opened file
 // 	struct s_files *next; // Pointer to the next redirection
 // }						t_files;
@@ -95,24 +94,9 @@ struct					s_data
 // {
 // 	int					index;
 // 	char **args;            // Command + arguments
-// 	t_files *infiles;       // Linked list of input redirections (<, <<)
-// 	t_files *outfiles;      // Linked list of output redirections (>, >>)
-// 	int pipe;               // 1 if followed by a pipe
+// 	t_files *redirections;       // Linked list of redirections (<, <<, >, >>)
+// 	t_token *tokens; // linked list of tokens
 // 	struct s_command *next; // Pointer to the next command
 // }						t_command;
 
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;     // command + arguments
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command	*next;
-// }						t_command;
 
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;     // command + arguments
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command	*next;
-// }						t_command;
