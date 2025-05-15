@@ -26,7 +26,7 @@ int	shell_loop(t_data	*data)
         //free(args);  // Free the args array
         //free_command_list(commands);  // Free the commands list, need to create this function
 	}
-	return (0);
+	return (data->status);
 }
 int	main(int ac, char **av, char **env)
 {
