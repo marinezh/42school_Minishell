@@ -74,13 +74,32 @@ void	node_add_last(t_env **envp_list, t_env *new_node)
 	ptr->next = new_node;
 }
 
-int	env_list_size(t_env *env)
+int	env_list_size(t_env *head)
 {
-	int	count = 0;
-	while (env)
+	int		count;
+	t_env	*cur; 
+
+	count = 0;
+	cur = head;
+	while (cur)
 	{
 		count++;
-		env = env->next;
+		cur = cur->next;
 	}
 	return (count);
+}
+
+int	cmd_list_size(t_command *head)
+{
+	int	count;
+	t_command *cur;
+
+	count = 0;
+	cur = head;
+	while (cur)
+	{
+		count++;
+		cur = cur->next;
+	}
+	return(count);
 }

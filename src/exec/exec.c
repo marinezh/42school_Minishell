@@ -1,19 +1,6 @@
 #include "minishell.h"
 
-int	command_list_size(t_command *head)
-{
-	int	count;
-	t_command *cur;
 
-	count = 0;
-	cur = head;
-	while (cur)
-	{
-		count++;
-		cur = cur->next;
-	}
-	return(count);
-}
 int	run_bltin(t_data *data, t_command *cmd)
 {
 	int i;
@@ -56,7 +43,7 @@ int	execute(t_data *data, t_command *cmd)
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (0);
-	if (command_list_size(cmd) == 1)
+	if (cmd_list_size(cmd) == 1)
 	{
 		if (is_builtin(data, cmd))
 			return (run_bltin(data, cmd));
