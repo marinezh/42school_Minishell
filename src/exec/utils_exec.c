@@ -89,17 +89,17 @@ int	env_list_size(t_env *head)
 	return (count);
 }
 
-int	cmd_list_size(t_command *head)
-{
-	int	count;
-	t_command *cur;
+// int	cmd_list_size(t_command *head)
+// {
+// 	int	count;
+// 	t_command *cur;
 
-	count = 0;
-	cur = head;
-	while (cur)
-	{
-		count++;
-		cur = cur->next;
-	}
-	return(count);
-}
+// 	count = 0;
+// 	cur = head;
+// 	while (cur)
+// 	{
+// 		count++;
+// 		cur = cur->next;
+// 	}
+// 	return(count);
+// }

@@ -22,6 +22,8 @@ void	print_error(char **args, char *msg);
 t_env	*find_env_name(t_data *data, char *env_var);
 int		count_args(char **args);
 int		execute(t_data *data, t_command *cmd);
+int     run_bltin(t_data *data, t_command *cmd);
+int     run_external(t_data *data, t_command *cmd);
 
 // don't forget to delete
 // this is just to print linked list
