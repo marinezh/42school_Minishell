@@ -3,12 +3,13 @@
 
 typedef enum e_token_type
 {
-	WORD,					// 0
-	PIPE,					// 1
-	REDIR_OUT,    // >		// 2
-	REDIR_APPEND, // >>		// 3
-	REDIR_IN,     // <		// 4
-	HEREDOC       // <<		// 5
+	NONE,					// 0
+	WORD,					// 1
+	PIPE,					// 2
+	REDIR_OUT,    // >		// 3
+	REDIR_APPEND, // >>		// 4
+	REDIR_IN,     // <		// 5
+	HEREDOC       // <<		// 6
 }						t_token_type;
 
 typedef	enum e_error_code
@@ -42,6 +43,15 @@ typedef struct s_token
 	struct s_token		*next;
 }						t_token;
 
+//osibilities for code improvement
+typedef struct s_files
+{
+	char *name; // File name or heredoc delimiter
+	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT, APPEND
+	int fd;               // File descriptor for the opened file
+	struct s_files *next; // Pointer to the next redirection
+} t_files;
+
 // linked list of structs split by pipe
 typedef struct s_command
 {
@@ -49,8 +59,8 @@ typedef struct s_command
 	char **args; // command + arguments
 	t_token *tokens; // linked list of tokens
 	// t_files				**redirections;
-	// t_files				in; // name of last in including << and <
-	// t_files				out;// name of last out > or >>
+	t_files				in; // name of last in including << and <
+	t_files				out;// name of last out > or >>
 	struct s_command	*next;
 }						t_command;
 
@@ -81,14 +91,7 @@ struct					s_data
 
 #endif
 
-// posibilities for code improvement
-// typedef struct s_files
-// {
-// 	char *file_name; // File name or heredoc delimiter
-// 	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT, APPEND
-// 	int fd;               // File descriptor for the opened file
-// 	struct s_files *next; // Pointer to the next redirection
-// }						t_files;
+
 
 // typedef struct s_command
 // {
