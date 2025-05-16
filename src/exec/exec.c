@@ -1,22 +1,19 @@
 #include "minishell.h"
-#include "exec.h"
 
-int	run_bltin(t_data *data, t_command *cmd)
+int	execute(t_data *data, t_command *cmd)
 {
-	int i;
-	char	**args;
+	int	builtin_status;
+	// int	external_cmd_status;
 
-	i = 0;
-	args = cmd->args;
-	while (i < 7)
-	{
-		if (data->cmd_names[i] && ft_strcmp(args[0], data->cmd_names[i]) == 0)
-		{
-			data->builtins[i](data, cmd);
-			return (0);
-		}
-		i++;
-	}
-	printf("builtin doesn't exit\n");
-	return(1);
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (0);
+	// if (cmd_list_size(cmd) == 1)
+	// {
+	builtin_status = run_bltin(data, cmd);
+	if (builtin_status != -1)
+		return (builtin_status);
+	// external_cmd_status = 
+	run_external(data, cmd);
+	return (0);
 }
+//**command not found -> status changes to 127, but not exit bash
