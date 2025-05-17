@@ -75,6 +75,7 @@ const char *token_type_to_str(t_token_type type)
 		case REDIR_APPEND: return "REDIR_APPEND";
 		case REDIR_IN: return "REDIR_IN";
 		case HEREDOC: return "HEREDOC";
+		case FILE_NAME : return "FILE_NAME";
 		default: return "UNKNOWN";
 	}
 }
@@ -102,6 +103,15 @@ void print_commands(t_command *cmd_list)
 			tok = tok->next;
 		}
 		cmd_list = cmd_list->next;
+		
 		printf("=====================\n");
+	}
+}
+void print_files_nodes(t_files *files)
+{
+	while(files)
+	{
+		printf("File name %s, file_type %d\n", files->name, files->type);
+		files = files->next;
 	}
 }

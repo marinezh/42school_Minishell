@@ -9,6 +9,14 @@ t_command *create_new_command(int index)
 	cmd->args = NULL;
 	cmd->tokens = NULL;
 	cmd->next = NULL;
+	// cmd->in->name = NULL;
+	// cmd->in->type = NONE;
+	// cmd->in->fd = -1;
+	// cmd->in->next = NULL;
+	// cmd->out->name = NULL;
+	// cmd->out->type = NONE;
+	// cmd->out->fd = -1;
+	// cmd->out->next = NULL;
 	return cmd;
 }
 
@@ -70,6 +78,7 @@ t_command *parse_tokens(t_token *token_list)
 		}
 		if (token_list->type == PIPE)
 		{
+			current->pipe = 1;
 			append_token(&current->tokens, token_list);
 			current = NULL;
 			token_list = token_list->next;

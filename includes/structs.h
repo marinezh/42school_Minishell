@@ -6,10 +6,11 @@ typedef enum e_token_type
 	NONE,					// 0
 	WORD,					// 1
 	PIPE,					// 2
-	REDIR_OUT,    // >		// 3
-	REDIR_APPEND, // >>		// 4
-	REDIR_IN,     // <		// 5
-	HEREDOC       // <<		// 6
+	REDIR_OUT,				// 3 >
+	REDIR_APPEND,			// 4 >>
+	REDIR_IN,				// 5 <
+	HEREDOC,				// 6 <<
+	FILE_NAME				// 7
 }						t_token_type;
 
 typedef enum e_error_code
@@ -38,8 +39,7 @@ typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
-
-	// struct s_token		*prev;
+	struct s_token		*prev;
 	struct s_token		*next;
 }						t_token;
 
@@ -58,9 +58,9 @@ typedef struct s_command
 	int					index;
 	char **args;     // command + arguments
 	t_token *tokens; // linked list of tokens
-	// t_files				**redirections;
-	t_files				in; // name of last in including << and <
-	t_files				out;// name of last out > or >>
+	t_files				*in; // list of << and <
+	t_files				*out;// nlist of out > or >>
+	int					pipe;
 	struct s_command	*next;
 }						t_command;
 

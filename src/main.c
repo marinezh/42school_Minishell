@@ -6,7 +6,7 @@ int	shell_loop(t_data	*data)
 	//t_token		*tokens_lexer = NULL; //do i need this?
 	t_token		*tokens = NULL;
 	t_command	*commands;
-	t_files		*files;
+	//t_files		*files;
 
 	while (!data->exit_f)
 	{
@@ -17,8 +17,8 @@ int	shell_loop(t_data	*data)
 		if (!tokens)
 			continue;
 		print_tokens(tokens);
-		files = parse_redir(tokens);
-		print_files_nodes(files);
+		// files = parse_redir(tokens);
+		// print_files_nodes(files);
 		if (error_check(tokens))
 		{
     		free_tokens(tokens);
