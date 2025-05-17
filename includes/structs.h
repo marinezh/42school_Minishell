@@ -12,18 +12,18 @@ typedef enum e_token_type
 	HEREDOC       // <<		// 6
 }						t_token_type;
 
-typedef	enum e_error_code
+typedef enum e_error_code
 {
 	ERROR_GENERIC = 1,
-    ERROR_INVALID_OPTION = 2,
-    ERROR_MALLOC_FAILS = 12,
-    ERROR_ISDIR = 126,
-    ERROR_CMD_NOT_FOUND = 127,
-    ERROR_INTERUPTED_SIGINT = 130,
-    ERROR_INVALID_EXIT_CODE = 255,
-    ERROR_SYNTAX_HEREDOC = 258,
-    ERROR_IGNORE = 1024
-}	t_error_code;
+	ERROR_INVALID_OPTION = 2,
+	ERROR_MALLOC_FAILS = 12,
+	ERROR_ISDIR = 126,
+	ERROR_CMD_NOT_FOUND = 127,
+	ERROR_INTERUPTED_SIGINT = 130,
+	ERROR_INVALID_EXIT_CODE = 255,
+	ERROR_SYNTAX_HEREDOC = 258,
+	ERROR_IGNORE = 1024
+}						t_error_code;
 
 typedef struct s_cmd_input
 {
@@ -56,7 +56,7 @@ typedef struct s_files
 typedef struct s_command
 {
 	int					index;
-	char **args; // command + arguments
+	char **args;     // command + arguments
 	t_token *tokens; // linked list of tokens
 	// t_files				**redirections;
 	t_files				in; // name of last in including << and <
@@ -85,8 +85,8 @@ struct					s_data
 	char				**envp;
 	t_env				*envp_list;
 	char				envp_f;
-	// char        exit_t;
-	// int         status;
+	char				exit_f;
+	int					status;
 };
 
 #endif

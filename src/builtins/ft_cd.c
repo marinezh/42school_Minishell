@@ -87,8 +87,10 @@ int	change_cur_dir(t_data *data, char *path)
 int	ft_cd(t_data *data, t_command *cmd)
 {
 	char	*path;
+	int		args;
 
-	if (cmd->args[2])
+	args = count_args(cmd->args);
+	if (args > 2)
 	{
 		print_error_msg("cd", ERR_TOO_MANY_ARGS);
 		return (ERROR_GENERIC);

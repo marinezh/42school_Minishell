@@ -7,8 +7,8 @@ int	shell_loop(t_data	*data)
 	t_token		*tokens = NULL;
 	t_command	*commands;
 	t_files		*files;
-	
-	while (1)
+
+	while (!data->exit_f)
 	{
 		if (print_prompt(&cmd_input) == -1)
 			break;
@@ -30,28 +30,27 @@ int	shell_loop(t_data	*data)
 		print_commands(commands);
 		add_history(cmd_input.input);
 
-		run_bltin(data, commands);
+		execute(data, commands);
 		// Cleanup
 		free(cmd_input.input);
 		free_tokens(tokens);  // Free the tokens list
         free_command_list(commands);  // Free the commands list, need to create this function
 	}
-	return (0);
+	return (data->status);
 }
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
+	int		exit_code;
 
 	(void)av;
-	// for (int i = 0; env[i]; i++)
-	// 	printf("%s\n", env[i]);
 	if (ac < 1)
 		return (1);
 	//init struct where env are stored
 	init_data(&data, env);
-	shell_loop(&data);
+	exit_code = shell_loop(&data);
 	//clean struct where env are stored
 	free_env_list(data.envp_list);
 	free_envp_array(data.envp);
-	return (0);
+	return (exit_code);
 }
