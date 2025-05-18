@@ -47,7 +47,7 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 			ar_ptr[i] = ft_strdup(current->key);
 		if (!ar_ptr[i])
 		{
-			free_envp_array(ar_ptr);
+			free_double_array(ar_ptr);
 			ar_ptr = NULL;
 			return ;
 		}
@@ -56,7 +56,7 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 	}
 	if (data->envp)
 	{
-		free_envp_array(data->envp);
+		free_double_array(data->envp);
 		data->envp = NULL;
 	}
 	data->envp = ar_ptr;

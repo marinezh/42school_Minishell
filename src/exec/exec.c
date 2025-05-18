@@ -5,8 +5,11 @@ int	execute(t_data *data, t_command *cmd)
 	int	builtin_status;
 	// int	external_cmd_status;
 
-	if (!cmd || !cmd->args || !cmd->args[0])
-		return (0);
+	if (!cmd || !cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+	{
+		data->status = ERROR_GENERIC;
+		return (-1);
+	}
 	// if (cmd_list_size(cmd) == 1)
 	// {
 	builtin_status = run_bltin(data, cmd);

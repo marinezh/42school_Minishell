@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+#include <errno.h> 
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
