@@ -1,11 +1,12 @@
 #include "minishell.h"
 
-void	handle_permission_denied(t_data *data, char *arg)
+int handle_error(t_data *data, char *arg, char *msg, int error_code)
 {
-	data->status = ERR_PERMISSION_DENIED;
+	data->status = error_code;
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+    return(data->status);
 }
 
 char *build_path(char *path, char *arg)
@@ -45,7 +46,7 @@ char	*process_path(t_data *data, char *path_str, char *arg)
 		return (path);
 	if (access_res == -1)
 	{
-		handle_permission_denied(data, arg);
+        handle_error(data, arg, MSG_NO_PERMISSION, ERR_PERM_DENIED);
 		free(path);
 		return (NULL);
 	}
@@ -82,14 +83,6 @@ char	*parse_path_env(t_data *data, char *arg)
 	return (path_res);
 }
 
-void	handle_no_command_found(t_data *data, char *arg)
-{
-	data->status = ERR_CMD_NOT_FOUND;
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd(": command not found\n", STDERR_FILENO);
-}
-
 int	execute_cmd(t_data *data, t_command *cmd, char *path)
 {
 	pid_t	pid;
@@ -111,7 +104,7 @@ int	execute_cmd(t_data *data, t_command *cmd, char *path)
 			if (errno == ENOENT)
 				exit(ERR_CMD_NOT_FOUND);
 			else if (errno == EACCES)
-				exit(ERR_PERMISSION_DENIED);
+				exit(ERR_PERM_DENIED);
 			else
 				exit(ERR_GENERIC);
 		}
@@ -134,32 +127,46 @@ int	execute_cmd(t_data *data, t_command *cmd, char *path)
 	}
 	return (exit_code);
 }
+char *process_binary(t_data *data, char *arg)
+{
+    int		access_res;
+    char	*path;
+
+    access_res = check_file_access(arg);
+    if (access_res == 1)
+        path = arg;
+    else if (access_res == -1)
+    {
+        handle_error(data, arg, MSG_NO_PERMISSION, ERR_PERM_DENIED);
+        return(NULL);
+    }
+    else
+    {
+        handle_error(data, arg, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
+        return(NULL);
+    }
+    return (path);
+}
 
 int	run_external(t_data *data, t_command *cmd)
 {
 	char	*path;
 	char	*path_to_free;
 	int		exit_status;
-	int		access_res;
 
-	path_to_free = NULL;
-	access_res = check_file_access(cmd->args[0]);
-	if (access_res == 1)
-		path = cmd->args[0];
-	else if (access_res == -1)
-	{
-		handle_permission_denied(data, cmd->args[0]);
-		return (-1);
-	}
+    path_to_free = NULL;
+    if (ft_strchr(cmd->args[0], '/'))
+    {
+        path = process_binary(data, cmd->args[0]);
+        if (!path)
+            return (data->status);
+    }
 	else
 	{
 		path = parse_path_env(data, cmd->args[0]);
 		path_to_free = path;
 		if (!path)
-		{
-			handle_no_command_found(data, cmd->args[0]);
-			return (-1);
-		}
+            return(handle_error(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127));
 	}
 	exit_status = execute_cmd(data, cmd, path);
 	data->status = exit_status;
@@ -176,3 +183,7 @@ int	run_external(t_data *data, t_command *cmd)
 // 1) not exist
 // 2) exist not executable
 // 3) exist and executable
+
+//bash make difference if (code the same 127)
+// asldkfjasldkf - command not found
+// or bin/adsfasdf - no such file or directory
