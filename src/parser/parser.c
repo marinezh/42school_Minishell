@@ -1,52 +1,98 @@
 #include <minishell.h>
 
-t_command *create_new_command(int index)
+t_command	*create_new_command(int index)
 {
-	t_command *cmd = malloc(sizeof(t_command));
+	t_command	*cmd;
+
+	cmd = malloc(sizeof(t_command));
 	if (!cmd)
-		return NULL;
+		return (NULL);
 	cmd->index = index;
 	cmd->args = NULL;
 	cmd->tokens = NULL;
+	cmd->in = NULL;  // input redirection list
+	cmd->out = NULL; // output redirection list
+	cmd->pipe = 0;   // Not a pipe by default
 	cmd->next = NULL;
-	// cmd->in->name = NULL;
-	// cmd->in->type = NONE;
-	// cmd->in->fd = -1;
-	// cmd->in->next = NULL;
-	// cmd->out->name = NULL;
-	// cmd->out->type = NONE;
-	// cmd->out->fd = -1;
-	// cmd->out->next = NULL;
-	return cmd;
+	return (cmd);
 }
 
-void append_token(t_token **head, t_token *token)
+// Helper function to create a new redirection file node
+t_files	*create_file_node(char *name, int type)
 {
-	t_token *copy = malloc(sizeof(t_token));
+	t_files	*new_file;
+
+	new_file = malloc(sizeof(t_files));
+	if (!new_file)
+		return (NULL);
+	new_file->name = ft_strdup(name);
+	if (!new_file->name)
+	{
+		free(new_file);
+		return (NULL);
+	}
+	new_file->type = type;
+	new_file->fd = -1; // Initialize fd to -1 (unopened)
+	new_file->next = NULL;
+	return (new_file);
+}
+// Helper function to add a redirection to the linkedlist
+void	add_redirection(t_command *cmd, char *filename, int type)
+{
+	t_files	*new_file;
+	t_files	**list;
+	t_files	*current;
+
+	if (type == REDIR_IN || type == HEREDOC) // IN
+		list = &(cmd->in);
+	else // REDIR_OUT or REDIR_APPEND
+		list = &(cmd->out);
+	new_file = create_file_node(filename, type);
+	if (!new_file)
+		return ; // Handle error in the calling function
+	// Add to the end of the appropriate list
+	if (*list == NULL)
+		*list = new_file;
+	else
+	{
+		current = *list;
+		while (current->next)
+			current = current->next;
+		current->next = new_file;
+	}
+}
+
+void	append_token(t_token **head, t_token *token)
+{
+	t_token	*copy;
+	t_token	*curr;
+
+	copy = malloc(sizeof(t_token));
 	if (!copy)
-		return;
+		return ;
 	copy->type = token->type;
 	copy->value = ft_strdup(token->value);
 	copy->next = NULL;
-
 	if (!*head)
 		*head = copy;
 	else
 	{
-		t_token *curr = *head;
+		curr = *head;
 		while (curr->next)
 			curr = curr->next;
 		curr->next = copy;
 	}
 }
 
-char **realloc_args(char **args, int count, char *value)
+char	**realloc_args(char **args, int count, char *value)
 {
-	int i = 0;
+	int		i;
+	char	**new_args;
 
-	char **new_args = malloc(sizeof(char *) * (count + 2));
+	i = 0;
+	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
-		return NULL;
+		return (NULL);
 	while (i < count)
 	{
 		new_args[i] = args[i];
@@ -54,20 +100,27 @@ char **realloc_args(char **args, int count, char *value)
 	}
 	new_args[count] = ft_strdup(value);
 	new_args[count + 1] = NULL;
-	if(args)
+	if (args)
 		free(args);
-	return new_args;
+	return (new_args);
 }
-t_command *parse_tokens(t_token *token_list)
+t_command	*parse_tokens(t_token *token_list)
 {
-	t_command *head = NULL; 
-	t_command *tail = NULL;
-	t_command *current = NULL;
-	int command_index = 0;
+	t_command	*head;
+	t_command	*tail;
+	t_command	*current;
+	int			command_index;
+	int			argc;
+	int			redir_type;
 
+	// t_token		*next_token;
+	head = NULL;
+	tail = NULL;
+	current = NULL;
+	command_index = 0;
 	while (token_list)
 	{
-		if (!current) // On PIPE, start a new command
+		if (!current) // On PIPE or at start, create a new command
 		{
 			current = create_new_command(command_index++);
 			if (!head)
@@ -82,22 +135,47 @@ t_command *parse_tokens(t_token *token_list)
 			append_token(&current->tokens, token_list);
 			current = NULL;
 			token_list = token_list->next;
-			continue;
+			continue ;
 		}
-		append_token(&current->tokens, token_list); // Add token to current command
-		
-		if (token_list->type == WORD) // If it's a WORD, add to args
+		// Handle redirections
+		if (token_list->type == REDIR_IN || token_list->type == HEREDOC
+			|| token_list->type == REDIR_OUT
+			|| token_list->type == REDIR_APPEND)
 		{
-			int argc = 0;
+			redir_type = token_list->type;
+			append_token(&current->tokens, token_list);
+			token_list = token_list->next;
+			// Check if next token exists and is a valid filename
+			if (token_list && (token_list->type == WORD
+					|| token_list->type == FILE_NAME))
+			{
+				add_redirection(current, token_list->value, redir_type);
+				append_token(&current->tokens, token_list);
+				token_list = token_list->next;
+			}
+			// Do i need extra error handling here for missing filename after redirection ?
+			else
+			{
+				continue ; // think about error hendling here
+			}
+		}
+		// Add WORD tokens to args
+		else if (token_list->type == WORD)
+		{
+			append_token(&current->tokens, token_list);
+			argc = 0;
 			while (current->args && current->args[argc])
 				argc++;
-			current->args = realloc_args(current->args, argc, token_list->value);
+			current->args = realloc_args(current->args, argc,
+					token_list->value);
+			token_list = token_list->next;
 		}
-		token_list = token_list->next;
+		else
+		{
+			// Handle other token types
+			append_token(&current->tokens, token_list);
+			token_list = token_list->next;
+		}
 	}
-	return head;
+	return (head);
 }
-
-
-
-
