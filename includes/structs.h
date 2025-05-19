@@ -3,12 +3,14 @@
 
 typedef enum e_token_type
 {
-	WORD,
-	PIPE,
-	REDIR_OUT,    // >
-	REDIR_APPEND, // >>
-	REDIR_IN,     // <
-	HEREDOC       // <<
+	NONE,         // 0
+	WORD,         // 1
+	PIPE,         // 2
+	REDIR_OUT,    // 3 >
+	REDIR_APPEND, // 4 >>
+	REDIR_IN,     // 5 <
+	HEREDOC,      // 6 <<
+	FILE_NAME     // 7
 }						t_token_type;
 
 typedef enum e_error_code
@@ -29,27 +31,36 @@ typedef struct s_cmd_input
 	char				*input;
 	char				*spaced;
 	int					len;
-	int					i;
-	int					j;
-	// t_list  env; // need to do linkedlist part in libft
+	// int					i;
+	// int					j;
 }						t_cmd_input;
 
 typedef struct s_token
 {
 	t_token_type		type;
 	char				*value;
+	struct s_token		*prev;
 	struct s_token		*next;
 }						t_token;
+
+// osibilities for code improvement
+typedef struct s_files
+{
+	char *name;           // File name or heredoc delimiter
+	int type;             // Type of redirection: > >> < <<
+	int fd;               // File descriptor for the opened file
+	struct s_files *next; // Pointer to the next redirection
+}						t_files;
 
 // linked list of structs split by pipe
 typedef struct s_command
 {
 	int					index;
 	char **args;     // command + arguments
-	t_token *tokens; // linked list of tokens
-	// t_files				**redirections;
-	// t_files				in; // name of last in including << and <
-	// t_files				out;// name of last out > or >>
+	t_token *tokens; // Should we delete this from t_command?
+	t_files *in;     // list of << and <
+	t_files *out;    // list of out > or >>
+	int					pipe;
 	struct s_command	*next;
 }						t_command;
 
@@ -80,38 +91,11 @@ struct					s_data
 
 #endif
 
-// posibilities for code improvement
-// typedef struct s_files
-// {
-// 	char *name; // File name or heredoc delimiter
-// 	int type;   // Type of redirection: REDIR_IN, HEREDOC, REDIR_OUT,
-// 	REDIR_APPEND
-// 	int fd;               // File descriptor for the opened file
-// 	struct s_files *next; // Pointer to the next redirection
-// }						t_files;
-
 // typedef struct s_command
 // {
 // 	int					index;
 // 	char **args;            // Command + arguments
-// 	t_files *infiles;       // Linked list of input redirections (<, <<)
-// 	t_files *outfiles;      // Linked list of output redirections (>, >>)
-// 	int pipe;               // 1 if followed by a pipe
+// 	t_files *redirections;       // Linked list of redirections (<, <<, >, >>)
+// 	t_token *tokens; // linked list of tokens
 // 	struct s_command *next; // Pointer to the next command
-// }						t_command;
-
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;     // command + arguments
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command	*next;
-// }						t_command;
-
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;     // command + arguments
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command	*next;
 // }						t_command;

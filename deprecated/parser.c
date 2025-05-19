@@ -55,7 +55,7 @@
 // 	if (!head)
 // 	{
 // 		fprintf(stderr, "Error: failed to allocate memory for command\n");
-// 		return NULL;
+// 		return (NULL);
 // 	}
 // 	current = head;
 // 	index = 0;
@@ -69,30 +69,33 @@
 // 			current->next = init_command();
 // 			if (!current->next)
 // 			{
-// 				fprintf(stderr, "Error: failed to allocate memory for new command\n");
-// 				return NULL;
+// 				fprintf(stderr,
+					"Error: failed to allocate memory for new command\n");
+// 				return (NULL);
 // 			}
 // 			current = current->next;
 // 			current->index = index++;
 // 		}
 // 		// Handle redirections: need to copy both redirection type and its target
 // 		else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT ||
-// 		         tokens->type == REDIR_APPEND || tokens->type == HEREDOC)
+// 			      tokens->type == REDIR_APPEND || tokens->type == HEREDOC)
 // 		{
 // 			// Copy redirection operator token
 // 			new_token = malloc(sizeof(t_token));
 // 			if (!new_token)
 // 			{
-// 				fprintf(stderr, "Error: failed to allocate memory for redirection token\n");
-// 				return NULL;
+// 				fprintf(stderr,
+					"Error: failed to allocate memory for redirection token\n");
+// 				return (NULL);
 // 			}
 // 			new_token->type = tokens->type;
 // 			new_token->value = strdup(tokens->value);
 // 			if (!new_token->value)
 // 			{
 // 				free(new_token);
-// 				fprintf(stderr, "Error: failed to allocate memory for redirection value\n");
-// 				return NULL;
+// 				fprintf(stderr,
+					"Error: failed to allocate memory for redirection value\n");
+// 				return (NULL);
 // 			}
 // 			new_token->next = NULL;
 
@@ -115,16 +118,18 @@
 // 				new_token = malloc(sizeof(t_token));
 // 				if (!new_token)
 // 				{
-// 					fprintf(stderr, "Error: failed to allocate memory for target token\n");
-// 					return NULL;
+// 					fprintf(stderr,
+						"Error: failed to allocate memory for target token\n");
+// 					return (NULL);
 // 				}
 // 				new_token->type = tokens->type;
 // 				new_token->value = strdup(tokens->value);
 // 				if (!new_token->value)
 // 				{
 // 					free(new_token);
-// 					fprintf(stderr, "Error: failed to allocate memory for target value\n");
-// 					return NULL;
+// 					fprintf(stderr,
+						"Error: failed to allocate memory for target value\n");
+// 					return (NULL);
 // 				}
 // 				new_token->next = NULL;
 
@@ -142,15 +147,16 @@
 // 			if (!new_token)
 // 			{
 // 				fprintf(stderr, "Error: failed to allocate memory for token\n");
-// 				return NULL;
+// 				return (NULL);
 // 			}
 // 			new_token->type = tokens->type;
 // 			new_token->value = strdup(tokens->value);
 // 			if (!new_token->value)
 // 			{
 // 				free(new_token);
-// 				fprintf(stderr, "Error: failed to allocate memory for token value\n");
-// 				return NULL;
+// 				fprintf(stderr,
+					"Error: failed to allocate memory for token value\n");
+// 				return (NULL);
 // 			}
 // 			new_token->next = NULL;
 
@@ -169,10 +175,8 @@
 // 		tokens = tokens->next; // advance in input token stream
 // 	}
 
-// 	return head;
+// 	return (head);
 // }
-
-
 
 // t_command	*parse_tokens(t_token *tokens)
 // {
@@ -242,4 +246,48 @@
 // 	return (head);
 // }
 
+// t_command	*parse_tokens(t_token *token_list)
+// {
+// 	t_command	*head;
+// 	t_command	*tail;
+// 	t_command	*current;
+// 	int			command_index;
+// 	int			argc;
 
+// 	head = NULL;
+// 	tail = NULL;
+// 	current = NULL;
+// 	command_index = 0;
+// 	while (token_list)
+// 	{
+// 		if (!current) // On PIPE, start a new command
+// 		{
+// 			current = create_new_command(command_index++);
+// 			if (!head)
+// 				head = current;
+// 			if (tail)
+// 				tail->next = current;
+// 			tail = current;
+// 		}
+// 		if (token_list->type == PIPE)
+// 		{
+// 			current->pipe = 1;
+// 			append_token(&current->tokens, token_list);
+// 			current = NULL;
+// 			token_list = token_list->next;
+// 			continue ;
+// 		}
+// 		append_token(&current->tokens, token_list);
+// 		// Add token to current command
+// 		if (token_list->type == WORD) // If it's a WORD, add to args
+// 		{
+// 			argc = 0;
+// 			while (current->args && current->args[argc])
+// 				argc++;
+// 			current->args = realloc_args(current->args, argc,
+// 					token_list->value);
+// 		}
+// 		token_list = token_list->next;
+// 	}
+// 	return (head);
+// }
