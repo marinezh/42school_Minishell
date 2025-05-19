@@ -13,12 +13,12 @@ typedef enum e_token_type
 
 typedef enum e_error_code
 {
-	ERROR_GENERIC = 1,
-	ERROR_INVALID_OPTION = 2,
-	ERROR_ISDIR = 126,
-	ERROR_CMD_NOT_FOUND = 127,
-	ERROR_INTERUPTED_SIGINT = 130,
-	ERROR_INVALID_EXIT_CODE = 255,
+	ERR_GENERIC = 1,
+	ERR_INVALID_OPTION = 2,
+	ERR_PERMISSION_DENIED = 126,
+	ERR_CMD_NOT_FOUND = 127,
+	ERR_INTERUPTED_SIGINT = 130,
+	ERR_INVALID_EXIT_CODE = 255,
 }						t_error_code;
 
 typedef struct s_cmd_input

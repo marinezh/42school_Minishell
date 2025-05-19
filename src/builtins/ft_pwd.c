@@ -8,7 +8,7 @@ int ft_pwd(t_data *data, t_command *cmd)
     if (cmd->args[1])
 	{
 		print_error_msg("pwd", ERR_OPTIONS);
-		return(ERROR_GENERIC);
+		return(ERR_GENERIC);
 	}
 	pwd_node = find_env_name(data, "PWD");
 	if (pwd_node && pwd_node->value)
@@ -20,7 +20,7 @@ int ft_pwd(t_data *data, t_command *cmd)
 	if (pwd == NULL)
     {
         perror("pwd");
-		return (ERROR_GENERIC);
+		return (ERR_GENERIC);
     }
 	printf("%s\n", pwd);
 	free(pwd);

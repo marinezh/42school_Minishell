@@ -8,7 +8,7 @@ int ft_env(t_data *data, t_command *cmd)
     if (cmd->args[1])
     {
         print_error_msg("env", ERR_OPTS_ARGS);
-        return(ERROR_GENERIC);
+        return(ERR_GENERIC);
     }
 	if (data->envp_f)
 	{

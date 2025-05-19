@@ -3,7 +3,7 @@
 void	handle_numeric_arg_error(t_data * data, char *arg)
 {
 	data->exit_f = 1;
-	data->status = ERROR_INVALID_EXIT_CODE;
+	data->status = ERR_INVALID_EXIT_CODE;
     ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
     ft_putstr_fd(arg, STDERR_FILENO);
     ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
@@ -40,7 +40,7 @@ long long custom_strtoll(char *str, int *error)
 
 	sign = 1;
 	*error = 0;
-	
+
 	while (*str == ' ' || *str == '\t')
 		str++;
 	if (*str == '+' || *str == '-')
@@ -76,7 +76,7 @@ int	ft_exit(t_data *data, t_command *cmd)
 	}
 	if (count_args(cmd->args) > 2)
 	{
-		data->status = ERROR_GENERIC;
+		data->status = ERR_GENERIC;
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		return (data->status);
 	}

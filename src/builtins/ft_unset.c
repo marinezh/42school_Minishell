@@ -34,7 +34,7 @@ int	ft_unset(t_data *data, t_command *cmd)
 	if (cmd->args[i][0] == '-')
 	{
 		print_error_msg("unset", ERR_OPTIONS);
-		return(ERROR_GENERIC);
+		return(ERR_GENERIC);
 	}
 	while (cmd->args[i])
 	{
