@@ -7,7 +7,7 @@ int ft_pwd(t_data *data, t_command *cmd)
 
     if (cmd->args[1])
 	{
-		print_error_msg("pwd", ERR_OPTIONS);
+		print_error_msg("pwd", MSG_NO_OPTIONS);
 		return(ERR_GENERIC);
 	}
 	pwd_node = find_env_name(data, "PWD");

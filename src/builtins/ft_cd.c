@@ -92,7 +92,7 @@ int	ft_cd(t_data *data, t_command *cmd)
 	args = count_args(cmd->args);
 	if (args > 2)
 	{
-		print_error_msg("cd", ERR_TOO_MANY_ARGS);
+		print_error_msg("cd", MSG_TOO_MANY_ARGS);
 		return (ERR_GENERIC);
 	}
 	path = cmd->args[1];
@@ -100,7 +100,7 @@ int	ft_cd(t_data *data, t_command *cmd)
 		return (go_home(data));
 	if (path[0] == '-')
 	{
-		print_error_msg("cd", ERR_OPTIONS);
+		print_error_msg("cd", MSG_NO_OPTIONS);
 		return (ERR_GENERIC);
 	}
 	return (change_cur_dir(data, path));
