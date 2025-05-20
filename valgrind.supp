@@ -33,3 +33,15 @@
    fun:getenv
    ...
 }
+{
+   leak xrealloc
+   Memcheck:Leak
+   ...
+   fun:readline
+}
+{
+   leak xrealloc
+   Memcheck:Leak
+   ...
+   fun:add_history
+}
