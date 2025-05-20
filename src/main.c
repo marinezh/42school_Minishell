@@ -50,6 +50,6 @@ int	main(int ac, char **av, char **env)
 	exit_code = shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(data.envp_list);
-	free_envp_array(data.envp);
+	free_double_array(data.envp);
 	return (exit_code);
 }

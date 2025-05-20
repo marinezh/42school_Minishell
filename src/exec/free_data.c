@@ -1,19 +1,19 @@
 #include"minishell.h"
 
-void	free_envp_array(char **envp)
+void	free_double_array(char **arr)
 {
 	int	i;
 
 	i = 0;
-	if (envp)
+	if (arr)
 	{
-		while (envp[i])
+		while (arr[i])
 		{
-			free(envp[i]);
+			free(arr[i]);
 			i++;
 		}
 	}
-	free(envp);
+	free(arr);
 }
 
 void	free_env_list(t_env *env)

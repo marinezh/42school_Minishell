@@ -66,7 +66,7 @@ int	print_current_envp(t_data *data, t_command *cmd)
 	{
 		sort_envp_by_key(data->envp);
 		print_export_format(data->envp);
-		free_envp_array(data->envp);
+		free_double_array(data->envp);
 		data->envp = NULL;
 		data->envp_f = 1;
 	}
