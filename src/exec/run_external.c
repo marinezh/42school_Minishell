@@ -28,7 +28,7 @@ char	*process_path(t_data *data, char *path_str, char *arg)
 		return (path);
 	if (access_res == -1)
 	{
-        handle_error_arg(data, arg, MSG_NO_PERMISSION, ERR_PERM_DENIED);
+        handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
 		free(path);
 		return (NULL);
 	}
@@ -75,7 +75,7 @@ char *process_binary(t_data *data, char *arg)
         path = arg;
     else if (access_res == -1)
     {
-        handle_error_arg(data, arg, MSG_NO_PERMISSION, ERR_PERM_DENIED);
+        handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
         return(NULL);
     }
     else
