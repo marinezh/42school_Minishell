@@ -22,8 +22,15 @@ void	print_error(char **args, char *msg);
 t_env	*find_env_name(t_data *data, char *env_var);
 int		count_args(char **args);
 int		execute(t_data *data, t_command *cmd);
-int     run_bltin(t_data *data, t_command *cmd);
-int     run_external(t_data *data, t_command *cmd);
+int		run_bltin(t_data *data, t_command *cmd);
+int		run_external(t_data *data, t_command *cmd);
+int		handle_error_arg(t_data *data, char *arg, char *msg, int error_code);
+int		execute_cmd(t_data *data, t_command *cmd, char *path);
+int		check_file_access(char *path);
+char	*process_binary(t_data *data, char *arg);
+int		check_file_access(char *path);
+int		redirect_stream(t_data *data, int old_fd, int new_fd);
+int		handle_redirs(t_data *data, t_command *cmd);
 
 // don't forget to delete
 // this is just to print linked list

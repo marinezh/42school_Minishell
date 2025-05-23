@@ -89,6 +89,15 @@ int	env_list_size(t_env *head)
 	return (count);
 }
 
+int	check_file_access(char *path)
+{
+	if (access(path, F_OK | X_OK) == 0)
+		return(1);
+	if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
+		return (-1);
+	return (0);
+}
+
 // int	cmd_list_size(t_command *head)
 // {
 // 	int	count;
