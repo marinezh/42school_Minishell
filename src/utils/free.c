@@ -40,8 +40,8 @@ void free_command_list(t_command *commands)
 			free(tmp->args);
 		}
 		// Free tokens using your existing function
-		if (tmp->tokens)
-			free_tokens(tmp->tokens);
+		// if (tmp->tokens)
+		// 	free_tokens(tmp->tokens);
 		free(tmp); // Free the command itself
 	}
 }

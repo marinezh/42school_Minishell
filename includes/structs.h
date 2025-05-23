@@ -54,7 +54,7 @@ typedef struct s_command
 {
 	int					index;
 	char **args;     // command + arguments
-	t_token *tokens; // Should we delete this from t_command?
+	//t_token *tokens; // Should we delete this from t_command?
 	t_files *in;     // list of << and <
 	t_files *out;    // list of out > or >>
 	int					pipe;

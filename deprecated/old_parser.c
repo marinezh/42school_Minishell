@@ -9,6 +9,7 @@ t_command	*create_new_command(int index)
 		return (NULL);
 	cmd->index = index;
 	cmd->args = NULL;
+	//cmd->tokens = NULL;
 	cmd->in = NULL;  // input redirection list
 	cmd->out = NULL; // output redirection list
 	cmd->pipe = 0;   // Not a pipe by default
@@ -61,6 +62,28 @@ void	add_redirection(t_command *cmd, char *filename, int type)
 	}
 }
 
+// void	append_token(t_token **head, t_token *token)
+// {
+// 	t_token	*copy;
+// 	t_token	*curr;
+
+// 	copy = malloc(sizeof(t_token));
+// 	if (!copy)
+// 		return ;
+// 	copy->type = token->type;
+// 	copy->value = ft_strdup(token->value);
+// 	copy->next = NULL;
+// 	if (!*head)
+// 		*head = copy;
+// 	else
+// 	{
+// 		curr = *head;
+// 		while (curr->next)
+// 			curr = curr->next;
+// 		curr->next = copy;
+// 	}
+// }
+
 char	**realloc_args(char **args, int count, char *value)
 {
 	int		i;
@@ -91,6 +114,7 @@ t_command	*parse_tokens(t_token *token_list)
 	int			argc;
 	int			redir_type;
 
+	// t_token		*next_token;
 	head = NULL;
 	tail = NULL;
 	current = NULL;
@@ -120,12 +144,14 @@ t_command	*parse_tokens(t_token *token_list)
 			|| token_list->type == REDIR_APPEND)
 		{
 			redir_type = token_list->type;
+			//append_token(&current->tokens, token_list);
 			token_list = token_list->next;
 			// Check if next token exists and is a valid filename
 			if (token_list && (token_list->type == WORD
 					|| token_list->type == FILE_NAME))
 			{
 				add_redirection(current, token_list->value, redir_type);
+				//append_token(&current->tokens, token_list);
 				token_list = token_list->next;
 			}
 			// Do i need extra error handling here for missing filename after redirection ?
@@ -137,6 +163,7 @@ t_command	*parse_tokens(t_token *token_list)
 		// Add WORD tokens to args
 		else if (token_list->type == WORD)
 		{
+			//append_token(&current->tokens, token_list);
 			argc = 0;
 			while (current->args && current->args[argc])
 				argc++;
@@ -147,6 +174,7 @@ t_command	*parse_tokens(t_token *token_list)
 		else
 		{
 			// Handle other token types
+			//append_token(&current->tokens, token_list);
 			token_list = token_list->next;
 		}
 	}
