@@ -3,20 +3,31 @@
 int	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
-	t_token		*tokens;
-	t_command	*commands;
+	t_token		*tokens = NULL;
+	t_command	*commands = NULL;
+	char **split_input = NULL;
+	
 
 	// t_token		*tokens_lexer = NULL; //do i need this?
-	tokens = NULL;
 	// t_files		*files;
 	while (!data->exit_f)
 	{
 		if (print_prompt(&cmd_input) == -1)
 			break ;
 		// tokens_lexer = run_lexer(&cmd_input); and this?
-		tokens = tokenize_input(cmd_input.input);
+		split_input = preprocess_input(cmd_input.input);
+		if (!split_input)
+		{
+			free(cmd_input.input);
+			continue;
+		}
+		tokens = tokenize_input(split_input);
+		free_split_input(split_input); // after we tokenise we do not need split_input anymore
 		if (!tokens)
-			continue ;
+		{
+			free(cmd_input.input);
+			continue;
+		}
 		// print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
@@ -32,11 +43,12 @@ int	shell_loop(t_data *data)
 		execute(data, commands);
 		// Cleanup
 		free(cmd_input.input);
-		free_tokens(tokens);         // Free the tokens list
-		free_command_list(commands); // Free the commands list
+		free_tokens(tokens);			// Free the tokens list
+		free_command_list(commands);	// Free the commands list
 	}
 	return (data->status);
 }
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;

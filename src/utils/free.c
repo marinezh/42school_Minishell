@@ -45,3 +45,16 @@ void free_command_list(t_command *commands)
 		free(tmp); // Free the command itself
 	}
 }
+
+void	free_split_input(char **split)
+{
+	int i = 0;
+	if (!split)
+		return;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
