@@ -43,9 +43,9 @@ typedef struct s_token
 // osibilities for code improvement
 typedef struct s_files
 {
-	char *name;           // File name or heredoc delimiter
-	int type;             // Type of redirection: > >> < <<
 	int fd;               // File descriptor for the opened file
+	char *name;           // File name or heredoc delimiter
+	t_token_type type;             // Type of redirection: > >> < <<
 	struct s_files *next; // Pointer to the next redirection
 }						t_files;
 

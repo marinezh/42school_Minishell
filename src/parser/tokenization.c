@@ -22,8 +22,8 @@ t_token	*create_token_node(char *value)
 	token->type = NONE;
 	return (token);
 }
-// CHANGE FUNCTION NAME!!!!!!!!!!!!!!!!!!!!!!!
-void	append_token_1(t_token **head, t_token **tail, t_token *new_token)
+
+void	append_token(t_token **head, t_token **tail, t_token *new_token)
 {
 	if (!*head)
 		*head = new_token;
@@ -122,7 +122,7 @@ t_token	*tokenize_input(char **split_input)
 			return (NULL);
 		}
 		determine_token_type(new_token, split_input[i], &pending_redirection);
-		append_token_1(&head, &tail, new_token);
+		append_token(&head, &tail, new_token);
 		i++;
 	}
 	return (head);

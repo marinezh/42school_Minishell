@@ -28,7 +28,8 @@ int	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue;
 		}
-		// print_tokens(tokens);
+		printf("PURE TOKENS\n");
+		print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
 		if (error_check(tokens))

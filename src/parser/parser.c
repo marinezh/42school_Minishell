@@ -82,6 +82,7 @@ char	**realloc_args(char **args, int count, char *value)
 	return (new_args);
 }
 
+
 t_command	*parse_tokens(t_token *token_list)
 {
 	t_command	*head;
@@ -109,11 +110,11 @@ t_command	*parse_tokens(t_token *token_list)
 		if (token_list->type == PIPE)
 		{
 			current->pipe = 1;
-			//append_token(&current->tokens, token_list);
 			current = NULL;
 			token_list = token_list->next;
 			continue ;
 		}
+		
 		// Handle redirections
 		if (token_list->type == REDIR_IN || token_list->type == HEREDOC
 			|| token_list->type == REDIR_OUT
@@ -140,8 +141,7 @@ t_command	*parse_tokens(t_token *token_list)
 			argc = 0;
 			while (current->args && current->args[argc])
 				argc++;
-			current->args = realloc_args(current->args, argc,
-					token_list->value);
+			current->args = realloc_args(current->args, argc,token_list->value);
 			token_list = token_list->next;
 		}
 		else
