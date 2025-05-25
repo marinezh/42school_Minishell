@@ -77,6 +77,54 @@ int	process_redir_out(t_data *data, t_files *redir_out)
 	data->status = 0;
 	return (data->status);
 }
+// TODO: free after readline (allocate memory in heap)
+// then free after join
+// TODO: close fd
+
+void	collect_heredoc_input(t_files *cur_node)
+{
+	static int heredoc_counter = 0;
+	char	*heredoc_num;
+	char	*input;
+	int		fd;
+	char	*input_nl;
+	char	*temp_name;
+
+	heredoc_num = ft_itoa(heredoc_counter++);
+	temp_name = ft_strjoin("/tmp/heredoc_", heredoc_num);
+	free(heredoc_num);
+	fd = open(temp_name, O_RDWR | O_CREAT | O_APPEND, 0644);
+	if (fd == -1)
+	{
+		perror("open");
+		free(temp_name);
+		return ;
+	}
+	unlink(temp_name);
+	free(temp_name);
+	cur_node->fd = fd;
+	while (1)
+	{
+		input = readline("> ");
+		if (!input)
+		{
+			free(input);
+			break ; 
+			//FIXME:
+		}
+		if (ft_strcmp(input, cur_node->name) == 0)
+		{
+			free(input);
+			break ;
+		}
+		input_nl = ft_strjoin(input, "\n");
+		printf("len - %zd\n", ft_strlen(input));
+		write(fd, input_nl, ft_strlen(input_nl));
+		free(input_nl);
+		free(input);
+	}
+
+}
 
 int	handle_redirs(t_data *data, t_command *cmd)
 {
@@ -87,11 +135,22 @@ int	handle_redirs(t_data *data, t_command *cmd)
 	res = 0;
 	cur_in = cmd->in;
 	cur_out = cmd->out;
-	while (cur_in && cur_in->type != HEREDOC)
+	while (cur_in)
 	{
+		if (cur_in->type == HEREDOC)
+		{
+			collect_heredoc_input(cur_in);
+		}
+		cur_in = cur_in->next;
+	}
+	cur_in = cmd->in;
+	while (cur_in)
+	{
+		if (cur_in->type == HEREDOC)
+			break;
 		res = process_redir_in(data, cur_in);
 		if (res == -1)
-			break;
+				break;
 		cur_in = cur_in->next;
 	}
 	if (res == -1)
