@@ -84,22 +84,34 @@ int	execute(t_data *data, t_command *cmd)
 	int	orig_stdout;
 	int	is_redir;
 
-	if (!cmd || !cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+	if (!cmd)
 	{
 		data->status = ERR_GENERIC;
 		return (-1);
 	}
-	is_redir = (cmd->in || cmd->out);
-	if (is_redir && (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1))
-		return (-1);
-	builtin_status = run_bltin(data, cmd);
-	if (builtin_status != -1)
+	if (!cmd->in && !cmd->out)
 	{
-		if (is_redir)
-			restore_streams(data, orig_stdin, orig_stdout);
-		return (builtin_status);
+		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+			data->status = 0;
+		return (0);
 	}
-	run_external(data, cmd);
+	if (cmd->in || cmd->out)
+	{
+		is_redir = 1;
+		if (is_redir && (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1))
+			return (-1);
+	}
+	if (cmd->args)
+	{
+		builtin_status = run_bltin(data, cmd);
+		if (builtin_status != -1)
+		{
+			if (is_redir)
+				restore_streams(data, orig_stdin, orig_stdout);
+			return (builtin_status);
+		}
+		run_external(data, cmd);
+	}
 	if (is_redir)
 		restore_streams(data, orig_stdin, orig_stdout);
 	return (0);
