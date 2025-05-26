@@ -92,13 +92,16 @@ int	execute(t_data *data, t_command *cmd)
 	if (!cmd->in && !cmd->out)
 	{
 		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		{
 			data->status = 0;
-		return (0);
+			return (0);
+		}
 	}
+	is_redir = 0;
 	if (cmd->in || cmd->out)
 	{
 		is_redir = 1;
-		if (is_redir && (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1))
+		if (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1)
 			return (-1);
 	}
 	if (cmd->args)

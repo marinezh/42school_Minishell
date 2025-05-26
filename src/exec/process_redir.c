@@ -81,7 +81,7 @@ int	process_redir_out(t_data *data, t_files *redir_out)
 // then free after join
 // TODO: close fd
 
-void	collect_heredoc_input(t_files *cur_node)
+int	collect_heredoc_input(t_data *data, t_files *cur_node)
 {
 	static int heredoc_counter = 0;
 	char	*heredoc_num;
@@ -89,28 +89,31 @@ void	collect_heredoc_input(t_files *cur_node)
 	int		fd;
 	char	*input_nl;
 	char	*temp_name;
+	// char	*line;
 
 	heredoc_num = ft_itoa(heredoc_counter++);
-	temp_name = ft_strjoin("/tmp/heredoc_", heredoc_num);
+	if (!heredoc_num)
+		return (-1);
+	temp_name = ft_strjoin("heredoc_", heredoc_num);
 	free(heredoc_num);
-	fd = open(temp_name, O_RDWR | O_CREAT | O_APPEND, 0644);
+	if (!temp_name)
+		return (-1);
+	fd = open(temp_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		perror("open");
 		free(temp_name);
-		return ;
+		return (-1);
 	}
-	unlink(temp_name);
-	free(temp_name);
-	cur_node->fd = fd;
 	while (1)
 	{
 		input = readline("> ");
 		if (!input)
 		{
-			free(input);
-			break ; 
-			//FIXME:
+			close(fd);
+			unlink(temp_name);
+			free(temp_name);
+			return (-1);
 		}
 		if (ft_strcmp(input, cur_node->name) == 0)
 		{
@@ -118,12 +121,41 @@ void	collect_heredoc_input(t_files *cur_node)
 			break ;
 		}
 		input_nl = ft_strjoin(input, "\n");
-		printf("len - %zd\n", ft_strlen(input));
+		if (!input_nl)
+		{
+			free(input);
+			close(fd);
+			unlink(temp_name);
+			free(temp_name);
+			return (-1);
+		}
 		write(fd, input_nl, ft_strlen(input_nl));
 		free(input_nl);
 		free(input);
 	}
+	close(fd);
+	fd = open(temp_name, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("open");
+		unlink(temp_name);
+		free(temp_name);
+		return (-1);
+	}
+	unlink(temp_name);
+	free(temp_name);
+	cur_node->fd = fd;
+	data->status = 0;
+	return(data->status);
 
+	// while (1)
+	// {
+	// 	line = get_next_line(fd_read);
+	// 	if (!line)
+	// 		break;
+	// 	printf("%s", line);
+	// }
+	// close(fd_read);
 }
 
 int	handle_redirs(t_data *data, t_command *cmd)
@@ -139,7 +171,9 @@ int	handle_redirs(t_data *data, t_command *cmd)
 	{
 		if (cur_in->type == HEREDOC)
 		{
-			collect_heredoc_input(cur_in);
+			res = collect_heredoc_input(data, cur_in);
+			if (res == -1)
+				break;
 		}
 		cur_in = cur_in->next;
 	}
@@ -147,10 +181,14 @@ int	handle_redirs(t_data *data, t_command *cmd)
 	while (cur_in)
 	{
 		if (cur_in->type == HEREDOC)
-			break;
-		res = process_redir_in(data, cur_in);
+		{
+			res = redirect_stream(data, cur_in->fd, 0);
+			close(cur_in->fd);
+		}
+		else
+			res = process_redir_in(data, cur_in);
 		if (res == -1)
-				break;
+			break;
 		cur_in = cur_in->next;
 	}
 	if (res == -1)
