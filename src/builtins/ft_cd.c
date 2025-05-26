@@ -24,7 +24,7 @@ int	set_pwd(t_data *data, char *env, char *old_pwd)
 		if (!cwd)
 			return (ERR_GENERIC);
 	}
-	env_ptr = find_env_name(data, env);
+	env_ptr = find_env_node(data, env);
 	if (!env_ptr)
 	{
 		if (!old_pwd)
@@ -41,7 +41,7 @@ int	go_home(t_data *data)
 {
 	t_env	*home_ptr;
 
-	home_ptr = find_env_name(data, "HOME");
+	home_ptr = find_env_node(data, "HOME");
 	if (!home_ptr || !home_ptr->value)
 	{
 		print_error_msg("cd", ": HOME not set\n");

@@ -38,7 +38,7 @@ int	ft_unset(t_data *data, t_command *cmd)
 	}
 	while (cmd->args[i])
 	{
-		env_node = find_env_name(data, cmd->args[i]);
+		env_node = find_env_node(data, cmd->args[i]);
 		if (env_node)
 			delete_node(data, env_node);
 		i++;
