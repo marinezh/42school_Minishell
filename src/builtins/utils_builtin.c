@@ -12,7 +12,7 @@ int var_name_len(char *name)
 	return(count);
 }
 
-t_env *find_env_name(t_data *data, char *env_var)
+t_env *find_env_node(t_data *data, char *env_var)
 {
     int name_len;
     t_env	*cur;

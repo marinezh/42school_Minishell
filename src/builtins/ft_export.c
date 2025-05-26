@@ -65,7 +65,7 @@ void    process_env_var(t_data *data, char *env_var)
 {
     t_env   *cur_env;
 
-    cur_env = find_env_name(data, env_var);
+    cur_env = find_env_node(data, env_var);
     if (cur_env)
         update_var_value(data, cur_env, env_var);
     else

@@ -10,7 +10,7 @@ int ft_pwd(t_data *data, t_command *cmd)
 		print_error_msg("pwd", MSG_NO_OPTIONS);
 		return(ERR_GENERIC);
 	}
-	pwd_node = find_env_name(data, "PWD");
+	pwd_node = find_env_node(data, "PWD");
 	if (pwd_node && pwd_node->value)
 	{
 		printf("%s\n", pwd_node->value);

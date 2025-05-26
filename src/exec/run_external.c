@@ -44,7 +44,7 @@ char	*parse_path_env(t_data *data, char *arg)
 	int		i;
 
 	path_res = NULL;
-	path_ptr = find_env_name(data, "PATH");
+	path_ptr = find_env_node(data, "PATH");
 	if (!path_ptr)
 		return (NULL);
 	path_dirs = ft_split(path_ptr->value, ':');

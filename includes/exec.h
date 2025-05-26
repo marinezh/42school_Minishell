@@ -19,7 +19,7 @@ int		print_current_envp(t_data *data, t_command *cmd);
 int		var_name_len(char *name);
 void	print_error_msg(char *cmd, char *msg);
 void	print_error(char **args, char *msg);
-t_env	*find_env_name(t_data *data, char *env_var);
+t_env	*find_env_node(t_data *data, char *env_var);
 int		count_args(char **args);
 int		execute(t_data *data, t_command *cmd);
 int		run_bltin(t_data *data, t_command *cmd);

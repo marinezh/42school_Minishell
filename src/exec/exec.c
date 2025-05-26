@@ -11,21 +11,6 @@ int	redirect_stream(t_data *data, int old_fd, int new_fd)
 	return (new_fd);
 }
 
-int	check_redirections(t_command *cmd)
-{
-	t_files	*cur;
-
-	if (cmd->out)
-		return(1);
-	cur = cmd->in;
-	while (cur)
-	{
-		if (cur->type == REDIR_IN)
-			return (1);
-		cur = cur->next;
-	}
-	return(0);
-}
 int	copy_stream(int fd)
 {
 	int	saved_stream;
@@ -41,32 +26,47 @@ void	restore_streams(t_data *data, int orig_stdin, int orig_stdout)
 	int	status;
 
 	status = 0;
-	if (redirect_stream(data, orig_stdin, 0) == -1)
+	if (orig_stdin != -1)
 	{
-		status = -1;
-		perror("restore stdin");
+		if (redirect_stream(data, orig_stdin, 0) == -1)
+		{
+			status = -1;
+			perror("restore stdin");
+			close(orig_stdin);
+		}
 	}
-	if (status != -1 && (redirect_stream(data, orig_stdout, 1) == -1))
+	if (status != -1 && orig_stdout != -1)
 	{
-		perror("restore stdout");
-		status = -1;
+		if (redirect_stream(data, orig_stdout, 1) == -1)
+		{
+			perror("restore stdout");
+			status = -1;
+			close(orig_stdout);
+		}
 	}
-	close(orig_stdin);
-	close(orig_stdout);
 }
 
 int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
 {
 	int	redir_status;
 
-	*orig_in = copy_stream(0);
-	if (*orig_in == -1)
-		return(-1);
-	*orig_out = copy_stream(1);
-	if (*orig_out == -1)
+	*orig_in = -1;
+	*orig_out = -1;
+	if (cmd->in)
 	{
-		close(*orig_in);
-		return(-1);
+		*orig_in = copy_stream(0);
+		if (*orig_in == -1)
+			return(-1);
+	}
+	if (cmd->out)
+	{
+		*orig_out = copy_stream(1);
+		if (*orig_out == -1)
+		{
+			if (*orig_in != -1)
+				close(*orig_in);
+			return(-1);
+		}
 	}
 	redir_status = handle_redirs(data, cmd);
 	if (redir_status == -1)
@@ -84,22 +84,37 @@ int	execute(t_data *data, t_command *cmd)
 	int	orig_stdout;
 	int	is_redir;
 
-	is_redir = check_redirections(cmd);
-	if (!cmd || !cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+	if (!cmd)
 	{
 		data->status = ERR_GENERIC;
 		return (-1);
 	}
-	if (is_redir && (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1))
-		return (-1);
-	builtin_status = run_bltin(data, cmd);
-	if (builtin_status != -1)
+	if (!cmd->in && !cmd->out)
 	{
-		if (is_redir)
-			restore_streams(data, orig_stdin, orig_stdout);
-		return (builtin_status);
+		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		{
+			data->status = 0;
+			return (0);
+		}
 	}
-	run_external(data, cmd);
+	is_redir = 0;
+	if (cmd->in || cmd->out)
+	{
+		is_redir = 1;
+		if (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1)
+			return (-1);
+	}
+	if (cmd->args)
+	{
+		builtin_status = run_bltin(data, cmd);
+		if (builtin_status != -1)
+		{
+			if (is_redir)
+				restore_streams(data, orig_stdin, orig_stdout);
+			return (builtin_status);
+		}
+		run_external(data, cmd);
+	}
 	if (is_redir)
 		restore_streams(data, orig_stdin, orig_stdout);
 	return (0);
