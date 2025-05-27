@@ -79,8 +79,8 @@ char **preprocess_input(char *input)
 	cmd.input = input;
 	if (!input)
 	{
-	printf("Input is NULL.\n");
-	return NULL;
+		printf("Input is NULL.\n");
+		return NULL;
 	}
 	add_space(&cmd);
 	if (!cmd.spaced)
@@ -98,7 +98,7 @@ char **preprocess_input(char *input)
 	// FOR DEBUGGIN , delete later
 	for (int j = 0; split_input[j]; j++)
 	printf("token[%d] = [%s]\n", j, split_input[j]);
-
+	free(cmd.spaced);
 	return split_input;
 }
 t_token	*tokenize_input(char **split_input)
