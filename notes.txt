@@ -1,0 +1,6 @@
+/usr/lib/gcc/x86_64-unknown-linux-gnu/14.2.0/../../../../x86_64-unknown-linux-gnu/bin/ld: obj/process_redir.o: relocation R_X86_64_32S against `.bss' can not be used when making a PIE object; recompile with -fPIE
+/usr/lib/gcc/x86_64-unknown-linux-gnu/14.2.0/../../../../x86_64-unknown-linux-gnu/bin/ld: failed to set dynamic section sizes: bad value
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:65: minishell] Error 1
+
+to avoide this mistake i changed Makefile settings , added -pie flag
