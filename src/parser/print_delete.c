@@ -169,7 +169,6 @@ const char	*token_type_to_str(t_token_type type)
 // }
 void	print_commands(t_command *cmd_list)
 {
-	t_token *tok;
 	t_files *file;
 
 	while (cmd_list)
@@ -179,41 +178,34 @@ void	print_commands(t_command *cmd_list)
 		if (cmd_list->args)
 		{
 			for (int i = 0; cmd_list->args[i]; i++)
-				printf("\"%s\" ", cmd_list->args[i]);
+				printf("   \"%s\" ", cmd_list->args[i]);
 		}
 		else
 			printf("(none)");
 		printf("\n");
 		// Print input redirections
-		printf("  Input redirections:\n");
+		printf("  Input:");
 		file = cmd_list->in;
 		while (file)
 		{
-			printf("    Type: %s, Name: \"%s\"\n",
+			printf("   [<%s> - <%s>]",
 				file->type == REDIR_IN ? "REDIR_IN" : "HEREDOC", file->name);
 			file = file->next;
 		}
 		// Print output redirections
-		printf("  Output redirections:\n");
+		printf("\n");
+		printf("  Output:");
 		file = cmd_list->out;
 		while (file)
 		{
-			printf("    Type: %s, Name: \"%s\"\n",
+			printf("  [<%s> - <%s>]",
 				file->type == REDIR_OUT ? "REDIR_OUT" : "REDIR_APPEND",
 				file->name);
 			file = file->next;
 		}
-		// Print tokens
-		printf("  Tokens:\n");
-		tok = cmd_list->tokens;
-		while (tok)
-		{
-			printf("       [%s] %s\n", token_type_to_str(tok->type),
-				tok->value);
-			tok = tok->next;
-		}
-		printf("  Pipe: %s\n", cmd_list->pipe ? "Yes" : "No");
+		printf("\n");
+		printf("  Pipe:    %s\n", cmd_list->pipe ? "Yes" : "No");
 		cmd_list = cmd_list->next;
-		printf("=====================\n");
+		printf("=============================\n");
 	}
 }
