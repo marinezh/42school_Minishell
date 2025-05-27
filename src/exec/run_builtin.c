@@ -12,7 +12,7 @@ int	run_bltin(t_data *data, t_command *cmd)
 		if (data->cmd_names[i] && ft_strcmp(args[0], data->cmd_names[i]) == 0)
 		{
 			data->status = data->builtins[i](data, cmd);
-			return (data->status);
+			return (0);
 		}
 		i++;
 	}

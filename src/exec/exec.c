@@ -77,7 +77,7 @@ int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
 	return (0);
 }
 
-int	execute(t_data *data, t_command *cmd)
+void	execute(t_data *data, t_command *cmd)
 {
 	int	builtin_status;
 	int	orig_stdin;
@@ -85,39 +85,27 @@ int	execute(t_data *data, t_command *cmd)
 	int	is_redir;
 
 	if (!cmd)
-	{
 		data->status = ERR_GENERIC;
-		return (-1);
-	}
 	if (!cmd->in && !cmd->out)
 	{
 		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
-		{
 			data->status = 0;
-			return (0);
-		}
 	}
 	is_redir = 0;
 	if (cmd->in || cmd->out)
 	{
 		is_redir = 1;
 		if (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1)
-			return (-1);
+			data->status = 1;
 	}
 	if (cmd->args)
 	{
 		builtin_status = run_bltin(data, cmd);
-		if (builtin_status != -1)
-		{
-			if (is_redir)
-				restore_streams(data, orig_stdin, orig_stdout);
-			return (builtin_status);
-		}
-		run_external(data, cmd);
+		if (builtin_status == -1)
+			run_external(data, cmd);
 	}
 	if (is_redir)
 		restore_streams(data, orig_stdin, orig_stdout);
-	return (0);
 }
 //**command not found -> status changes to 127, but not exit bash
 

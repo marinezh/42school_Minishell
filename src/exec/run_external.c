@@ -28,7 +28,7 @@ char	*process_path(t_data *data, char *path_str, char *arg)
 		return (path);
 	if (access_res == -1)
 	{
-        handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
+		handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
 		free(path);
 		return (NULL);
 	}
@@ -67,50 +67,49 @@ char	*parse_path_env(t_data *data, char *arg)
 
 char *process_binary(t_data *data, char *arg)
 {
-    int		access_res;
-    char	*path;
+	int		access_res;
+	char	*path;
 
-    access_res = check_file_access(arg);
-    if (access_res == 1)
-        path = arg;
-    else if (access_res == -1)
-    {
-        handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
-        return(NULL);
-    }
-    else
-    {
-        handle_error_arg(data, arg, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
-        return(NULL);
-    }
-    return (path);
+	access_res = check_file_access(arg);
+	if (access_res == 1)
+		path = arg;
+	else if (access_res == -1)
+	{
+		handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
+		return(NULL);
+	}
+	else
+	{
+		handle_error_arg(data, arg, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
+		return(NULL);
+	}
+	return (path);
 }
 
-int	run_external(t_data *data, t_command *cmd)
+void	run_external(t_data *data, t_command *cmd)
 {
 	char	*path;
 	char	*path_to_free;
 	int		exit_status;
 
-    path_to_free = NULL;
-    if (ft_strchr(cmd->args[0], '/'))
-    {
-        path = process_binary(data, cmd->args[0]);
-        if (!path)
-            return (data->status);
-    }
+	path_to_free = NULL;
+	if (ft_strchr(cmd->args[0], '/'))
+	{
+		path = process_binary(data, cmd->args[0]);
+		if (!path)
+			data->status = ERR_GENERIC;
+	}
 	else
 	{
 		path = parse_path_env(data, cmd->args[0]);
 		path_to_free = path;
 		if (!path)
-            return(handle_error_arg(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127));
+			handle_error_arg(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127);
 	}
 	exit_status = execute_cmd(data, cmd, path);
 	data->status = exit_status;
 	if (path_to_free)
 		free(path_to_free);
-	return (exit_status);
 }
 
 // bash command - test -x filename.c

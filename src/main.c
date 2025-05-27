@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	shell_loop(t_data *data)
+void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
 	t_token		*tokens = NULL;
@@ -47,22 +47,20 @@ int	shell_loop(t_data *data)
 		free_tokens(tokens);			// Free the tokens list
 		free_command_list(commands);	// Free the commands list
 	}
-	return (data->status);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
-	int		exit_code;
 
 	(void)av;
 	if (ac < 1)
 		return (1);
 	// init struct where env are stored
 	init_data(&data, env);
-	exit_code = shell_loop(&data);
+	shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(data.envp_list);
 	free_double_array(data.envp);
-	return (exit_code);
+	return (data.status);
 }
