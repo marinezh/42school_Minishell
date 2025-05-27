@@ -18,7 +18,8 @@ COLOUR_BRIGHT_CYAN = \033[1;36m
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes/
+CFLAGS = -Wall -Wextra -Werror -fPIE -I./includes/
+LDFLAGS = -pie
 READLINE = -lreadline
 
 # Base Paths
@@ -41,7 +42,7 @@ BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c utils_builtin.
 LEXER = lexer.c operator_check.c split.c utils.c
 EXEC = init_data.c free_data.c exec.c utils_exec.c run_builtin.c run_external.c exec_cmd.c\
 		handle_errors.c process_redir.c
-PARSER = parser.c tokenization.c print_delete.c error_check.c
+PARSER = parser.c tokenization.c print_delete.c error_check.c token_handlers.c redirect.c
 UTILS = free.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
@@ -62,7 +63,8 @@ all: $(NAME)
 
 # Link the final executable
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
+#	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
+	@$(CC) $(OBJ) $(LIBFT) $(READLINE) $(LDFLAGS) -o $(NAME)
 	@echo -e "$(COLOUR_BRIGHT_GREEN)$@ created$(COLOUR_END)"
 
 # Rule to compile all .c → obj/.o
