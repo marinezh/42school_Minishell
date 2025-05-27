@@ -23,26 +23,17 @@ int	copy_stream(int fd)
 
 void	restore_streams(t_data *data, int orig_stdin, int orig_stdout)
 {
-	int	status;
-
-	status = 0;
 	if (orig_stdin != -1)
 	{
 		if (redirect_stream(data, orig_stdin, 0) == -1)
-		{
-			status = -1;
 			perror("restore stdin");
-			close(orig_stdin);
-		}
+		close(orig_stdin);
 	}
-	if (status != -1 && orig_stdout != -1)
+	if (orig_stdout != -1)
 	{
 		if (redirect_stream(data, orig_stdout, 1) == -1)
-		{
 			perror("restore stdout");
-			status = -1;
-			close(orig_stdout);
-		}
+		close(orig_stdout);
 	}
 }
 
