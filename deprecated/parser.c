@@ -69,8 +69,7 @@
 // 			current->next = init_command();
 // 			if (!current->next)
 // 			{
-// 				fprintf(stderr,
-					"Error: failed to allocate memory for new command\n");
+// 				fprintf(stderr,"Error: failed to allocate memory for new command\n");
 // 				return (NULL);
 // 			}
 // 			current = current->next;
@@ -84,8 +83,7 @@
 // 			new_token = malloc(sizeof(t_token));
 // 			if (!new_token)
 // 			{
-// 				fprintf(stderr,
-					"Error: failed to allocate memory for redirection token\n");
+// 				fprintf(stderr,"Error: failed to allocate memory for redirection token\n");
 // 				return (NULL);
 // 			}
 // 			new_token->type = tokens->type;
@@ -93,8 +91,7 @@
 // 			if (!new_token->value)
 // 			{
 // 				free(new_token);
-// 				fprintf(stderr,
-					"Error: failed to allocate memory for redirection value\n");
+// 				fprintf(stderr,"Error: failed to allocate memory for redirection value\n");
 // 				return (NULL);
 // 			}
 // 			new_token->next = NULL;
@@ -118,8 +115,7 @@
 // 				new_token = malloc(sizeof(t_token));
 // 				if (!new_token)
 // 				{
-// 					fprintf(stderr,
-						"Error: failed to allocate memory for target token\n");
+// 					fprintf(stderr,"Error: failed to allocate memory for target token\n");
 // 					return (NULL);
 // 				}
 // 				new_token->type = tokens->type;
@@ -127,8 +123,7 @@
 // 				if (!new_token->value)
 // 				{
 // 					free(new_token);
-// 					fprintf(stderr,
-						"Error: failed to allocate memory for target value\n");
+// 					fprintf(stderr,"Error: failed to allocate memory for target value\n");
 // 					return (NULL);
 // 				}
 // 				new_token->next = NULL;
@@ -154,8 +149,7 @@
 // 			if (!new_token->value)
 // 			{
 // 				free(new_token);
-// 				fprintf(stderr,
-					"Error: failed to allocate memory for token value\n");
+// 				fprintf(stderr, "Error: failed to allocate memory for token value\n");
 // 				return (NULL);
 // 			}
 // 			new_token->next = NULL;
@@ -288,6 +282,74 @@
 // 					token_list->value);
 // 		}
 // 		token_list = token_list->next;
+// 	}
+// 	return (head);
+// }
+// t_command	*parse_tokens(t_token *token_list)
+// {
+// 	t_command	*head;
+// 	t_command	*tail;
+// 	t_command	*current;
+// 	int			command_index;
+// 	int			argc;
+// 	int			redir_type;
+
+// 	head = NULL;
+// 	tail = NULL;
+// 	current = NULL;
+// 	command_index = 0;
+// 	while (token_list)
+// 	{
+// 		if (!current) // On PIPE or at start, create a new command
+// 		{
+// 			current = create_new_command(command_index++);
+// 			if (!head)
+// 				head = current;
+// 			if (tail)
+// 				tail->next = current;
+// 			tail = current;
+// 		}
+// 		if (token_list->type == PIPE)
+// 		{
+// 			current->pipe = 1;
+// 			current = NULL;
+// 			token_list = token_list->next;
+// 			continue ;
+// 		}
+// 		// Handle redirections
+// 		if (token_list->type == REDIR_IN || token_list->type == HEREDOC
+// 			|| token_list->type == REDIR_OUT
+// 			|| token_list->type == REDIR_APPEND)
+// 		{
+// 			redir_type = token_list->type;
+// 			token_list = token_list->next;
+// 			// Check if next token exists and is a valid filename
+// 			if (token_list && (token_list->type == WORD
+// 					|| token_list->type == FILE_NAME))
+// 			{
+// 				add_redirection(current, token_list->value, redir_type);
+// 				token_list = token_list->next;
+// 			}
+// 			// Do i need extra error handling here for missing filename after redirection ?
+// 			else
+// 			{
+// 				continue ; // think about error hendling here
+// 			}
+// 		}
+// 		// Add WORD tokens to args
+// 		else if (token_list->type == WORD)
+// 		{
+// 			argc = 0;
+// 			while (current->args && current->args[argc])
+// 				argc++;
+// 			current->args = realloc_args(current->args, argc,token_list->value);
+// 			token_list = token_list->next;
+// 		}
+// 		else
+// 		{
+// 			// Handle other token types
+// 			token_list = token_list->next;
+// 		}
 // 	}
 // 	return (head);
 // }
