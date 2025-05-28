@@ -31,6 +31,7 @@ char	*process_binary(t_data *data, char *arg);
 int		check_file_access(char *path);
 int		redirect_stream(t_data *data, int old_fd, int new_fd);
 int		handle_redirs(t_data *data, t_command *cmd);
+int	    process_heredoc(t_data *data, t_files *cur_node);
 
 // don't forget to delete
 // this is just to print linked list

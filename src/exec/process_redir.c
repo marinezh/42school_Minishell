@@ -77,86 +77,6 @@ int	process_redir_out(t_data *data, t_files *redir_out)
 	data->status = 0;
 	return (data->status);
 }
-// TODO: free after readline (allocate memory in heap)
-// then free after join
-// TODO: close fd
-
-int	collect_heredoc_input(t_data *data, t_files *cur_node)
-{
-	static int heredoc_counter = 0;
-	char	*heredoc_num;
-	char	*input;
-	int		fd;
-	char	*input_nl;
-	char	*temp_name;
-	// char	*line;
-
-	heredoc_num = ft_itoa(heredoc_counter++);
-	if (!heredoc_num)
-		return (-1);
-	temp_name = ft_strjoin("heredoc_", heredoc_num);
-	free(heredoc_num);
-	if (!temp_name)
-		return (-1);
-	fd = open(temp_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
-	{
-		perror("open");
-		free(temp_name);
-		return (-1);
-	}
-	while (1)
-	{
-		input = readline("> ");
-		if (!input)
-		{
-			close(fd);
-			unlink(temp_name);
-			free(temp_name);
-			return (-1);
-		}
-		if (ft_strcmp(input, cur_node->name) == 0)
-		{
-			free(input);
-			break ;
-		}
-		input_nl = ft_strjoin(input, "\n");
-		if (!input_nl)
-		{
-			free(input);
-			close(fd);
-			unlink(temp_name);
-			free(temp_name);
-			return (-1);
-		}
-		write(fd, input_nl, ft_strlen(input_nl));
-		free(input_nl);
-		free(input);
-	}
-	close(fd);
-	fd = open(temp_name, O_RDONLY);
-	if (fd == -1)
-	{
-		perror("open");
-		unlink(temp_name);
-		free(temp_name);
-		return (-1);
-	}
-	unlink(temp_name);
-	free(temp_name);
-	cur_node->fd = fd;
-	data->status = 0;
-	return(data->status);
-
-	// while (1)
-	// {
-	// 	line = get_next_line(fd_read);
-	// 	if (!line)
-	// 		break;
-	// 	printf("%s", line);
-	// }
-	// close(fd_read);
-}
 
 int	handle_redirs(t_data *data, t_command *cmd)
 {
@@ -171,7 +91,7 @@ int	handle_redirs(t_data *data, t_command *cmd)
 	{
 		if (cur_in->type == HEREDOC)
 		{
-			res = collect_heredoc_input(data, cur_in);
+			res = process_heredoc(data, cur_in);
 			if (res == -1)
 				break;
 		}
