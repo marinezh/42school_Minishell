@@ -4,3 +4,14 @@ collect2: error: ld returned 1 exit status
 make: *** [Makefile:65: minishell] Error 1
 
 to avoide this mistake i changed Makefile settings , added -pie flag
+
+From Inna:
+-switched to your branch 3-parsing, tried to compile on mac, had the error below
+/libft library created
+clang: warning: argument unused during compilation: '-pie' [-Wunused-command-line-argument]
+/minishell created
+- I also checked in GPTchat what error is about and one of the reasons - static variable in obj/process_redir.o
+- But there are no static variables in this function
+- there is one static variable in a different fucntion. everything compiles without this flag just fine in my branch
+- in get next line we had static variable and didn't add any flags
+- when you are back, let's try together to check
