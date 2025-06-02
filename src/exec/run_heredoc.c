@@ -34,6 +34,7 @@ int collect_input(t_files *node, int fd_read, int fd_write)
 		if (!input)
 		{
 			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
+            //TODO: check the message in bash school - cntl + D
 			close(fd_write);
 			close(fd_read);
 			return (-1);

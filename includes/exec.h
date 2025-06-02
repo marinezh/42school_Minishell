@@ -33,8 +33,4 @@ int		redirect_stream(t_data *data, int old_fd, int new_fd);
 int		handle_redirs(t_data *data, t_command *cmd);
 int	    process_heredoc(t_data *data, t_files *cur_node);
 
-// don't forget to delete
-// this is just to print linked list
-void	print_envp_list(t_env *envp_list);
-
 #endif
