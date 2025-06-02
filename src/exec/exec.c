@@ -68,20 +68,13 @@ int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
 	return (0);
 }
 
-void	execute(t_data *data, t_command *cmd)
+void	process_cmd(t_data *data, t_command *cmd)
 {
 	int	builtin_status;
 	int	orig_stdin;
 	int	orig_stdout;
 	int	is_redir;
 
-	if (!cmd)
-		data->status = ERR_GENERIC;
-	if (!cmd->in && !cmd->out)
-	{
-		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
-			data->status = 0;
-	}
 	is_redir = 0;
 	if (cmd->in || cmd->out)
 	{
@@ -97,6 +90,38 @@ void	execute(t_data *data, t_command *cmd)
 	}
 	if (is_redir)
 		restore_streams(data, orig_stdin, orig_stdout);
+}
+int	count_commands(t_command *head)
+{
+	t_command *cur;
+	int	count;
+
+	cur = head;
+	count = 0;
+	while(cur)
+	{
+		count++;
+		cur = cur->next;
+	}
+	return(count);
+}
+
+void	execute(t_data *data, t_command *cmd)
+{
+	int	cmd_count;
+
+	if (!cmd)
+		data->status = ERR_GENERIC;
+	if (!cmd->in && !cmd->out)
+	{
+		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+			data->status = 0;
+	}
+	cmd_count = count_commands(cmd);
+	if (cmd_count > 1)
+		run_pipes(data, cmd, cmd_count);
+	else
+		process_cmd(data, cmd);
 }
 //**command not found -> status changes to 127, but not exit bash
 

@@ -29,3 +29,13 @@ void	free_env_list(t_env *env)
 		free(tmp);
 	}
 }
+
+void	free_fds(int **fds, int i)
+{
+        while (i > 0)
+        {
+            i--;
+            free(fds[i]);
+        }
+	free(fds);
+}
