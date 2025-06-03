@@ -10,7 +10,7 @@ int		ft_unset(t_data *data, t_command *cmd);
 int		ft_cd(t_data *data, t_command *cmd);
 int		ft_exit(t_data *data, t_command *cmd);
 void	free_double_array(char **envp);
-void	free_env_list(t_env *env);
+void	free_env_list(t_env **env);
 void	update_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);

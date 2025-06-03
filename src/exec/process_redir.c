@@ -91,19 +91,9 @@ int	handle_redirs(t_data *data, t_command *cmd)
 	{
 		if (cur_in->type == HEREDOC)
 		{
-			res = process_heredoc(data, cur_in);
-			if (res == -1)
-				break;
-		}
-		cur_in = cur_in->next;
-	}
-	cur_in = cmd->in;
-	while (cur_in)
-	{
-		if (cur_in->type == HEREDOC)
-		{
 			res = redirect_stream(data, cur_in->fd, 0);
 			close(cur_in->fd);
+			cur_in->fd = -1;
 		}
 		else
 			res = process_redir_in(data, cur_in);

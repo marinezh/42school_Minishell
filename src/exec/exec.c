@@ -93,8 +93,8 @@ void	process_cmd(t_data *data, t_command *cmd)
 }
 int	count_commands(t_command *head)
 {
-	t_command *cur;
-	int	count;
+	t_command	*cur;
+	int			count;
 
 	cur = head;
 	count = 0;
@@ -106,16 +106,61 @@ int	count_commands(t_command *head)
 	return(count);
 }
 
+int	has_heredoc(t_data *data, t_command *cmd)
+{
+	t_files	*cur_in;
+	int		count;
+
+	count = 0;
+	cur_in = cmd->in;
+	while (cur_in)
+	{
+		if (cur_in->type == HEREDOC)
+		{
+			count++;
+			if (count > 16)
+			{
+				ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+				data->exit_f = 1;
+				return (-1);
+			}
+		}
+		cur_in = cur_in->next;
+	}
+	cur_in = cmd->in;
+	while (cur_in)
+	{
+		if (cur_in->type == HEREDOC)
+		{
+			if (process_heredoc(data, cur_in) == -1)
+				return (-1);
+		}
+		cur_in = cur_in->next;
+	}
+	return (0);
+}
+
 void	execute(t_data *data, t_command *cmd)
 {
 	int	cmd_count;
 
 	if (!cmd)
+	{
 		data->status = ERR_GENERIC;
+		return ;
+	}
 	if (!cmd->in && !cmd->out)
 	{
 		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
+		{
 			data->status = 0;
+			return ;
+		}
+	}
+	if (has_heredoc(data, cmd) == -1)
+	{
+		data->status = ERR_GENERIC;
+		return ;
 	}
 	cmd_count = count_commands(cmd);
 	if (cmd_count > 1)
