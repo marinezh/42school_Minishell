@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_envp_list(t_data *data, char **env)
+void	build_envp_list(t_data *data, char **env)
 {
 	t_env	*node;
 	size_t	i;
@@ -12,17 +12,6 @@ void	init_envp_list(t_data *data, char **env)
 		if (node)
 			node_add_last(&data->envp_list, node);
 		i++;
-	}
-}
-
-void	print_envp_list(t_env *envp_list)
-{
-	t_env	*list = envp_list;
-
-	while (list)
-	{
-		printf("Key: [%s] | Value: [%s]\n", list->key, list->value);
-		list = list->next;
 	}
 }
 
@@ -64,6 +53,7 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 
 void	init_data(t_data *data, char **env)
 {
+	ft_memset(data, 0, sizeof(t_data));
 	data->cmd_names[0] = "pwd";
 	data->cmd_names[1] = "echo";
 	data->cmd_names[2] = "env";
@@ -78,19 +68,7 @@ void	init_data(t_data *data, char **env)
 	data->builtins[4] = ft_unset;
 	data->builtins[5] = ft_cd;
 	data->builtins[6] = ft_exit;
-
-	data->envp_list = NULL;
-	data->envp = NULL;
-	data->envp_f = 0;
-	data->exit_f = 0;
-	data->status = 0;
-	init_envp_list(data, env);
+	build_envp_list(data, env);
 	if (data->envp_list)
 		update_envp_array(data, data->envp_list);
-	// print_envp_list(data->envp_list);
-	// int j = 0;
-	// while (data->envp[j])
-	// {
-	// 	printf("%s\n", data->envp[j++]);
-	// }
 }

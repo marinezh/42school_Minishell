@@ -6,7 +6,7 @@ void	shell_loop(t_data *data)
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
 	char **split_input = NULL;
-	
+
 
 	// t_token		*tokens_lexer = NULL; //do i need this?
 	// t_files		*files;
@@ -60,7 +60,7 @@ int	main(int ac, char **av, char **env)
 	init_data(&data, env);
 	shell_loop(&data);
 	// clean struct where env are stored
-	free_env_list(data.envp_list);
+	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
 	return (data.status);
 }

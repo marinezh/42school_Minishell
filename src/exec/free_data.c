@@ -16,16 +16,31 @@ void	free_double_array(char **arr)
 	free(arr);
 }
 
-void	free_env_list(t_env *env)
+void	free_env_list(t_env **env)
 {
 	t_env	*tmp;
+	t_env	*node;
 
-	while (env)
+	if (!env || !*env)
+		return ;
+	node = *env;
+	while (node)
 	{
-		tmp = env;
-		env = env->next;
+		tmp = node;
+		node = node->next;
 		free(tmp->key);
 		free(tmp->value);
 		free(tmp);
 	}
+	*env = NULL;
+}
+
+void	free_fds(int **fds, int i)
+{
+        while (i > 0)
+        {
+            i--;
+            free(fds[i]);
+        }
+	free(fds);
 }
