@@ -108,34 +108,46 @@ int	count_commands(t_command *head)
 
 int	has_heredoc(t_data *data, t_command *cmd)
 {
-	t_files	*cur_in;
-	int		count;
+	t_command	*cur_cmd;
+	t_files		*cur_in;
+	int			count;
 
 	count = 0;
-	cur_in = cmd->in;
-	while (cur_in)
+	cur_cmd = cmd;
+	while (cur_cmd)
 	{
-		if (cur_in->type == HEREDOC)
+		cur_in = cur_cmd->in;
+		while (cur_in)
 		{
-			count++;
-			if (count > 16)
+			if (cur_in->type == HEREDOC)
 			{
-				ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
-				data->exit_f = 1;
-				return (-1);
+				count++;
+				if (count > 16)
+				{
+					ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+					data->exit_f = 1;
+					return (-1);
+				}
 			}
+			cur_in = cur_in->next;
 		}
-		cur_in = cur_in->next;
+		cur_cmd = cur_cmd->next;
 	}
-	cur_in = cmd->in;
-	while (cur_in)
+	printf("heredoc count - %d\n", count);
+	cur_cmd = cmd;
+	while (cur_cmd)
 	{
-		if (cur_in->type == HEREDOC)
+		cur_in = cur_cmd->in;
+		while (cur_in)
 		{
-			if (process_heredoc(data, cur_in) == -1)
-				return (-1);
+			if (cur_in->type == HEREDOC)
+			{
+				if (process_heredoc(data, cur_in) == -1)
+					return (-1);
+			}
+			cur_in = cur_in->next;
 		}
-		cur_in = cur_in->next;
+		cur_cmd = cur_cmd->next;
 	}
 	return (0);
 }
