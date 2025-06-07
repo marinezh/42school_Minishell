@@ -5,7 +5,8 @@
 
 t_command *parse_tokens(t_token *token_list);
 t_token *tokenize_input(char **split_input);
-int error_check(t_token *token);
+//int error_check(t_token *token);
+int error_check(t_token *token, t_data *data);
 //t_files *parse_redir(t_token *token_list);
 char **preprocess_input(char *input);
 char	**realloc_args(char **args, int count, char *value);

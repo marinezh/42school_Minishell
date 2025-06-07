@@ -1,3 +1,4 @@
+
 # Library name
 NAME = minishell
 
@@ -18,8 +19,7 @@ COLOUR_BRIGHT_CYAN = \033[1;36m
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fPIE -I./includes/
-LDFLAGS = -pie
+CFLAGS = -Wall -Wextra -Werror -I./includes/
 READLINE = -lreadline
 
 # Base Paths
@@ -63,8 +63,7 @@ all: $(NAME)
 
 # Link the final executable
 $(NAME): $(OBJ) $(LIBFT)
-#	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
-	@$(CC) $(OBJ) $(LIBFT) $(READLINE) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE) -o $(NAME)
 	@echo -e "$(COLOUR_BRIGHT_GREEN)$@ created$(COLOUR_END)"
 
 # Rule to compile all .c → obj/.o

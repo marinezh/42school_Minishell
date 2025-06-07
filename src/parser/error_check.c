@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 
-int error_check(t_token *token)
+int error_check(t_token *token, t_data *data)
 {
 	// Check if command starts with a pipe
 	if (token && token->type == PIPE)
@@ -13,7 +13,7 @@ int error_check(t_token *token)
 	{
 		if(token->type == PIPE && (!token->next || token->next->type == PIPE))
 		{
-			printf("syntax error |\n");
+			handle_error_arg(data, "", ERR_PARSING_PIPE, 2);
 			return (1);
 		}
 		else if((token->type == REDIR_APPEND || token->type == REDIR_IN || 
@@ -22,14 +22,14 @@ int error_check(t_token *token)
 			token->next->type == REDIR_IN || token->next->type == REDIR_OUT ||
 			token->next->type == HEREDOC))
 		{
-			printf("syntax error >\n");
+			handle_error_arg(data, "", ERR_PARSING_RED, 2);
 			return (1);
 		}
 		else if((token->type == REDIR_APPEND || token->type == REDIR_IN || 
 			token->type == REDIR_OUT || token->type == HEREDOC) &&
 			(!token->next || token->next->type == PIPE ))
 		{
-			printf("syntax error > |\n");
+			handle_error_arg(data, "", ERR_PARSING_PIPE, 2);
 			return (1);
 		}
 		// else if(token->type == PIPE && (!token->prev)) // think about do i need to use double linked list here
