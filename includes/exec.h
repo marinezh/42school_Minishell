@@ -10,7 +10,7 @@ int		ft_unset(t_data *data, t_command *cmd);
 int		ft_cd(t_data *data, t_command *cmd);
 int		ft_exit(t_data *data, t_command *cmd);
 void	free_double_array(char **envp);
-void	free_env_list(t_env *env);
+void	free_env_list(t_env **env);
 void	update_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);
@@ -31,9 +31,10 @@ char	*process_binary(t_data *data, char *arg);
 int		check_file_access(char *path);
 int		redirect_stream(t_data *data, int old_fd, int new_fd);
 int		handle_redirs(t_data *data, t_command *cmd);
-
-// don't forget to delete
-// this is just to print linked list
-void	print_envp_list(t_env *envp_list);
+int	    process_heredoc(t_data *data, t_files *cur_node);
+int     run_pipes(t_data *data, t_command *cmd, int cmd_count);
+pid_t	create_process(void);
+void	process_cmd(t_data *data, t_command *cmd);
+void	free_fds(int **fds, int i);
 
 #endif
