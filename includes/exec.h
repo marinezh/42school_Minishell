@@ -37,4 +37,6 @@ pid_t	create_process(void);
 void	process_cmd(t_data *data, t_command *cmd);
 void	free_fds(int **fds, int i);
 
+void    setup_sig_handler(void);
+
 #endif

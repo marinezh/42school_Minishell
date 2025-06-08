@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+volatile sig_atomic_t sig_received = 0;
+
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
@@ -12,6 +14,7 @@ void	shell_loop(t_data *data)
 	// t_files		*files;
 	while (!data->exit_f)
 	{
+		sig_received = 0;
 		if (print_prompt(&cmd_input) == -1)
 			break ;
 		// tokens_lexer = run_lexer(&cmd_input); and this?
@@ -58,6 +61,7 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	// init struct where env are stored
 	init_data(&data, env);
+	setup_sig_handler();
 	shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);

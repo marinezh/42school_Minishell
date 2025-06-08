@@ -1,6 +1,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+extern volatile sig_atomic_t sig_received;
+
 typedef enum e_token_type
 {
 	NONE,         // 0
@@ -25,6 +27,12 @@ typedef enum e_error_code
     ERR_PARSER_MISSING_FILE = 259,	// Missing filename after redirection
     ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing
 }						t_error_code;
+
+typedef enum e_mode
+{
+	INTERACTIVE_MODE,
+	HEREDOC_MODE,
+}	t_mode;
 
 typedef struct s_cmd_input
 {
@@ -86,6 +94,7 @@ struct					s_data
 	char				envp_f;
 	char				exit_f;
 	int					status;
+	t_mode				cur_mode;
 };
 
 #endif
