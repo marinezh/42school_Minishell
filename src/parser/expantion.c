@@ -2,19 +2,29 @@
 
 char *get_env_value(t_env *env_list, const char *key)
 {
-    printf("Searching for environment key: '%s'\n", key);
+	//printf("Searching for environment key: '%s'\n", key);
 	while (env_list)
-    {
-		printf("Comparing with: '%s'\n", env_list->key);
-        if (ft_strcmp(env_list->key, key) == 0)
+	{
+		char *temp_key = ft_strdup(env_list->key); // Create a temporary copy to manipulate
+		if (!temp_key)
+			return NULL;
+		
+		char *equals = ft_strchr(temp_key, '=');
+		if (equals)
+			*equals = '\0'; // Remove equals sign if present
+			
+		printf("Comparing with: '%s' (original: '%s')\n", temp_key, env_list->key);
+		if (ft_strcmp(temp_key, key) == 0) // Compare without equals sign
 		{
 			printf("MATCH FOUND! Value: '%s'\n", env_list->value);
+			free(temp_key);
 			return env_list->value;
 		}
-        printf("KEY NOT FOUND in environment\n");
-        env_list = env_list->next;
-    }
-    return NULL;
+		free(temp_key);
+		env_list = env_list->next;
+	}
+	printf("KEY NOT FOUND in environment\n");
+	return NULL;
 }
 
 void expand_variables(t_token *token, t_data *data)
@@ -31,13 +41,13 @@ void expand_variables(t_token *token, t_data *data)
 	// }
 	// printf("/////////////////////////////////////\n");
 	t_env *debug_env = data->envp_list;
-    printf("--- ENVIRONMENT VARIABLES DEBUG ---\n");
-    while (debug_env)
-    {
-        printf("ENV KEY: '%s', VALUE: '%s'\n", debug_env->key, debug_env->value);
-        debug_env = debug_env->next;
-    }
-    printf("--- END DEBUG ---\n");
+	printf("--- ENVIRONMENT VARIABLES DEBUG ---\n");
+	while (debug_env)
+	{
+		printf("ENV KEY: '%s', VALUE: '%s'\n", debug_env->key, debug_env->value);
+		debug_env = debug_env->next;
+	}
+	printf("--- END DEBUG ---\n");
 
 	current_token = token;
 	while(current_token)
