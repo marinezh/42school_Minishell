@@ -80,7 +80,10 @@ void	process_cmd(t_data *data, t_command *cmd)
 	{
 		is_redir = 1;
 		if (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1)
+		{
 			data->status = 1;
+			return ;
+		}
 	}
 	if (cmd->args)
 	{
