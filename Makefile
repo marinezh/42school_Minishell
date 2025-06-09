@@ -42,7 +42,7 @@ BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c utils_builtin.
 LEXER = lexer.c operator_check.c split.c utils.c
 EXEC = init_data.c free_data.c exec.c utils_exec.c run_builtin.c run_external.c exec_cmd.c\
 		handle_errors.c process_redir.c run_heredoc.c run_pipes.c
-PARSER = parser.c tokenization.c print_delete.c error_check.c token_handlers.c redirect.c
+PARSER = parser.c tokenization.c print_delete.c error_check.c token_handlers.c redirect.c expantion.c
 UTILS = free.c
 
 LIBFT := $(LIBFT_PATH)/libft.a

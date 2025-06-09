@@ -35,6 +35,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
+		expand_variables(tokens, data);
 		commands = parse_tokens(tokens);
 		print_commands(commands);
 		add_history(cmd_input.input);
