@@ -77,7 +77,7 @@ char **preprocess_input(char *input)
 	t_cmd_input cmd = {0};
 	char **split_input = NULL;
 	cmd.input = input;
-	if (!input)
+	if (!input)						// if set to NULL seg fault, do i need this extra check here?
 	{
 		printf("Input is NULL.\n");
 		return NULL;

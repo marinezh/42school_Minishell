@@ -67,13 +67,14 @@ void expand_variables(t_token *token, t_data *data)
 					var_name[j] = '\0';
 					
 					printf("var_name %s\n",var_name);
-					char *var_value = get_env_value(data->envp_list, var_name);
+					t_env *node = find_env_node(data, var_name);
+					// char *var_value = get_env_value(data->envp_list, var_name);
 					//printf("Var value length: %zu\n", strlen(var_value));
-					printf("var_value %s\n", var_value);
-					if (var_value)
-					{
-					 	printf("Found variable %s = %s\n", var_name, var_value);
-					}
+					printf("var_value %s\n", node->value);
+					// if (var_value)
+					// {
+					//  	printf("Found variable %s = %s\n", var_name, var_value);
+					// }
 					free(var_name);
 				}
 				i++;

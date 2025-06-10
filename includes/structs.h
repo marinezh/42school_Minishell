@@ -16,14 +16,12 @@ typedef enum e_token_type
 typedef enum e_error_code
 {
 	ERR_GENERIC = 1,
-	ERR_INVALID_OPTION = 2,
+	ERR_PARSER = 2,
 	ERR_PERM_DENIED = 126,
 	ERR_CMD_NOT_FOUND = 127,
 	ERR_INTERUPTED_SIGINT = 130,
 	ERR_INVALID_EXIT_CODE = 255,
-	ERR_PARSER_SYNTAX = 258,		// Syntax error in the command
-    ERR_PARSER_MISSING_FILE = 259,	// Missing filename after redirection
-    ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing
+    ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing DOUBLE CHECK
 }						t_error_code;
 
 typedef struct s_cmd_input
