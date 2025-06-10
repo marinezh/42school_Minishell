@@ -1,22 +1,29 @@
 #include "minishell.h"
 
-volatile sig_atomic_t sig_received = 0;
-
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
 	char **split_input = NULL;
+	int		prompt_res;
 
 
 	// t_token		*tokens_lexer = NULL; //do i need this?
 	// t_files		*files;
 	while (!data->exit_f)
 	{
-		sig_received = 0;
-		if (print_prompt(&cmd_input) == -1)
+		prompt_res = print_prompt(&cmd_input);
+		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
+		{
+			data->status = 0;
 			break ;
+		}
+		if (prompt_res == 0) //signal received or empty input
+		{
+			data->status = ERR_INTERUPTED_SIGINT;
+			continue ;
+		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
 		split_input = preprocess_input(cmd_input.input);
 		if (!split_input)
@@ -66,5 +73,6 @@ int	main(int ac, char **av, char **env)
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
+	rl_clear_history();
 	return (data.status);
 }

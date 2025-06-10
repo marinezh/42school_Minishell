@@ -33,7 +33,9 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 		input = readline("> ");
 		if (!input)
 		{
-			ft_putstr_fd("minishell: warning: here-document delimited by end-of-file\n", 2);
+			ft_putstr_fd("minishell: warning: ", 2);
+			ft_putstr_fd("here-document delimited by end-of-file (wanted ", 2);
+			printf("`%s')\n", node->name);
 			//TODO: check cntl + D - cause "dup2: Bad file descriptor" and what is wanted as delimeted
 			close(fd_write);
 			close(fd_read);

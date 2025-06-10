@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-void	reset_readline(void)
-{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-}
+volatile sig_atomic_t sig_received = 0;
 
 void	handler(int sig)
 {
 	if (sig == SIGINT)
+	{
 		sig_received = 1;
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 void	setup_sig_handler(void)

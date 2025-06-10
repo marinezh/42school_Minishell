@@ -24,15 +24,9 @@ typedef enum e_error_code
 	ERR_INTERUPTED_SIGINT = 130,
 	ERR_INVALID_EXIT_CODE = 255,
 	ERR_PARSER_SYNTAX = 258,		// Syntax error in the command
-    ERR_PARSER_MISSING_FILE = 259,	// Missing filename after redirection
-    ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing
+	ERR_PARSER_MISSING_FILE = 259,	// Missing filename after redirection
+	ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing
 }						t_error_code;
-
-typedef enum e_mode
-{
-	INTERACTIVE_MODE,
-	HEREDOC_MODE,
-}	t_mode;
 
 typedef struct s_cmd_input
 {
@@ -94,7 +88,6 @@ struct					s_data
 	char				envp_f;
 	char				exit_f;
 	int					status;
-	t_mode				cur_mode;
 };
 
 #endif
