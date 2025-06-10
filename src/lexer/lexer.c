@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	print_prompt(t_cmd_input *cmd)
+int	read_prompt(t_cmd_input *cmd)
 {
 	sig_received = 0;
 	cmd->input = readline("minishell$ ");

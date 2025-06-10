@@ -13,7 +13,7 @@ void	shell_loop(t_data *data)
 	// t_files		*files;
 	while (!data->exit_f)
 	{
-		prompt_res = print_prompt(&cmd_input);
+		prompt_res = read_prompt(&cmd_input);
 		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
 		{
 			data->status = 0;
