@@ -15,6 +15,14 @@ pid_t	create_process(void)
 
 void	handle_child_process(char *path, char **args, char **envp)
 {
+	struct sigaction sa;
+
+    ft_memset(&sa, 0, sizeof(sa));
+    sa.sa_handler = SIG_DFL;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGQUIT, &sa, NULL);
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");

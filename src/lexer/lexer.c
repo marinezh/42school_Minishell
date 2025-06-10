@@ -1,12 +1,28 @@
 #include "minishell.h"
 
-int	print_prompt(t_cmd_input *cmd)
+int	read_prompt(t_cmd_input *cmd)
 {
+	sig_received = 0;
 	cmd->input = readline("minishell$ ");
+	if (sig_received)
+	{
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
+		return (0);
+	}
 	if (!cmd->input)
 	{
 		printf("exit\n");
 		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		free(cmd->input);
+		cmd->input = NULL;
+		return (0);
 	}
 	return (1);
 }
