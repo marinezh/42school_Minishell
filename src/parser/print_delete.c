@@ -170,6 +170,7 @@ const char	*token_type_to_str(t_token_type type)
 void	print_commands(t_command *cmd_list)
 {
 	t_files *file;
+	t_files *list;
 
 	while (cmd_list)
 	{
@@ -182,6 +183,15 @@ void	print_commands(t_command *cmd_list)
 		}
 		else
 			printf("(none)");
+		printf("\n");
+		// Print all redirections
+		printf("  All redirections:");
+		list = cmd_list->redirections;
+		while (list)
+		{
+			printf("   [<%d> - <%s>]",list->type, list->name);
+			list = list->next;
+		}
 		printf("\n");
 		// Print input redirections
 		printf("  Input:");

@@ -40,14 +40,14 @@ void expand_variables(t_token *token, t_data *data)
 	// 	i++;
 	// }
 	// printf("/////////////////////////////////////\n");
-	t_env *debug_env = data->envp_list;
-	printf("--- ENVIRONMENT VARIABLES DEBUG ---\n");
-	while (debug_env)
-	{
-		printf("ENV KEY: '%s', VALUE: '%s'\n", debug_env->key, debug_env->value);
-		debug_env = debug_env->next;
-	}
-	printf("--- END DEBUG ---\n");
+	// t_env *debug_env = data->envp_list;
+	// printf("--- ENVIRONMENT VARIABLES DEBUG ---\n");
+	// while (debug_env)
+	// {
+	// 	printf("ENV KEY: '%s', VALUE: '%s'\n", debug_env->key, debug_env->value);
+	// 	debug_env = debug_env->next;
+	// }
+	// printf("--- END DEBUG ---\n");
 
 	current_token = token;
 	while(current_token)
