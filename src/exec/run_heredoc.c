@@ -31,6 +31,12 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 	while (1)
 	{
 		input = readline("> ");
+		if (sig_received)
+		{
+			if (input)
+				free(input);
+			return (-1);
+		}
 		if (!input)
 		{
 			ft_putstr_fd("minishell: warning: ", 2);
@@ -74,7 +80,12 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 	int		fd_write;
 	int		fd_read;
 	char	*heredoc_name;
+	struct 	sigaction old_int;
+	struct	sigaction old_quit;
 
+	sig_received = 0;
+	sigaction(SIGINT, NULL, &old_int);
+	sigaction(SIGQUIT, NULL, &old_quit);
 	heredoc_name = create_new_name();
 	fd_write = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd_write == -1)
@@ -92,14 +103,22 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 		close(fd_write);
 		return (-1);
 	}
+	
+	set_heredoc_signals();
 	if (collect_input(cur_node, fd_read, fd_write) == -1)
 	{
 		close(fd_read);
 		close(fd_write);
+		sigaction(SIGINT, &old_int, NULL);
+		sigaction(SIGQUIT, &old_quit, NULL);
+		if (sig_received)
+			data->status = 1;
 		return (-1);
 	}
 	close(fd_write);
 	cur_node->fd = fd_read;
 	data->status = 0;
+	sigaction(SIGINT, &old_int, NULL);
+	sigaction(SIGQUIT, &old_quit, NULL);
 	return(0);
 }
