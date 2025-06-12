@@ -23,11 +23,31 @@ char	*create_new_name(void)
 		return (NULL);
 	return(heredoc_name);
 }
+
+void	print_eof_warning(t_files *node, int line_num)
+{
+	char	full_msg[256];
+	char	*number;
+
+	number = ft_itoa(line_num);
+	if (!number)
+		return ;
+	ft_strlcpy(full_msg, "minishell: warning: here-document at line ", sizeof(full_msg));
+	ft_strlcat(full_msg, number, sizeof(full_msg));
+	ft_strlcat(full_msg, "delimited by end-of-file (wanted `", sizeof(full_msg));
+	ft_strlcat(full_msg, node->name, sizeof(full_msg));
+	ft_strlcat(full_msg, "')\n", sizeof(full_msg));
+	ft_putstr_fd(full_msg, 2);
+	free(number);
+}
+
 int	collect_input(t_files *node, int fd_read, int fd_write)
 {
 	char	*input;
 	char	*input_nl;
+	int		line_count;
 
+	line_count = 1;
 	while (1)
 	{
 		input = readline("> ");
@@ -39,9 +59,7 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 		}
 		if (!input)
 		{
-			ft_putstr_fd("minishell: warning: ", 2);
-			ft_putstr_fd("here-document delimited by end-of-file (wanted ", 2);
-			printf("`%s')\n", node->name);
+			print_eof_warning(node, line_count);
 			//TODO: check cntl + D - cause "dup2: Bad file descriptor" and what is wanted as delimeted
 			close(fd_write);
 			close(fd_read);
