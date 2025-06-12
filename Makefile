@@ -33,7 +33,8 @@ EXEC_PATH = $(SRCS_PATH)/exec
 PARSER_PATH = $(SRCS_PATH)/parser
 UTILS_PATH = $(SRCS_PATH)/utils
 SIGNALS_PATH = $(SRCS_PATH)/signals
-VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) $(UTILS_PATH) $(SIGNALS_PATH)
+VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) \
+		$(UTILS_PATH) $(SIGNALS_PATH)
 
 # Files
 MAIN = main.c
@@ -44,7 +45,7 @@ EXEC = init_data.c free_data.c exec.c utils_exec.c run_builtin.c run_external.c 
 		handle_errors.c process_redir.c run_heredoc.c run_pipes.c
 PARSER = parser.c tokenization.c print_delete.c error_check.c
 UTILS = free.c
-SIGNALS = setup_sig_handler.c
+SIGNALS = heredoc_handler.c prompt_handler.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 

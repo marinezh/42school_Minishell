@@ -23,19 +23,43 @@ char	*create_new_name(void)
 		return (NULL);
 	return(heredoc_name);
 }
+
+void	print_eof_warning(t_files *node, int line_num)
+{
+	char	full_msg[256];
+	char	*number;
+
+	number = ft_itoa(line_num);
+	if (!number)
+		return ;
+	ft_strlcpy(full_msg, "minishell: warning: here-document at line ", sizeof(full_msg));
+	ft_strlcat(full_msg, number, sizeof(full_msg));
+	ft_strlcat(full_msg, "delimited by end-of-file (wanted `", sizeof(full_msg));
+	ft_strlcat(full_msg, node->name, sizeof(full_msg));
+	ft_strlcat(full_msg, "')\n", sizeof(full_msg));
+	ft_putstr_fd(full_msg, 2);
+	free(number);
+}
+
 int	collect_input(t_files *node, int fd_read, int fd_write)
 {
 	char	*input;
 	char	*input_nl;
+	int		line_count;
 
+	line_count = 1;
 	while (1)
 	{
 		input = readline("> ");
+		if (sig_received)
+		{
+			if (input)
+				free(input);
+			return (-1);
+		}
 		if (!input)
 		{
-			ft_putstr_fd("minishell: warning: ", 2);
-			ft_putstr_fd("here-document delimited by end-of-file (wanted ", 2);
-			printf("`%s')\n", node->name);
+			print_eof_warning(node, line_count);
 			//TODO: check cntl + D - cause "dup2: Bad file descriptor" and what is wanted as delimeted
 			close(fd_write);
 			close(fd_read);
@@ -74,7 +98,12 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 	int		fd_write;
 	int		fd_read;
 	char	*heredoc_name;
+	struct 	sigaction old_int;
+	struct	sigaction old_quit;
 
+	sig_received = 0;
+	sigaction(SIGINT, NULL, &old_int);
+	sigaction(SIGQUIT, NULL, &old_quit);
 	heredoc_name = create_new_name();
 	fd_write = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd_write == -1)
@@ -92,14 +121,22 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 		close(fd_write);
 		return (-1);
 	}
+	
+	set_heredoc_signals();
 	if (collect_input(cur_node, fd_read, fd_write) == -1)
 	{
 		close(fd_read);
 		close(fd_write);
+		sigaction(SIGINT, &old_int, NULL);
+		sigaction(SIGQUIT, &old_quit, NULL);
+		if (sig_received)
+			data->status = 1;
 		return (-1);
 	}
 	close(fd_write);
 	cur_node->fd = fd_read;
 	data->status = 0;
+	sigaction(SIGINT, &old_int, NULL);
+	sigaction(SIGQUIT, &old_quit, NULL);
 	return(0);
 }

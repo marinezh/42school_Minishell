@@ -7,6 +7,7 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     int     **fds;
     int     i;
     int     j;
+    int     exit_code;
     t_command *cur_cmd;
 
     pids = calloc(cmd_count, sizeof(pid_t));
@@ -58,6 +59,7 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
         pids[i] = create_process();
         if (pids[i] == 0)
         {
+            reset_signals_to_default();
             //redirect out/in
             if (i != cmd_count - 1)
                 dup2(fds[i][1], STDOUT_FILENO);
@@ -86,7 +88,8 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     i = 0;
     while (i < cmd_count)
     {
-        waitpid(pids[i], NULL, 0);
+        exit_code = handle_parent_process(pids[i]);
+        data->status = exit_code;
         i++;
     }
     free(pids);

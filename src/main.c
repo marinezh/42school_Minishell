@@ -68,11 +68,11 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	// init struct where env are stored
 	init_data(&data, env);
-	setup_sig_handler();
+	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
-	rl_clear_history();
+	// rl_clear_history();
 	return (data.status);
 }
