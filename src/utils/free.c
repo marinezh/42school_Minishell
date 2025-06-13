@@ -5,46 +5,50 @@
 // 	int i = 0;
 
 // 	if (!tokens)
-// 		return;
+// 		return ;
 // 	while (tokens[i])
 // 	{
 // 		free(tokens[i]);
 // 	}
 // 	free(tokens);
 // }
-void free_tokens(t_token *tokens)
+void	free_tokens(t_token *tokens)
 {
-	t_token *tmp;
-	while (tokens != NULL) {
+	t_token	*tmp;
+
+	while (tokens != NULL)
+	{
 		tmp = tokens;
 		tokens = tokens->next;
-		free(tmp->value);		// Free the value
-		free(tmp);				// Free the token itself
+		free(tmp->value); // Free the value
+		free(tmp);        // Free the token itself
 	}
 }
 
-void free_file_list(t_files *files)
+void	free_file_list(t_files *files)
 {
-    t_files *tmp;
-    
-    while (files)
-    {
-        tmp = files;
-        files = files->next;
-        if (tmp->name)
-            free(tmp->name);
-        free(tmp);
-    }
+	t_files	*tmp;
+
+	while (files)
+	{
+		tmp = files;
+		files = files->next;
+		if (tmp->name)
+			free(tmp->name);
+		if (tmp->fd >= 0)
+			close(tmp->fd);
+		free(tmp);
+	}
 }
-void free_command_list(t_command *commands)
+void	free_command_list(t_command *commands)
 {
-	t_command *tmp;
-	int i;
+	t_command	*tmp;
+	int			i;
+
 	while (commands)
 	{
 		tmp = commands; // we use tmp pointer as we free node by node
 		commands = commands->next;
-
 		// Free args (array of strings)
 		if (tmp->args)
 		{
@@ -61,9 +65,11 @@ void free_command_list(t_command *commands)
 
 void	free_split_input(char **split)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!split)
-		return;
+		return ;
 	while (split[i])
 	{
 		free(split[i]);

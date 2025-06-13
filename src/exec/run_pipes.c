@@ -67,13 +67,13 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
                 dup2(fds[i - 1][0], STDIN_FILENO);
             j = 0;
             while (j < cmd_count - 1)
-            { 
+            {
                 close(fds[j][0]);
                 close(fds[j][1]);
                 j++;
             }
             process_cmd(data, cur_cmd);
-            exit(0); 
+            exit(0);
         }
         cur_cmd = cur_cmd->next;
         i++;
@@ -89,11 +89,12 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     while (i < cmd_count)
     {
         exit_code = handle_parent_process(pids[i]);
+
         data->status = exit_code;
         i++;
     }
     free(pids);
-    free_fds(fds, cmd_count - 1);
+    free_fds(fds, cmd_count - 2);
     return(0);
 }
 
