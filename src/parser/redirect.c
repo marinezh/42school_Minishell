@@ -45,8 +45,10 @@ void add_redirection(t_command *cmd, char *filename, int type)
 		return;
 	append_to_list(&(cmd->redirections), global_redir_node);
 	typed_redir_node = create_file_node(filename, type);
+	if (!typed_redir_node)
 	{
 		free(global_redir_node->name);
+		free(global_redir_node);
 		return;
 	}
 	if (type == REDIR_IN || type == HEREDOC)
