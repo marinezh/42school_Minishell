@@ -71,3 +71,16 @@ void	free_split_input(char **split)
 	}
 	free(split);
 }
+void free_split_result(char **result, int i)
+{
+	int k;
+
+	k = 0;
+	while (k < i)
+	{
+		if(result[k])
+			free(result[k]);
+		k++;
+	}
+	free(result);
+}
