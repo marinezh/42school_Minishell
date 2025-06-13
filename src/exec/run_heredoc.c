@@ -1,4 +1,5 @@
 #include "minishell.h"
+
 /* Heredoc implementation approach:
  * 1. Create a temporary file with unique name in /tmp
  * 2. Open for both reading and writing
@@ -21,7 +22,7 @@ char	*create_new_name(void)
 	free(heredoc_num);
 	if (!heredoc_name)
 		return (NULL);
-	return(heredoc_name);
+	return (heredoc_name);
 }
 
 void	print_eof_warning(t_files *node, int line_num)
@@ -32,9 +33,11 @@ void	print_eof_warning(t_files *node, int line_num)
 	number = ft_itoa(line_num);
 	if (!number)
 		return ;
-	ft_strlcpy(full_msg, "minishell: warning: here-document at line ", sizeof(full_msg));
+	ft_strlcpy(full_msg, "minishell: warning: here-document at line ",
+		sizeof(full_msg));
 	ft_strlcat(full_msg, number, sizeof(full_msg));
-	ft_strlcat(full_msg, "delimited by end-of-file (wanted `", sizeof(full_msg));
+	ft_strlcat(full_msg, " delimited by end-of-file (wanted `",
+		sizeof(full_msg));
 	ft_strlcat(full_msg, node->name, sizeof(full_msg));
 	ft_strlcat(full_msg, "')\n", sizeof(full_msg));
 	ft_putstr_fd(full_msg, 2);
@@ -60,10 +63,7 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 		if (!input)
 		{
 			print_eof_warning(node, line_count);
-			//TODO: check cntl + D - cause "dup2: Bad file descriptor" and what is wanted as delimeted
-			close(fd_write);
-			close(fd_read);
-			return (-1);
+			return (0);
 		}
 		if (ft_strcmp(input, node->name) == 0)
 		{
@@ -85,21 +85,22 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 			close(fd_write);
 			close(fd_read);
 			perror("write");
-			return(-1);
+			return (-1);
 		}
 		free(input_nl);
 		free(input);
+		line_count++;
 	}
 	return (0);
 }
 
 int	process_heredoc(t_data *data, t_files *cur_node)
 {
-	int		fd_write;
-	int		fd_read;
-	char	*heredoc_name;
-	struct 	sigaction old_int;
-	struct	sigaction old_quit;
+	int					fd_write;
+	int					fd_read;
+	char				*heredoc_name;
+	struct sigaction	old_int;
+	struct sigaction	old_quit;
 
 	sig_received = 0;
 	sigaction(SIGINT, NULL, &old_int);
@@ -121,7 +122,6 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 		close(fd_write);
 		return (-1);
 	}
-	
 	set_heredoc_signals();
 	if (collect_input(cur_node, fd_read, fd_write) == -1)
 	{
@@ -138,5 +138,5 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 	data->status = 0;
 	sigaction(SIGINT, &old_int, NULL);
 	sigaction(SIGQUIT, &old_quit, NULL);
-	return(0);
+	return (0);
 }

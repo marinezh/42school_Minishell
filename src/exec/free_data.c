@@ -1,4 +1,4 @@
-#include"minishell.h"
+#include "minishell.h"
 
 void	free_double_array(char **arr)
 {
@@ -37,10 +37,10 @@ void	free_env_list(t_env **env)
 
 void	free_fds(int **fds, int i)
 {
-        while (i > 0)
-        {
-            i--;
-            free(fds[i]);
-        }
+	while (i >= 0)
+	{
+		free(fds[i]);
+		i--;
+	}
 	free(fds);
 }
