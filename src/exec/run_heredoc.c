@@ -36,7 +36,7 @@ void	print_eof_warning(t_files *node, int line_num)
 	ft_strlcpy(full_msg, "minishell: warning: here-document at line ",
 		sizeof(full_msg));
 	ft_strlcat(full_msg, number, sizeof(full_msg));
-	ft_strlcat(full_msg, "delimited by end-of-file (wanted `",
+	ft_strlcat(full_msg, " delimited by end-of-file (wanted `",
 		sizeof(full_msg));
 	ft_strlcat(full_msg, node->name, sizeof(full_msg));
 	ft_strlcat(full_msg, "')\n", sizeof(full_msg));
