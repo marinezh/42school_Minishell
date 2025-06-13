@@ -8,5 +8,8 @@
 # define MSG_NO_PERM ": permission denied\n"
 # define MSG_CMD_NOT_FOUND ": command not found\n"
 # define MSG_NO_FILE ": No such file or directory\n"
+# define ERR_QUOTES "Quotes are not closed\n"
+# define ERR_PARSING_PIPE "syntax error near unexpected token `|'\n"
+# define ERR_PARSING_RED "syntax error near unexpected token `newline'\n"
 
 #endif

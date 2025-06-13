@@ -53,7 +53,10 @@ char **quote_safe_split(char *str, char delimiter)
 			if (str[j] == '\'' || str[j] == '\"')
 			{
 				if (fmt_quotes(str, NULL, &j, NULL, 0) == -1)
-					break ;
+				{
+					free_split_result(result, i);
+					return NULL;
+				}
 			}
 			else 
 			{
@@ -75,7 +78,13 @@ char **quote_safe_split(char *str, char delimiter)
 					j++;
 				}
 			}
-			result[i++] = word_dup(&str[start], j - start); // Copy the word and store it in the array
+			result[i] = word_dup(&str[start], j - start); // Copy the word and store it in the array
+			if (!result[i])
+			{
+				free_split_result(result, i);
+				return NULL;
+			}
+			i++;
 		}
 	}
 	result[i] = NULL;

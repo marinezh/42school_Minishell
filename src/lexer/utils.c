@@ -20,8 +20,9 @@ int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
 	}
 	if (input[*i] != quote)
 	{
-		printf("quotes not closed\n");
-		return (-1);
+		ft_putstr_fd("minishell:quotes are not closed", 2);
+		//ft_putstr_fd(ERR_QUOTES, 2);
+		return (ERR_PARSER);
 	}
 	if (copy && output)
 		output[*j] = input[*i];

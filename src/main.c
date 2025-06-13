@@ -8,9 +8,6 @@ void	shell_loop(t_data *data)
 	char **split_input = NULL;
 	int		prompt_res;
 
-
-	// t_token		*tokens_lexer = NULL; //do i need this?
-	// t_files		*files;
 	while (!data->exit_f)
 	{
 		prompt_res = read_prompt(&cmd_input);
@@ -26,7 +23,7 @@ void	shell_loop(t_data *data)
 		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
 		split_input = preprocess_input(cmd_input.input);
-		if (!split_input)
+		if (!split_input) // This will be NULL if fmt_quotes found an error
 		{
 			free(cmd_input.input);
 			continue;
@@ -42,12 +39,13 @@ void	shell_loop(t_data *data)
 		print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
-		if (error_check(tokens))
+		if (error_check(tokens, data))
 		{
 			free_tokens(tokens);
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
+		expand_variables(tokens, data);
 		commands = parse_tokens(tokens);
 		print_commands(commands);
 		add_history(cmd_input.input);
@@ -73,6 +71,6 @@ int	main(int ac, char **av, char **env)
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
-	// rl_clear_history();
+	rl_clear_history();
 	return (data.status);
 }

@@ -19,26 +19,40 @@ t_files	*create_file_node(char *name, int type)
 	return (new_file);
 }
 
-void	add_redirection(t_command *cmd, char *filename, int type)
+void append_to_list(t_files **list, t_files *node)
 {
-	t_files	*new_file;
-	t_files	**list;
-	t_files	*current;
-
-	if (type == REDIR_IN || type == HEREDOC) // IN
-		list = &(cmd->in);
-	else // REDIR_OUT or REDIR_APPEND
-		list = &(cmd->out);
-	new_file = create_file_node(filename, type);
-	if (!new_file)
-		return ; // Handle error in the calling function
+	t_files *current;
+	
 	if (*list == NULL)
-		*list = new_file;
-	else
 	{
-		current = *list;
-		while (current->next)
-			current = current->next;
-		current->next = new_file;
+		*list = node;
+		return;
 	}
+	current = *list;
+	while (current->next)
+		current = current->next;
+	current->next = node;
+}
+void add_redirection(t_command *cmd, char *filename, int type)
+{
+	t_files	*global_redir_node;
+	t_files	*typed_redir_node;
+	
+	if (!cmd || !filename)
+		return;
+	global_redir_node = create_file_node(filename, type); 
+	if (!global_redir_node)
+		return;
+	append_to_list(&(cmd->redirections), global_redir_node);
+	typed_redir_node = create_file_node(filename, type);
+	if (!typed_redir_node)
+	{
+		free(global_redir_node->name);
+		free(global_redir_node);
+		return;
+	}
+	if (type == REDIR_IN || type == HEREDOC)
+		append_to_list(&(cmd->in), typed_redir_node);
+	else 
+		append_to_list(&(cmd->out), typed_redir_node);
 }
