@@ -1,6 +1,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+extern volatile sig_atomic_t sig_received;
+
 typedef enum e_token_type
 {
 	NONE,         // 0

@@ -16,7 +16,7 @@
 
 int			getpwd(void);
 char		**run_lexer(t_cmd_input *cmd);
-int			print_prompt(t_cmd_input *data);
+int			read_prompt(t_cmd_input *data);
 //char	    *add_space(t_cmd_input *cmd);
 void	    add_space(t_cmd_input *cmd);
 

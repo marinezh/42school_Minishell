@@ -1,6 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <signal.h>
 # include "structs.h"
 # include "lexer.h"
 # include "parser.h"
@@ -19,7 +20,6 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <signal.h>
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
