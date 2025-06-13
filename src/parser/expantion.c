@@ -71,12 +71,25 @@ void expand_variables(t_token *token, t_data *data)
 					// char *var_value = get_env_value(data->envp_list, var_name);
 					//printf("Var value length: %zu\n", strlen(var_value));
 					printf("var_value %s\n", node->value);
-					if (node->value)
+					if (node && node->value)
 					{
 					 	printf("Found variable %s = %s\n", var_name, node->value);
 						char *prefix = ft_substr(current_token->value, 0, i);
 						printf("prefix is %s\n", prefix);
-
+						char *suffix = ft_strdup(&current_token->value[i + j + 1]);
+						printf("suffix is %s\n", suffix);
+						char *new_value = ft_strjoin(prefix, node->value);
+						printf("new_value %s\n", new_value);
+						char *final_value = ft_strjoin(new_value, suffix);
+						printf("final value %s\n", final_value);
+						free(current_token->value);
+						current_token->value = final_value;
+						free(prefix);
+						free(suffix);
+						free(new_value);
+						//TODO 
+						// add protection for malloc fail
+						// check how suffux work
 					}
 					free(var_name);
 				}
