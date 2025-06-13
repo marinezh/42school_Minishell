@@ -53,3 +53,120 @@
 // 		current->next = new_file;
 // 	}
 // }
+#include "minishell.h"
+
+t_files	*create_file_node(char *name, int type)
+{
+	t_files	*new_file;
+
+	new_file = malloc(sizeof(t_files));
+	if (!new_file)
+		return (NULL);
+	new_file->name = ft_strdup(name);
+	if (!new_file->name)
+	{
+		free(new_file);
+		return (NULL);
+	}
+	new_file->type = type;
+	new_file->fd = -1;
+	new_file->next = NULL;
+	return (new_file);
+}
+
+// void	add_redirection(t_command *cmd, char *filename, int type)
+// {
+// 	t_files	*new_file;
+// 	t_files *redir_node;
+// 	t_files	**target_list = NULL;
+// 	t_files	**redir_list = NULL;
+// 	t_files	*current;
+
+// 	// Sanity check
+// 	if (!cmd || !filename)
+// 		return;
+// 	// Set redir_list for all types
+// 	if (type == REDIR_IN || type == HEREDOC || type == REDIR_OUT || type == REDIR_APPEND)
+// 	{
+// 		redir_list = &(cmd->redirections);
+// 		redir_node = create_file_node(filename, type);
+// 		if (!redir_node)
+// 			return;
+
+// 		if (*redir_list == NULL)
+// 			*redir_list = redir_node;
+// 		else
+// 		{
+// 			current = *redir_list;
+// 			while (current->next)
+// 				current = current->next;
+// 			current->next = redir_node;
+// 		}
+// 	}
+// 	else
+// 		return; // Invalid type — log error or return silently
+	
+// 	// Assign target list
+// 	if (type == REDIR_IN || type == HEREDOC)
+// 		target_list = &(cmd->in);
+// 	else if (type == REDIR_OUT || type == REDIR_APPEND)
+// 		target_list = &(cmd->out);
+
+// 	if (!target_list)
+// 		return;
+
+// 	new_file = create_file_node(filename, type);
+// 	if (!new_file)
+// 		return;
+
+// 	if (*target_list == NULL)
+// 		*target_list = new_file;
+// 	else
+// 	{
+// 		current = *target_list;
+// 		while (current->next)
+// 			current = current->next;
+// 		current->next = new_file;
+// 	}
+// }
+
+/**
+ * Helper function to append a node to a list
+ */
+void append_to_list(t_files **list, t_files *node)
+{
+	t_files *current;
+	
+	if (*list == NULL)
+	{
+		*list = node;
+		return;
+	}
+	current = *list;
+	while (current->next)
+		current = current->next;
+	current->next = node;
+}
+void add_redirection(t_command *cmd, char *filename, int type)
+{
+	t_files	*global_redir_node;
+	t_files	*typed_redir_node;
+	
+	if (!cmd || !filename)
+		return;
+	global_redir_node = create_file_node(filename, type); // Create a single node and add it to both lists
+	if (!global_redir_node)
+		return;
+	append_to_list(&(cmd->redirections), global_redir_node); // Add to general redirections list
+	typed_redir_node = create_file_node(filename, type); // Create and add a copy to the specific list (in or out)
+	if (!typed_redir_node)
+	{
+		free(global_redir_node->name); // Clean up if second allocation fails
+		free(global_redir_node);
+		return;
+	}
+	if (type == REDIR_IN || type == HEREDOC) // Determine target list based on redirection type
+		append_to_list(&(cmd->in), typed_redir_node);
+	else 
+		append_to_list(&(cmd->out), typed_redir_node);
+}
