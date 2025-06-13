@@ -71,6 +71,6 @@ int	main(int ac, char **av, char **env)
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
-	rl_clear_history();
+	//rl_clear_history();
 	return (data.status);
 }

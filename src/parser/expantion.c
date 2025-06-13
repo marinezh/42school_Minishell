@@ -74,6 +74,8 @@ void expand_variables(t_token *token, t_data *data)
 					if (node->value)
 					{
 					 	printf("Found variable %s = %s\n", var_name, node->value);
+						char *prefix = ft_substr(current_token->value, 0, i);
+						printf("prefix is %s\n", prefix);
 
 					}
 					free(var_name);
