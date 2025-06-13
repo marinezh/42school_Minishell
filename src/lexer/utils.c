@@ -22,7 +22,7 @@ int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
 	{
 		ft_putstr_fd("minishell:quotes are not closed", 2);
 		//ft_putstr_fd(ERR_QUOTES, 2);
-		return (ERR_PARSER_SYNTAX);
+		return (ERR_PARSER);
 	}
 	if (copy && output)
 		output[*j] = input[*i];

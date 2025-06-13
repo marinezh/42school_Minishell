@@ -33,7 +33,9 @@ LEXER_PATH = $(SRCS_PATH)/lexer
 EXEC_PATH = $(SRCS_PATH)/exec
 PARSER_PATH = $(SRCS_PATH)/parser
 UTILS_PATH = $(SRCS_PATH)/utils
-VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) $(UTILS_PATH)
+SIGNALS_PATH = $(SRCS_PATH)/signals
+VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) \
+		$(UTILS_PATH) $(SIGNALS_PATH)
 
 # Files
 MAIN = main.c
@@ -44,6 +46,7 @@ EXEC = init_data.c free_data.c exec.c utils_exec.c run_builtin.c run_external.c 
 		handle_errors.c process_redir.c run_heredoc.c run_pipes.c
 PARSER = parser.c tokenization.c print_delete.c error_check.c token_handlers.c redirect.c expantion.c
 UTILS = free.c
+SIGNALS = heredoc_handler.c prompt_handler.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 
@@ -53,7 +56,8 @@ SRC = $(addprefix $(SRCS_PATH)/, $(MAIN)) \
 		$(addprefix $(LEXER_PATH)/, $(LEXER)) \
 		$(addprefix $(EXEC_PATH)/, $(EXEC)) \
 		$(addprefix $(PARSER_PATH)/, $(PARSER)) \
-		$(addprefix $(PARSER_UTILS)/, $(UTILS))
+		$(addprefix $(UTILS_PATH)/, $(UTILS)) \
+		$(addprefix $(SIGNALS_PATH)/, $(SIGNALS)) \
 
 # Flatten object file names into obj/
 OBJ := $(addprefix $(OBJS_PATH)/, $(notdir $(SRC:.c=.o)))

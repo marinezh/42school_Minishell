@@ -6,11 +6,21 @@ void	shell_loop(t_data *data)
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
 	char **split_input = NULL;
+	int		prompt_res;
 
 	while (!data->exit_f)
 	{
-		if (print_prompt(&cmd_input) == -1)
+		prompt_res = read_prompt(&cmd_input);
+		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
+		{
+			data->status = 0;
 			break ;
+		}
+		if (prompt_res == 0) //signal received or empty input
+		{
+			data->status = ERR_INTERUPTED_SIGINT;
+			continue ;
+		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
 		split_input = preprocess_input(cmd_input.input);
 		if (!split_input) // This will be NULL if fmt_quotes found an error
@@ -56,9 +66,11 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	// init struct where env are stored
 	init_data(&data, env);
+	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
+	rl_clear_history();
 	return (data.status);
 }
