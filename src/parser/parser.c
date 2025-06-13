@@ -12,7 +12,7 @@ t_command	*create_new_command(int index)
 	cmd->redirections = NULL;
 	cmd->in = NULL;
 	cmd->out = NULL;
-	cmd->pipe = 0;
+	//cmd->pipe = 0;
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -43,11 +43,11 @@ int process_token(t_command **current, t_token **token_list,
 		if (!(*current))
 			return (0);
 	}
-	if ((*token_list)->type == PIPE)
-	{
-		handle_pipe(*current, token_list, current);
-	}
-	else if ((*token_list)->type == REDIR_IN || (*token_list)->type == HEREDOC ||
+	// if ((*token_list)->type == PIPE)
+	// {
+	// 	handle_pipe(*current, token_list, current);
+	// }
+	if ((*token_list)->type == REDIR_IN || (*token_list)->type == HEREDOC ||
 			(*token_list)->type == REDIR_OUT || (*token_list)->type == REDIR_APPEND)
 	{
 		if (!handle_redirection(*current, token_list))

@@ -52,7 +52,7 @@ void expand_variables(t_token *token, t_data *data)
 	current_token = token;
 	while(current_token)
 	{
-			if (current_token->type == WORD)
+		if (current_token->type == WORD)
 		{
 			i = 0;
 			while(current_token->value[i])
@@ -71,10 +71,11 @@ void expand_variables(t_token *token, t_data *data)
 					// char *var_value = get_env_value(data->envp_list, var_name);
 					//printf("Var value length: %zu\n", strlen(var_value));
 					printf("var_value %s\n", node->value);
-					// if (var_value)
-					// {
-					//  	printf("Found variable %s = %s\n", var_name, var_value);
-					// }
+					if (node->value)
+					{
+					 	printf("Found variable %s = %s\n", var_name, node->value);
+
+					}
 					free(var_name);
 				}
 				i++;
