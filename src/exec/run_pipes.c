@@ -1,5 +1,28 @@
 #include"minishell.h"
 
+void    close_unused_heredoc_fds(t_command *cmd, t_command *cur_cmd)
+{
+    t_command *iter_cmd;
+    t_files *cur_in;
+
+    iter_cmd = cmd;
+    while (iter_cmd)
+    {
+        if (iter_cmd != cur_cmd)
+        {
+            cur_in = iter_cmd->in;
+            while (cur_in)
+            {
+                if (cur_in->type == HEREDOC && cur_in->fd >= 0)
+                    close(cur_in->fd);
+                cur_in = cur_in->next;
+            }
+        }
+        iter_cmd = iter_cmd->next;
+    }
+}
+
+
 int run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
     //created pids for processes == cmd_count
@@ -60,6 +83,8 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
         if (pids[i] == 0)
         {
             reset_signals_to_default();
+
+            close_unused_heredoc_fds(cmd, cur_cmd);
             //redirect out/in
             if (i != cmd_count - 1)
                 dup2(fds[i][1], STDOUT_FILENO);
