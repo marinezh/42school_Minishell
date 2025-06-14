@@ -1,0 +1,7 @@
+bash-3.2$ export (var=8
+bash: syntax error near unexpected token `var=8'
+bash-3.2$ echo $?
+258
+check on linux 
+****
+

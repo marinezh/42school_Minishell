@@ -27,6 +27,8 @@ char *get_env_value(t_env *env_list, const char *key)
 	return NULL;
 }
 
+
+
 void expand_variables(t_token *token, t_data *data)
 {
 	int i = 0;
@@ -66,36 +68,91 @@ void expand_variables(t_token *token, t_data *data)
 						j++;
 					var_name[j] = '\0';
 					
-					printf("var_name %s\n",var_name);
-					t_env *node = find_env_node(data, var_name);
-					// char *var_value = get_env_value(data->envp_list, var_name);
+					printf("var_name!!! %s\n",var_name);
+					t_env *node = find_env_node(data, var_name); 
 					//printf("Var value length: %zu\n", strlen(var_value));
-					printf("var_value %s\n", node->value);
+					
 					if (node && node->value)
 					{
-					 	printf("Found variable %s = %s\n", var_name, node->value);
+					 	printf("var_value %s\n", node->value);
+						printf("Found variable %s = %s\n", var_name, node->value);
 						char *prefix = ft_substr(current_token->value, 0, i);
+						if (!prefix)
+						{
+							free(var_name);
+							continue;
+						}
 						printf("prefix is %s\n", prefix);
 						char *suffix = ft_strdup(&current_token->value[i + j + 1]);
+						if (!suffix)
+						{
+							free(prefix);
+							free(var_name);
+							continue;
+						}
 						printf("suffix is %s\n", suffix);
 						char *new_value = ft_strjoin(prefix, node->value);
+						if (!new_value)
+						{
+							free(prefix);
+							free(suffix);
+							free(var_name);
+							continue;
+						}
 						printf("new_value %s\n", new_value);
 						char *final_value = ft_strjoin(new_value, suffix);
+						if (!final_value) {
+							free(prefix);
+							free(suffix);
+							free(new_value);
+							free(var_name);
+							continue;
+						}
 						printf("final value %s\n", final_value);
 						free(current_token->value);
 						current_token->value = final_value;
 						free(prefix);
 						free(suffix);
 						free(new_value);
-						//TODO 
-						// add protection for malloc fail
-						// check how suffux work
+					}
+					else
+					{
+						printf("Variable %s not found, replacing with empty string\n", var_name);
+						char *prefix = ft_substr(current_token->value, 0, i);
+    					if (!prefix)
+					    {
+					        free(var_name);
+					        continue;
+					    }
+    
+					    char *suffix = ft_strdup(&current_token->value[i + j + 1]);
+					    if (!suffix)
+					    {
+					        free(prefix);
+					        free(var_name);
+					        continue;
+					    }
+    
+					    // Directly join prefix and suffix with nothing in between
+					    char *final_value = ft_strjoin(prefix, suffix);
+					    if (!final_value)
+					    {
+					        free(prefix);
+					        free(suffix);
+					        free(var_name);
+					        continue;
+					    }
+					    
+					    free(current_token->value);
+					    current_token->value = final_value;
+					    free(prefix);
+					    free(suffix);
 					}
 					free(var_name);
 				}
 				i++;
 			}
-		//printf("       TOKENS!!![%d] %s\n", token->type, token->value);
+			//printf("       TOKENS!!![%d] %s\n", token->type, token->value);
 		}
 		current_token = current_token->next;
 	}
