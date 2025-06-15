@@ -50,8 +50,31 @@ void expand_variables(t_token *token, t_data *data)
 			i = 0;
 			while(current_token->value[i])
 			{
+				if (current_token->value[i] == '$' && current_token->value[i + 1] == '?')
+				{
+					char *status_str = ft_itoa(data->status);
+					printf("STATUS %s\n", status_str);
+					char *prefix = ft_substr(current_token->value, 0, i);
+					printf("prefix if there is a STATUS %s\n", prefix);
+					char *suffix = ft_strdup(&current_token->value[i + 2]);
+					printf("suffix if there is a STATUS %s\n", prefix);
+					char *new_value = ft_strjoin(prefix, status_str);
+					char *final_value = ft_strjoin(new_value, suffix);
+
+					free(current_token->value);
+					current_token->value = final_value;
+
+					i += ft_strlen(status_str) - 1;
+
+					free(prefix);
+					free(suffix);
+					free(new_value);
+					free(status_str);
+					
+				}
 				if (current_token->value[i] == '$' && current_token->value[i + 1])
 				{
+
 					printf("EXPANTION FOUND at posision %d in token %s\n", i, current_token ->value);
 					char *var_name = ft_strdup(&current_token->value[i + 1]);
 					j = 0;
