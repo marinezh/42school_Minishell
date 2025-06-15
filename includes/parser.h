@@ -16,6 +16,7 @@ int handle_word_token(t_command *current, t_token **token_list);
 void	add_redirection(t_command *cmd, char *filename, int type);
 t_files	*create_file_node(char *name, int type);
 void expand_variables(t_token *token, t_data *data);
+void remove_outer_quotes(t_token *token);
 
 // DELETE LATER DEBUG PRINTING FUNCTIONS
 void print_tokens(t_token *tok);

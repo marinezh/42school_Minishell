@@ -1,0 +1,28 @@
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<eof cat
+> $USER
+> hie
+> eof
+mzhivoto
+hie
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<eof"" cat
+$USER
+hie
+eof
+$USER
+hie
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<""eof cat
+$USER
+hie
+eof
+$USER
+hie
+
+
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<eof"" cat
+$USER
+^C
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<"eof" cat
+> $USER
+> eof
+$USER
+mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ 
