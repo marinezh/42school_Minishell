@@ -42,7 +42,7 @@ void	add_space(t_cmd_input *cmd)
 	{
 		if (cmd->input[i] == '\'' || cmd->input[i] == '\"')
 		{
-			if (fmt_quotes(cmd->input, cmd->spaced, &i, &j, 1) == -1)
+			if (copy_quoted_seg(cmd->input, cmd->spaced, &i, &j) == -1)
 			{
 				free(cmd->spaced);
 				cmd->spaced = NULL;

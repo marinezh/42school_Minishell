@@ -40,6 +40,7 @@ int skip_quotes(char *str, int *j)
 			(*j)++;
 	return 0;
 }
+
 // t_command	*parse_tokens(char **tokens)
 // {
 // 	t_command	*head = init_command();

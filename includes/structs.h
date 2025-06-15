@@ -60,7 +60,7 @@ typedef struct s_command
 	t_files				*in;
 	t_files				*out;
 	t_files				*redirections; // think about creation arr of pointers
-	int					pipe;
+	int					pipe; 
 	struct s_command	*next;
 }						t_command;
 
