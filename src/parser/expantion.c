@@ -1,31 +1,24 @@
 #include "minishell.h"
 
-char *get_env_value(t_env *env_list, const char *key)
+// int in_double_quotes(t_token *token) 
+// {
+//     int len = ft_strlen(token->value);
+
+//     if (len >= 2 && token->value[0] == '"' && token->value[len - 1] == '"')
+//         return 1;
+//     return 0;
+// }
+
+int in_single_quotes(t_token *token)
 {
-	//printf("Searching for environment key: '%s'\n", key);
-	while (env_list)
-	{
-		char *temp_key = ft_strdup(env_list->key); // Create a temporary copy to manipulate
-		if (!temp_key)
-			return NULL;
-		
-		char *equals = ft_strchr(temp_key, '=');
-		if (equals)
-			*equals = '\0'; // Remove equals sign if present
-			
-		printf("Comparing with: '%s' (original: '%s')\n", temp_key, env_list->key);
-		if (ft_strcmp(temp_key, key) == 0) // Compare without equals sign
-		{
-			printf("MATCH FOUND! Value: '%s'\n", env_list->value);
-			free(temp_key);
-			return env_list->value;
-		}
-		free(temp_key);
-		env_list = env_list->next;
-	}
-	printf("KEY NOT FOUND in environment\n");
-	return NULL;
+	int len;
+
+	len = ft_strlen(token->value);
+	if (len >= 2 && token->value[0] == '\'' && token->value[len - 1] == '\'')
+		return 1;
+	return 0;
 }
+
 
 void expand_variables(t_token *token, t_data *data)
 {
@@ -52,7 +45,7 @@ void expand_variables(t_token *token, t_data *data)
 	current_token = token;
 	while(current_token)
 	{
-		if (current_token->type == WORD)
+		if (current_token->type == WORD && !in_single_quotes(current_token))
 		{
 			i = 0;
 			while(current_token->value[i])
@@ -73,7 +66,6 @@ void expand_variables(t_token *token, t_data *data)
 					
 					if (node && node->value)
 					{
-						printf("var_value %s\n", node->value);
 					 	printf("Found variable %s = %s\n", var_name, node->value);
 						char *prefix = ft_substr(current_token->value, 0, i);
 						printf("prefix is %s\n", prefix);
