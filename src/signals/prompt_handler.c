@@ -8,9 +8,9 @@ static void	handler(int sig)
 	{
 		sig_received = 1;
 		write(1, "\n", 1);
-		rl_on_new_line(); //tells readline that cursor has moved to a new line
-		rl_replace_line("", 0); //clear the current input line
-		rl_redisplay(); //display a fresh prompt
+		//rl_on_new_line(); //tells readline that cursor has moved to a new line
+		//rl_replace_line("", 0); //clear the current input line
+		//rl_redisplay(); //display a fresh prompt
 	}
 }
 
