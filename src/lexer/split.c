@@ -52,7 +52,7 @@ char **quote_safe_split(char *str, char delimiter)
 			int start = j;
 			if (str[j] == '\'' || str[j] == '\"')
 			{
-				if (fmt_quotes(str, NULL, &j, NULL, 0) == -1)
+				if (skip_quoted_seg(str, &j) == -1)
 				{
 					free_split_result(result, i);
 					return NULL;
