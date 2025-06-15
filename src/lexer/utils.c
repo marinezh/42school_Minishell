@@ -1,22 +1,18 @@
 #include <minishell.h>
 
-int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
+int	copy_quoted_seg(char *input, char *output, int *i, int *j)
 {
 	char quote; 
 	
 	quote = input[*i]; 
-	if (copy && output) 
-		output[*j] = input[*i];
-	(*i)++; 
-	if (copy && output)
-		(*j)++; 
-	while (input[*i] && input[*i] != quote)
+	output[*j] = input[*i]; // copy openning quotes
+	(*i)++;
+	(*j)++;
+	while (input[*i] && input[*i] != quote) // copy everything in qutes
 	{
-		if (copy && output)
-			output[*j] = input[*i];
+		output[*j] = input[*i];
 		(*i)++;
-		if (copy && output)
-			(*j)++;
+		(*j)++;
 	}
 	if (input[*i] != quote)
 	{
@@ -24,11 +20,27 @@ int	fmt_quotes(char *input, char *output, int *i, int *j, int copy)
 		//ft_putstr_fd(ERR_QUOTES, 2);
 		return (ERR_PARSER);
 	}
-	if (copy && output)
-		output[*j] = input[*i];
+	output[*j] = input[*i]; // copy closing quotes
 	(*i)++;
-	if (copy && output)
-		(*j)++;
+	(*j)++;
+	return (0);
+}
+
+int skip_quoted_seg(char *input, int *i)
+{
+	char quote; 
+	
+	quote = input[*i];
+	(*i)++; // skip openning quote
+	while (input[*i] && input[*i] != quote)
+		(*i)++;
+	if (input[*i] != quote)
+	{
+		ft_putstr_fd("minishell:quotes are not closed", 2);
+		//ft_putstr_fd(ERR_QUOTES, 2);
+		return (ERR_PARSER);
+	}
+	(*i)++; // skip closing quote
 	return (0);
 }
 

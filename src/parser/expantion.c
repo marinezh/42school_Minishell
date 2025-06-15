@@ -70,9 +70,10 @@ void expand_variables(t_token *token, t_data *data)
 					t_env *node = find_env_node(data, var_name);
 					// char *var_value = get_env_value(data->envp_list, var_name);
 					//printf("Var value length: %zu\n", strlen(var_value));
-					printf("var_value %s\n", node->value);
+					
 					if (node && node->value)
 					{
+						printf("var_value %s\n", node->value);
 					 	printf("Found variable %s = %s\n", var_name, node->value);
 						char *prefix = ft_substr(current_token->value, 0, i);
 						printf("prefix is %s\n", prefix);
