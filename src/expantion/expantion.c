@@ -47,7 +47,7 @@ void expand_variables(t_token *token, t_data *data)
 	current_token = token;
 	while(current_token)
 	{
-		if (current_token->type == WORD && !in_single_quotes(current_token))
+		if ((current_token->type == WORD || current_token->type == FILE_NAME) && !in_single_quotes(current_token))
 		{
 			i = 0;
 			while(current_token->value[i])
@@ -76,7 +76,6 @@ void expand_variables(t_token *token, t_data *data)
 				}
 				if (current_token->value[i] == '$' && current_token->value[i + 1])
 				{
-
 					printf("EXPANTION FOUND at posision %d in token %s\n", i, current_token ->value);
 					char *var_name = ft_strdup(&current_token->value[i + 1]);
 					j = 0;
@@ -135,34 +134,32 @@ void expand_variables(t_token *token, t_data *data)
 					{
 						printf("Variable %s not found, replacing with empty string\n", var_name);
 						char *prefix = ft_substr(current_token->value, 0, i);
-    					if (!prefix)
-					    {
-					        free(var_name);
-					        continue;
-					    }
-    
-					    char *suffix = ft_strdup(&current_token->value[i + j + 1]);
-					    if (!suffix)
-					    {
-					        free(prefix);
-					        free(var_name);
-					        continue;
-					    }
-    
-					    // Directly join prefix and suffix with nothing in between
-					    char *final_value = ft_strjoin(prefix, suffix);
-					    if (!final_value)
-					    {
-					        free(prefix);
-					        free(suffix);
-					        free(var_name);
-					        continue;
-					    }
-					    
-					    free(current_token->value);
-					    current_token->value = final_value;
-					    free(prefix);
-					    free(suffix);
+						if (!prefix)
+						{
+							free(var_name);
+							continue;
+						}
+	
+						char *suffix = ft_strdup(&current_token->value[i + j + 1]);
+						if (!suffix)
+						{
+							free(prefix);
+							free(var_name);
+							continue;
+						}
+						// Directly join prefix and suffix with nothing in between
+						char *final_value = ft_strjoin(prefix, suffix);
+						if (!final_value)
+						{
+							free(prefix);
+							free(suffix);
+							free(var_name);
+							continue;
+						}
+						free(current_token->value);
+						current_token->value = final_value;
+						free(prefix);
+						free(suffix);
 					}
 					free(var_name);
 				}

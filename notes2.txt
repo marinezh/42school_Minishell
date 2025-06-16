@@ -26,3 +26,16 @@ mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<"eof" cat
 > eof
 $USER
 mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ 
+
+//////////////////////////////////////////////////////////////////////
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ export M="aa   bb   cc"
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo $M
+aa bb cc
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo "$M"
+aa   bb   cc
+//////////////////////////////////////////////////////////////////////
+
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo hello > $D // var D is not exist
+bash: $D: ambiguous redirect
+
+//////////////////////////////////////////////////////////////////////
