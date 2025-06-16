@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+static int	handle_file_error(t_data *data, char *file_name)
+{
+	if (errno == ENOENT)
+		handle_error_arg(data, file_name, MSG_NO_FILE, ERR_GENERIC);
+	else if (errno == EACCES)
+		handle_error_arg(data, file_name, MSG_NO_PERM, ERR_GENERIC);
+	else if (errno == EISDIR)
+		handle_error_arg(data, file_name, MSG_IS_DIR, ERR_GENERIC);
+	else
+		perror("open");
+	data->status = 1;
+	return (-1);
+}
+
 int	process_redir_in(t_data *data, t_files *redir_in)
 {
 	int		fd;
@@ -8,16 +22,7 @@ int	process_redir_in(t_data *data, t_files *redir_in)
 	file = redir_in->name;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-	{
-		if (errno == ENOENT)
-			handle_error_arg(data, file, MSG_NO_FILE, ERR_GENERIC);
-		else if (errno == EACCES)
-			handle_error_arg(data, file, MSG_NO_PERM, ERR_GENERIC);
-		else
-			perror("open");
-		data->status = 1;
-		return (-1);
-	}
+		return (handle_file_error(data, file));
 	if (redirect_stream(data, fd, 0) == -1)
 	{
 		close(fd);
@@ -34,46 +39,21 @@ int	process_redir_out(t_data *data, t_files *redir_out)
 	int		fd;
 	char	*file;
 
+	fd = -1;
 	type = redir_out->type;
 	file = redir_out->name;
 	if (type == REDIR_OUT)
-	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			if (errno == EACCES)
-				handle_error_arg(data, file, MSG_NO_PERM, ERR_GENERIC);
-			else
-				perror("open");
-			data->status = 1;
-			return (-1);
-		}
-		if (redirect_stream(data, fd, 1) == -1)
-		{
-			close(fd);
-			return (-1);
-		}
-		close(fd);
-	}
 	else if (type == REDIR_APPEND)
-	{
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			if (errno == EACCES)
-				handle_error_arg(data, file, MSG_NO_PERM, ERR_GENERIC);
-			else
-				perror("open");
-			data->status = 1;
-			return (-1);
-		}
-		if (redirect_stream(data, fd, 1) == -1)
-		{
-			close(fd);
-			return (-1);
-		}
+	if (fd == -1)
+		return (handle_file_error(data, file));
+	if (redirect_stream(data, fd, 1) == -1)
+	{
 		close(fd);
+		return (-1);
 	}
+	close(fd);
 	data->status = 0;
 	return (data->status);
 }
