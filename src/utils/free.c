@@ -90,3 +90,54 @@ void free_split_result(char **result, int i)
 	}
 	free(result);
 }
+/**
+ * Frees multiple string pointers
+ * Function accepts a variable number of string pointers and frees each one
+ * The last argument must be NULL to indicate the end of arguments
+ */
+void free_strings(char *str, ...)
+{
+	va_list args;
+	char *ptr;
+
+	if (str)
+		free(str);
+	
+	va_start(args, str);
+	while ((ptr = va_arg(args, char *)) != NULL)
+		free(ptr);
+	
+	va_end(args);
+}
+// void replace_variable(t_token *token, int i, int var_len, const char *value)
+// {
+// 	char *prefix = ft_substr(token->value, 0, i);
+// 	if (!prefix)
+// 		return;
+	
+// 	char *suffix = ft_strdup(&token->value[i + var_len + 1]);
+// 	if (!suffix)
+// 	{
+// 		free_strings(prefix, NULL);
+// 		return;
+// 	}
+	
+// 	char *new_value = ft_strjoin(prefix, value);
+// 	if (!new_value)
+// 	{
+// 		free_strings(prefix, suffix, NULL);
+// 		return;
+// 	}
+	
+// 	char *final_value = ft_strjoin(new_value, suffix);
+// 	if (!final_value)
+// 	{
+// 		free_strings(prefix, suffix, new_value, NULL);
+// 		return;
+// 	}
+	
+// 	free(token->value);
+// 	token->value = final_value;
+	
+// 	free_strings(prefix, suffix, new_value, NULL);
+// }
