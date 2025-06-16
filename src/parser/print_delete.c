@@ -219,3 +219,18 @@ void	print_commands(t_command *cmd_list)
 		printf("=============================\n");
 	}
 }
+
+	// while (data->envp[i])
+	// {
+	// 	printf("ENV : %s\n", data->envp[i]);
+	// 	i++;
+	// }
+	// printf("/////////////////////////////////////\n");
+	// t_env *debug_env = data->envp_list;
+	// printf("--- ENVIRONMENT VARIABLES DEBUG ---\n");
+	// while (debug_env)
+	// {
+	// 	printf("ENV KEY: '%s', VALUE: '%s'\n", debug_env->key, debug_env->value);
+	// 	debug_env = debug_env->next;
+	// }
+	// printf("--- END DEBUG ---\n");

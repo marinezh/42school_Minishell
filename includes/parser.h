@@ -17,7 +17,11 @@ void	add_redirection(t_command *cmd, char *filename, int type);
 t_files	*create_file_node(char *name, int type);
 void expand_variables(t_token *token, t_data *data);
 void remove_outer_quotes(t_token *token);
-
+void replace_undefined_variable(t_token *token, int i, int var_len);
+void replace_variable(t_token *token, int i, int var_len, const char *value);
+void handle_status_var(t_token *token, int status, int *i);
+void handle_expantion(t_token *token, t_data *data, int *i);
+char *extract_variable_name(const char *input);
 // DELETE LATER DEBUG PRINTING FUNCTIONS
 void print_tokens(t_token *tok);
 const char *token_type_to_str(t_token_type type);
