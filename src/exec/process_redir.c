@@ -80,35 +80,26 @@ int	process_redir_out(t_data *data, t_files *redir_out)
 
 int	handle_redirs(t_data *data, t_command *cmd)
 {
-	t_files	*cur_in;
-	t_files *cur_out;
+	t_files *cur_redir;
 	int res;
 
 	res = 0;
-	cur_in = cmd->in;
-	cur_out = cmd->out;
-	while (cur_in)
+	cur_redir = cmd->redirections;
+	while (cur_redir)
 	{
-		if (cur_in->type == HEREDOC)
+		if (cur_redir->type == HEREDOC)
 		{
-			res = redirect_stream(data, cur_in->fd, 0);
-			close(cur_in->fd);
-			cur_in->fd = -1;
+			res = redirect_stream(data, cur_redir->fd, 0);
+			close(cur_redir->fd);
+			cur_redir->fd = -1;
 		}
-		else
-			res = process_redir_in(data, cur_in);
+		else if (cur_redir->type == REDIR_IN)
+			res = process_redir_in(data, cur_redir);
+		else if (cur_redir->type == REDIR_OUT || cur_redir->type == REDIR_APPEND)
+			res = process_redir_out(data, cur_redir);
 		if (res == -1)
-			break;
-		cur_in = cur_in->next;
-	}
-	if (res == -1)
-		return (res);
-	while (cur_out)
-	{
-		res = process_redir_out(data, cur_out);
-		if (res == -1)
-			break;
-		cur_out = cur_out->next;
+			break ;
+		cur_redir = cur_redir->next;
 	}
 	return (res);
 }
