@@ -33,7 +33,7 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     int     exit_code;
     t_command *cur_cmd;
 
-    pids = calloc(cmd_count, sizeof(pid_t));
+    pids = ft_calloc(cmd_count, sizeof(pid_t));
     if (!pids)
     {
         perror("calloc");
@@ -41,7 +41,7 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     }
 
     //create array for fds{0,1}, number of pipes
-    fds = calloc(cmd_count - 1, sizeof(int*));
+    fds = ft_calloc(cmd_count - 1, sizeof(int*));
     if(!fds)
     {
         free(pids);
@@ -50,7 +50,7 @@ int run_pipes(t_data *data, t_command *cmd, int cmd_count)
     i = 0;
     while (i < cmd_count - 1)
     {
-        fds[i] = calloc(2, sizeof(int));
+        fds[i] = ft_calloc(2, sizeof(int));
         if (!fds[i])
         {
             perror("calloc");
