@@ -19,7 +19,7 @@ COLOUR_BRIGHT_CYAN = \033[1;36m
 
 # Valgrind config
 VALGRIND = valgrind --show-leak-kinds=all --leak-check=full --track-fds=yes --log-file=valg.log \
-			--suppressions=valgrind.supp
+			--suppressions=valgrind.supp --trace-children=yes
 
 # Compiler and flags
 CC = cc
