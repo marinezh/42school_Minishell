@@ -112,17 +112,17 @@ int	count_commands(t_command *head)
 int	has_heredoc(t_data *data, t_command *cmd)
 {
 	t_command	*cur_cmd;
-	t_files		*cur_in;
+	t_files		*cur_redir;
 	int			count;
 
 	count = 0;
 	cur_cmd = cmd;
 	while (cur_cmd)
 	{
-		cur_in = cur_cmd->in;
-		while (cur_in)
+		cur_redir = cur_cmd->redirections;
+		while (cur_redir)
 		{
-			if (cur_in->type == HEREDOC)
+			if (cur_redir->type == HEREDOC)
 			{
 				count++;
 				if (count > 16)
@@ -132,23 +132,22 @@ int	has_heredoc(t_data *data, t_command *cmd)
 					return (-1);
 				}
 			}
-			cur_in = cur_in->next;
+			cur_redir = cur_redir->next;
 		}
 		cur_cmd = cur_cmd->next;
 	}
-	printf("heredoc count - %d\n", count);
 	cur_cmd = cmd;
 	while (cur_cmd)
 	{
-		cur_in = cur_cmd->in;
-		while (cur_in)
+		cur_redir = cur_cmd->redirections;
+		while (cur_redir)
 		{
-			if (cur_in->type == HEREDOC)
+			if (cur_redir->type == HEREDOC)
 			{
-				if (process_heredoc(data, cur_in) == -1)
+				if (process_heredoc(data, cur_redir) == -1)
 					return (-1);
 			}
-			cur_in = cur_in->next;
+			cur_redir = cur_redir->next;
 		}
 		cur_cmd = cur_cmd->next;
 	}
