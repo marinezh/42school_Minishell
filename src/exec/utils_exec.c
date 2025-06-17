@@ -1,10 +1,10 @@
-#include"minishell.h"
+#include "minishell.h"
 
 t_env	*init_node(char *key, char *value)
 {
 	t_env	*ptr;
 
-	ptr = calloc(1, sizeof(t_env));
+	ptr = ft_calloc(1, sizeof(t_env));
 	if (!ptr)
 		return (NULL);
 	ptr->key = key;
@@ -15,17 +15,17 @@ t_env	*init_node(char *key, char *value)
 
 t_env	*create_env_node(char *str)
 {
-    char	*ptr;
+	char	*ptr;
 	char	*key;
 	char	*value;
-    t_env   *node;
+	t_env	*node;
 	size_t	len;
-	char *src;
+	char	*src;
 
-    ptr = ft_strchr(str, '=');
-    if (ptr)
+	ptr = ft_strchr(str, '=');
+	if (ptr)
 	{
-        len = (ptr - str) + 1;
+		len = (ptr - str) + 1;
 		src = ptr + 1;
 	}
 	else
@@ -33,28 +33,28 @@ t_env	*create_env_node(char *str)
 		len = ft_strlen(str);
 		src = NULL;
 	}
-    key = ft_strndup(str, len);
-    if(!key)
-        return (NULL);
-    if (src)
-    {
+	key = ft_strndup(str, len);
+	if (!key)
+		return (NULL);
+	if (src)
+	{
 		value = ft_strdup(src);
 		if (!value)
 		{
-        	free(key);
-        	return(NULL);
+			free(key);
+			return (NULL);
 		}
-    }
+	}
 	else
 		value = NULL;
-    node = init_node(key, value);
-    if (!node)
-    {
-        free(key);
-        free(value);
-        return(NULL);
-    }
-    return (node);
+	node = init_node(key, value);
+	if (!node)
+	{
+		free(key);
+		free(value);
+		return (NULL);
+	}
+	return (node);
 }
 
 void	node_add_last(t_env **envp_list, t_env *new_node)
@@ -77,7 +77,7 @@ void	node_add_last(t_env **envp_list, t_env *new_node)
 int	env_list_size(t_env *head)
 {
 	int		count;
-	t_env	*cur; 
+	t_env	*cur;
 
 	count = 0;
 	cur = head;
@@ -92,7 +92,7 @@ int	env_list_size(t_env *head)
 int	check_file_access(char *path)
 {
 	if (access(path, F_OK | X_OK) == 0)
-		return(1);
+		return (1);
 	if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
 		return (-1);
 	return (0);

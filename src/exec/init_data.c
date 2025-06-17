@@ -23,7 +23,7 @@ void	update_envp_array(t_data *data, t_env *envp_list)
 	t_env	*current;
 
 	list_size = env_list_size(envp_list);
-	ar_ptr = calloc(list_size + 1, sizeof(char *));
+	ar_ptr = ft_calloc(list_size + 1, sizeof(char *));
 	if (!ar_ptr)
 		return ;
 	current = envp_list;
