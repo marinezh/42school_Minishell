@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *build_path(char *path, char *arg)
+char	*build_path(char *path, char *arg)
 {
 	char	*tmp;
 	char	*res;
@@ -11,7 +11,7 @@ char *build_path(char *path, char *arg)
 	res = ft_strjoin(tmp, arg);
 	free(tmp);
 	if (!res)
-		return(NULL);
+		return (NULL);
 	return (res);
 }
 
@@ -32,7 +32,7 @@ char	*process_path(t_data *data, char *path_str, char *arg)
 		free(path);
 		return (NULL);
 	}
-	free (path);
+	free(path);
 	return (NULL);
 }
 
@@ -58,32 +58,25 @@ char	*parse_path_env(t_data *data, char *arg)
 	{
 		path_res = process_path(data, path_dirs[i], arg);
 		if (path_res)
-			break;
+			break ;
 		i++;
 	}
 	free_double_array(path_dirs);
 	return (path_res);
 }
 
-char *process_binary(t_data *data, char *arg)
+char	*process_binary(t_data *data, char *path)
 {
-	int		access_res;
-	char	*path;
+	int	access_res;
 
-	access_res = check_file_access(arg);
+	access_res = check_file_access(path);
 	if (access_res == 1)
-		path = arg;
-	else if (access_res == -1)
-	{
-		handle_error_arg(data, arg, MSG_NO_PERM, ERR_PERM_DENIED);
-		return(NULL);
-	}
+		return (path);
+	if (access_res == -1)
+		handle_error_arg(data, path, MSG_NO_PERM, ERR_PERM_DENIED);
 	else
-	{
-		handle_error_arg(data, arg, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
-		return(NULL);
-	}
-	return (path);
+		handle_error_arg(data, path, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
+	return (NULL);
 }
 
 void	run_external(t_data *data, t_command *cmd)
@@ -94,11 +87,7 @@ void	run_external(t_data *data, t_command *cmd)
 
 	path_to_free = NULL;
 	if (ft_strchr(cmd->args[0], '/'))
-	{
 		path = process_binary(data, cmd->args[0]);
-		if (!path)
-			data->status = ERR_GENERIC;
-	}
 	else
 	{
 		path = parse_path_env(data, cmd->args[0]);
@@ -106,6 +95,8 @@ void	run_external(t_data *data, t_command *cmd)
 		if (!path)
 			handle_error_arg(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127);
 	}
+	if (!path)
+		return ;
 	exit_status = execute_cmd(data, cmd, path);
 	data->status = exit_status;
 	if (path_to_free)
@@ -117,10 +108,10 @@ void	run_external(t_data *data, t_command *cmd)
 // cat: adfas: No such file or directory - 1
 // asdlfkja bash: kjsahfhsdf: command not found - 127
 
-// 1) not exist
-// 2) exist not executable
-// 3) exist and executable
+// 1) not exist = 0
+// 2) exist not executable = -1
+// 3) exist and executable = 1
 
-//bash make difference if (code the same 127)
+// bash make difference if (code the same 127)
 // asldkfjasldkf - command not found
 // or bin/adsfasdf - no such file or directory
