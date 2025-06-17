@@ -17,9 +17,13 @@ COLOUR_BRIGHT_BLUE = \033[1;34m
 COLOUR_BRIGHT_MAGENTA = \033[1;35m
 COLOUR_BRIGHT_CYAN = \033[1;36m
 
+# Valgrind config
+VALGRIND = valgrind --show-leak-kinds=all --leak-check=full --track-fds=yes --log-file=valg.log \
+			--suppressions=valgrind.supp
+
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I./includes/
+CFLAGS = -Wall -Wextra -Werror -g -I./includes/
 READLINE = -lreadline
 
 # Base Paths
@@ -87,6 +91,11 @@ $(OBJS_PATH):
 $(LIBFT):
 	@$(MAKE) -C $(LIBFT_PATH) > /dev/null 2>&1
 	@echo -e "$(COLOUR_BRIGHT_GREEN)libft library created$(COLOUR_END)"
+
+# Run with Valgrind
+valg: $(NAME)
+	@echo -e "$(COLOUR_BRIGHT_CYAN)Running $(NAME) with Valgrind...$(COLOUR_END)"
+	@$(VALGRIND) ./$(NAME)
 
 # Cleaning rules
 clean:
