@@ -16,8 +16,8 @@ hie
 eof
 $USER
 hie
-
-
+////////////////////////////////////////////////////////////////////////////
+SHOULD WE IMPLEMENT THIS ???
 mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<eof"" cat
 $USER
 ^C
@@ -26,3 +26,27 @@ mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ <<"eof" cat
 > eof
 $USER
 mzhivoto@c1r5p7:~/42cursus/PROJECTS/GitHub/42school_Minishell$ 
+
+//////////////////////////////////////////////////////////////////////
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ export M="aa   bb   cc"
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo $M
+aa bb cc
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo "$M"
+aa   bb   cc
+//////////////////////////////////////////////////////////////////////
+
+mzhivoto@c1r5p6:~/42cursus/PROJECTS/GitHub/42school_Minishell$ echo hello > $D // var D is not exist
+bash: $D: ambiguous redirect
+
+bash-3.2$ echo hello > $AAA // AAA=ls -la
+bash: $AAA: ambiguous redirect 
+
+//////////////////////////////////////////////////////////////////////
+bash-3.2$ export AAA="ls -la"
+bash-3.2$ $AAA
+total 3360
+-rw-r--r--    1 marinezh  staff        6 Jun 16 20:59  ggg  jjj
+-rw-r--r--    1 marinezh  staff        6 Jun 16 20:59 $A
+-rw-r--r--    1 marinezh  staff        6 Jun 16 20:59 $USER
+-rw-r--r--    1 marinezh  staff        6 Jun 16 20:59 $VAR8
+//////////////////////////////////////////////////////////////////////
