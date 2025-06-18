@@ -1,57 +1,76 @@
 #include "minishell.h"
 
-void	build_envp_list(t_data *data, char **env)
+int	build_envp_list(t_data *data, char **env)
 {
 	t_env	*node;
-	size_t	i;
+	int		i;
+	int		fail;
 
 	i = 0;
+	fail = 0;
 	while (env[i])
 	{
 		node = create_env_node(env[i]);
 		if (node)
 			node_add_last(&data->envp_list, node);
+		else
+			fail++;
 		i++;
 	}
+	if (fail == 0)
+		return (0);
+	else
+		return (-1);
 }
 
-void	update_envp_array(t_data *data, t_env *envp_list)
+char	**fill_envp_array(t_env *envp_list, int list_size)
 {
-	int	list_size;
-	char	**ar_ptr;
 	int		i;
 	t_env	*current;
+	char	**envp_arr;
 
-	list_size = env_list_size(envp_list);
-	ar_ptr = ft_calloc(list_size + 1, sizeof(char *));
-	if (!ar_ptr)
-		return ;
+	envp_arr = ft_calloc(list_size + 1, sizeof(char *));
+	if (!envp_arr)
+		return NULL;
 	current = envp_list;
 	i = 0;
-	while (current != NULL && i < list_size)
+	while (current)
 	{
 		if (current->value)
-			ar_ptr[i] = ft_strjoin(current->key, current->value);
+			envp_arr[i] = ft_strjoin(current->key, current->value);
 		else
-			ar_ptr[i] = ft_strdup(current->key);
-		if (!ar_ptr[i])
+			envp_arr[i] = ft_strdup(current->key);
+		if (!envp_arr[i])
 		{
-			free_double_array(ar_ptr);
-			ar_ptr = NULL;
-			return ;
+			free_double_array(envp_arr);
+			envp_arr = NULL;
+			return NULL;
 		}
 		i++;
 		current = current->next;
 	}
+	return (envp_arr);
+}
+
+int	rebuild_envp_array(t_data *data, t_env *envp_list)
+{
+	int		list_size;
+	char	**envp_arr;
+
+	list_size = env_list_size(envp_list);
+	envp_arr = fill_envp_array(envp_list, list_size);
+	if (!envp_arr)
+		return (-1);
 	if (data->envp)
 	{
 		free_double_array(data->envp);
 		data->envp = NULL;
 	}
-	data->envp = ar_ptr;
+	data->envp = envp_arr;
+	return (0);
 }
 
-void	init_data(t_data *data, char **env)
+int	init_data(t_data *data, char **env)
 {
 	ft_memset(data, 0, sizeof(t_data));
 	data->cmd_names[0] = "pwd";
@@ -68,7 +87,12 @@ void	init_data(t_data *data, char **env)
 	data->builtins[4] = ft_unset;
 	data->builtins[5] = ft_cd;
 	data->builtins[6] = ft_exit;
-	build_envp_list(data, env);
-	if (data->envp_list)
-		update_envp_array(data, data->envp_list);
+	if (build_envp_list(data, env) != 0)
+		ft_putstr_fd("Warning: Some environment variables were not loaded\n", 2);
+	if (data->envp_list && (rebuild_envp_array(data, data->envp_list)) != 0)
+	{
+		ft_putstr_fd("Error rebuilding environment array\n", 2);
+		return (-1);
+	}
+	return (0);
 }

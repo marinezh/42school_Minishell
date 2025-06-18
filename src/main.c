@@ -65,7 +65,11 @@ int	main(int ac, char **av, char **env)
 	if (ac < 1)
 		return (1);
 	// init struct where env are stored
-	init_data(&data, env);
+	if (init_data(&data, env) != 0)
+	{
+		ft_putstr_fd("Error initializing shell environment\n", 2);
+		return (1);
+	}
 	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored
