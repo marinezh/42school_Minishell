@@ -13,9 +13,13 @@ pid_t	create_process(void)
 	return (pid);
 }
 
-void	handle_child_process(char *path, char **args, char **envp)
+void	handle_child_process(t_data *data, char *path, char **args)
 {
+	char **envp;
+
+	envp = data->envp;
 	reset_signals_to_default();
+	cleanup_process_data(data);
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");
@@ -66,7 +70,7 @@ int	execute_cmd(t_data *data, t_command *cmd, char *path)
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
-		handle_child_process(path, cmd->args, data->envp);
+		handle_child_process(data, path, cmd->args);
 	else
 		exit_code = handle_parent_process(pid);
 	return (exit_code);

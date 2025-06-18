@@ -94,6 +94,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 				j++;
 			}
 			process_cmd(data, cur_cmd);
+            cleanup_process_data(data);
 			exit(0);
 		}
 		cur_cmd = cur_cmd->next;
@@ -115,6 +116,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	}
 	free(pids);
 	free_fds(fds, cmd_count - 2);
+    // free_command_list(cmd);
 	return (0);
 }
 

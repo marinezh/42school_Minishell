@@ -44,3 +44,10 @@ void	free_fds(int **fds, int i)
 	}
 	free(fds);
 }
+
+void	cleanup_process_data(t_data *data)
+{
+	free_env_list(&data->envp_list);
+	free_double_array(data->envp);
+	// rl_clear_history();
+}

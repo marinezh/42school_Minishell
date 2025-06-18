@@ -50,10 +50,9 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		print_commands(commands);
 		add_history(cmd_input.input);
-		execute(data, commands);
-		// Cleanup
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
+		execute(data, commands);
 		free_command_list(commands);	// Free the commands list
 	}
 }
