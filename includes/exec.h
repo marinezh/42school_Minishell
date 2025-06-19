@@ -1,7 +1,7 @@
 #ifndef EXEC_H
 # define EXEC_H
 
-void	init_data(t_data *data, char **env);
+int     init_data(t_data *data, char **env);
 int		ft_pwd(t_data *data, t_command *cmd);
 int		ft_echo(t_data *data, t_command *cmd);
 int		ft_env(t_data *data, t_command *cmd);
@@ -11,7 +11,7 @@ int		ft_cd(t_data *data, t_command *cmd);
 int		ft_exit(t_data *data, t_command *cmd);
 void	free_double_array(char **envp);
 void	free_env_list(t_env **env);
-void	update_envp_array(t_data *data, t_env *envp_list);
+int     rebuild_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);
 int		env_list_size(t_env *env);
@@ -37,6 +37,8 @@ pid_t	create_process(void);
 void	process_cmd(t_data *data, t_command *cmd);
 void	free_fds(int **fds, int i);
 int     handle_parent_process(pid_t pid);
+void	cleanup_process_data(t_data *data);
+void	process_cmd(t_data *data, t_command *cmd);
 
 void    set_prompt_signals(void);
 void	set_heredoc_signals(void);

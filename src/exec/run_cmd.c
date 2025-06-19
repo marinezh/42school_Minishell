@@ -13,8 +13,11 @@ pid_t	create_process(void)
 	return (pid);
 }
 
-void	handle_child_process(char *path, char **args, char **envp)
+void	handle_child_process(t_data *data, char *path, char **args)
 {
+	char	**envp;
+
+	envp = data->envp;
 	reset_signals_to_default();
 	if (execve(path, args, envp) == -1)
 	{
@@ -30,8 +33,8 @@ void	handle_child_process(char *path, char **args, char **envp)
 
 int	handle_parent_process(pid_t pid)
 {
-	int		wstatus;
-	int		exit_code;
+	int	wstatus;
+	int	exit_code;
 
 	if (waitpid(pid, &wstatus, 0) != -1)
 	{
@@ -53,7 +56,7 @@ int	handle_parent_process(pid_t pid)
 		perror("waitpid");
 		exit_code = ERR_GENERIC;
 	}
-	return(exit_code);
+	return (exit_code);
 }
 
 int	execute_cmd(t_data *data, t_command *cmd, char *path)
@@ -66,7 +69,7 @@ int	execute_cmd(t_data *data, t_command *cmd, char *path)
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
-		handle_child_process(path, cmd->args, data->envp);
+		handle_child_process(data, path, cmd->args);
 	else
 		exit_code = handle_parent_process(pid);
 	return (exit_code);

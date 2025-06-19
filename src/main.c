@@ -50,10 +50,9 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		print_commands(commands);
 		add_history(cmd_input.input);
-		execute(data, commands);
-		// Cleanup
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
+		execute(data, commands);
 		free_command_list(commands);	// Free the commands list
 	}
 }
@@ -66,7 +65,11 @@ int	main(int ac, char **av, char **env)
 	if (ac < 1)
 		return (1);
 	// init struct where env are stored
-	init_data(&data, env);
+	if (init_data(&data, env) != 0)
+	{
+		ft_putstr_fd("Error initializing shell environment\n", 2);
+		return (1);
+	}
 	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored
