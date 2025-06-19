@@ -22,6 +22,10 @@ void replace_variable(t_token *token, int i, int var_len, const char *value);
 void handle_status_var(t_token *token, int status, int *i);
 void handle_expantion(t_token *token, t_data *data, int *i);
 char *extract_variable_name(const char *input);
+void remove_outer_quotes_from_string(char *str);
+void remove_quotes_from_command_args(t_command *commands);
+void remove_quotes_from_files(t_files *files);
+char *expand_heredoc_line(char *input, t_data *data);
 // DELETE LATER DEBUG PRINTING FUNCTIONS
 void print_tokens(t_token *tok);
 const char *token_type_to_str(t_token_type type);
