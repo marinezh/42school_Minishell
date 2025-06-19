@@ -35,8 +35,8 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue;
 		}
-		printf("PURE TOKENS\n");
-		print_tokens(tokens);
+		//printf("PURE TOKENS\n");
+		//print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
 		if (error_check(tokens, data))
@@ -48,8 +48,7 @@ void	shell_loop(t_data *data)
 		expand_variables(tokens, data);
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
-	
-		print_commands(commands);
+		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
 		printf("/////////////////////\n");
 		print_commands(commands);
