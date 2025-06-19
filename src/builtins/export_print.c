@@ -59,7 +59,7 @@ int	print_current_envp(t_data *data, t_command *cmd)
 	(void)cmd;
 	if (data->envp_f)
 	{
-		update_envp_array(data, data->envp_list);
+		rebuild_envp_array(data, data->envp_list);
 		data->envp_f = 0;
 	}
 	if (data->envp)
