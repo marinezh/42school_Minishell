@@ -3,7 +3,7 @@
 t_token	*create_token_node(char *value)
 {
 	t_token	*token;
-	printf("initial value %s\n", value);
+	//printf("initial value %s\n", value);
 	token = malloc(sizeof(t_token));
 	if (!token)
 	{

@@ -44,7 +44,7 @@ void	print_eof_warning(t_files *node, int line_num)
 	free(number);
 }
 
-int	collect_input(t_files *node, int fd_read, int fd_write)
+int	collect_input(t_files *node, int fd_read, int fd_write, t_data *data)
 {
 	char	*input;
 	char	*input_nl;
@@ -70,6 +70,20 @@ int	collect_input(t_files *node, int fd_read, int fd_write)
 			free(input);
 			break ;
 		}
+		//////////////////////////////////ADD this part for expantion in HEREDOC
+		if (node->to_expand)
+		{
+			char *expanded = expand_heredoc_line(input, data);
+			free(input);
+			if (!expanded)
+			{
+				close(fd_write);
+				close(fd_read);
+				return (-1);
+			}
+			input = expanded;
+		}
+		////////////////////////////////////////////
 		input_nl = ft_strjoin(input, "\n");
 		if (!input_nl)
 		{
@@ -123,7 +137,7 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 		return (-1);
 	}
 	set_heredoc_signals();
-	if (collect_input(cur_node, fd_read, fd_write) == -1)
+	if (collect_input(cur_node, fd_read, fd_write, data) == -1)
 	{
 		close(fd_read);
 		close(fd_write);
