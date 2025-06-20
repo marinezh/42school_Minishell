@@ -36,8 +36,8 @@ int handle_redirection(t_command *current, t_token **token_list)
 	
 	if (*token_list && ((*token_list)->type == WORD || (*token_list)->type == FILE_NAME))
 	{
-		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
-	printf("handle_redirection: redir_type=%d, filename='%s'\n", redir_type, (*token_list)->value);
+		//printf("XXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+		//printf("handle_redirection: redir_type=%d, filename='%s'\n", redir_type, (*token_list)->value);
 		add_redirection(current, (*token_list)->value, redir_type);
 		*token_list = (*token_list)->next;
 		return (1);

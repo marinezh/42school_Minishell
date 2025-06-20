@@ -5,7 +5,7 @@ t_files	*create_file_node(char *name, int type)
 	t_files	*new_file;
 	int len;
 
-	printf("DEBUG create_file_node: Creating node type %d for name '%s'\n", type, name);
+	//printf("DEBUG create_file_node: Creating node type %d for name '%s'\n", type, name);
 	new_file = malloc(sizeof(t_files));
 	if (!new_file)
 		return (NULL);
@@ -13,13 +13,13 @@ t_files	*create_file_node(char *name, int type)
 	if (type == HEREDOC)
 	{
 		len = ft_strlen(name);
-		printf("DEBUG: Checking heredoc delimiter '%s', length %d\n", name, len);
+		//printf("DEBUG: Checking heredoc delimiter '%s', length %d\n", name, len);
 		if (len >= 2 &&
  				((name[0] == '\'' && name[len - 1] == '\'') ||
     			(name[0] == '"' && name[len - 1] == '"')))
 
 		{
-			printf("DEBUG: Found single quotes in heredoc delimiter\n");
+			//printf("DEBUG: Found single quotes in heredoc delimiter\n");
 			char *unquoted_name = ft_substr(name, 1, len - 2);
 			if (!unquoted_name)
 			{
@@ -28,7 +28,7 @@ t_files	*create_file_node(char *name, int type)
 			}
 			new_file->name = unquoted_name;
 			new_file->to_expand = 0;
-			printf("DEBUG: Setting expand_vars=0 (no expansion)\n");
+			//printf("DEBUG: Setting expand_vars=0 (no expansion)\n");
 		}
 		else
 		{
@@ -39,7 +39,7 @@ t_files	*create_file_node(char *name, int type)
 				return (NULL);
 			}
 			new_file->to_expand = 1;
-			printf("DEBUG: Setting expand_vars=1 (do expansion)\n");
+			//printf("DEBUG: Setting expand_vars=1 (do expansion)\n");
 		}
 	}
 	else
@@ -56,8 +56,8 @@ t_files	*create_file_node(char *name, int type)
 	new_file->type = type;
 	new_file->fd = -1;
 	new_file->next = NULL;
-	printf("DEBUG: Created file node with name '%s', expand_vars=%d\n", 
-           new_file->name, new_file->to_expand);
+	//printf("DEBUG: Created file node with name '%s', expand_vars=%d\n", 
+           //new_file->name, new_file->to_expand);
 	return (new_file);
 }
 
