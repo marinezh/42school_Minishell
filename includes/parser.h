@@ -26,6 +26,8 @@ void remove_outer_quotes_from_string(char *str);
 void remove_quotes_from_command_args(t_command *commands);
 void remove_quotes_from_files(t_files *files);
 char *expand_heredoc_line(char *input, t_data *data);
+void replace_current_with_multiple(t_token **current, t_token *new_tokens);
+t_token *create_token_list_from_split(char **split);
 // DELETE LATER DEBUG PRINTING FUNCTIONS
 void print_tokens(t_token *tok);
 const char *token_type_to_str(t_token_type type);

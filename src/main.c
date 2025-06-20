@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+
+
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
@@ -46,6 +48,37 @@ void	shell_loop(t_data *data)
 			continue ; // skip to next input
 		}
 		expand_variables(tokens, data);
+		printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n");
+		if (tokens->type == WORD || tokens->type == FILE_NAME)
+		{
+			print_tokens(tokens);
+			//int i = 0;
+			if(ft_strchr(tokens->value, ' '))
+			{
+				printf("XXX there is a space found XXX\n");
+
+				char **split = quote_safe_split(tokens->value, ' ');
+				t_token *new_tokens = create_token_list_from_split(split);
+				free_split_input(split);
+
+				t_token *old_next = tokens->next;
+
+					// Replace current token with first of new list
+				t_token *to_free = tokens;
+				tokens = new_tokens;
+
+					// Find end of new list and link rest
+				t_token *last = new_tokens;
+				while (last->next)
+					last = last->next;
+				last->next = old_next;
+
+				free(to_free->value);
+				free(to_free);
+
+				print_tokens(tokens);
+			}
+		}
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
 		//print_commands(commands);

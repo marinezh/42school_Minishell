@@ -179,7 +179,7 @@ void	print_commands(t_command *cmd_list)
 		if (cmd_list->args)
 		{
 			for (int i = 0; cmd_list->args[i]; i++)
-				printf("   %s ", cmd_list->args[i]);
+				printf("   %s, ", cmd_list->args[i]);
 		}
 		else
 			printf("(none)");
