@@ -4,7 +4,14 @@ int word_count(char *str, char delimeter)
 {
 	int i = 0;
 	int count = 0;
-	int in_word = 0;;
+	int in_word = 0;
+
+	if (!str || !*str)
+        return 0;
+    // Special case: if string has no delimiter, return 1
+    if (!strchr(str, delimeter))
+        return 1;
+
 	while (str[i])
 	{
 		if(str[i] == delimeter)
