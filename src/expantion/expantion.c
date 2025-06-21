@@ -9,7 +9,7 @@
 //     return 0;
 // }
 
-int in_single_quotes(t_token *token)
+static int in_single_quotes(t_token *token)
 {
 	int len;
 
@@ -19,63 +19,98 @@ int in_single_quotes(t_token *token)
 	return 0;
 }
 
-char *extract_variable_name(const char *input)
+static void handle_status_var(t_token *token, int status, int *i)
 {
-	int j;
-
-	j = 0;
-	while (input[j] && (ft_isalnum(input[j]) || input[j] == '_'))
-		j++;
-	char *var_name = ft_substr(input, 0, j);
-	return var_name;
-}
-void replace_current_with_multiple(t_token **current, t_token *new_tokens)
-{
-	if (!current || !*current || !new_tokens)
+	char *status_str = ft_itoa(status);
+	if (!status_str)
 		return;
-
-	t_token *old = *current;
-	t_token *tail = new_tokens;
-
-	// Find the last token in the new list
-	while (tail->next)
-		tail = tail->next;
-
-	// Link rest of old list after new tokens
-	tail->next = old->next;
-
-	// Replace current token pointer with new list head
-	*current = new_tokens;
-
-	// Free the original token
-	free(old->value);
-	free(old);
-}
-
-t_token *create_token_list_from_split(char **split)
-{
-	t_token *head = NULL;
-	t_token *last = NULL;
-
-	for (int i = 0; split[i]; i++)
+	printf("STATUS %s\n", status_str);
+	char *prefix = ft_substr(token->value, 0, *i);
+	if (!prefix)
 	{
-		t_token *new = malloc(sizeof(t_token));
-		if (!new)
-			return NULL;
-		new->value = ft_strdup(split[i]);
-		new->type = WORD;
-		new->next = NULL;
-
-		if (!head)
-			head = new;
-		else
-			last->next = new;
-		last = new;
+		free(status_str);
+		return;
 	}
-	return head;
+	printf("prefix if there is a STATUS %s\n", prefix);
+	char *suffix = ft_strdup(&token->value[*i + 2]);
+	if (!suffix)
+	{
+		free(status_str);
+		free(prefix);
+		return;
+	}
+	printf("suffix if there is a STATUS %s\n", prefix);
+	char *new_value = ft_strjoin(prefix, status_str);
+	if (!new_value)
+	{
+		free(status_str);
+		free(prefix);
+		free(suffix);
+		return;
+	}
+	char *final_value = ft_strjoin(new_value, suffix);
+	if (!final_value)
+	{
+		free(status_str);
+		free(prefix);
+		free(suffix);
+		free(new_value);
+		return;
+	}
+	free(token->value);
+	token->value = final_value;
+
+	*i = *i + ft_strlen(status_str) - 1;
+
+	free(prefix);
+	free(suffix);
+	free(new_value);
+	free(status_str);
 }
 
-void expand_variables(t_token *token, t_data *data)
+static int handle_expantion(t_token *token, t_data *data, int *i)
+{
+	printf("EXPANTION FOUND at posision %d in token %s\n", *i, token->value);
+	char *var_name = extract_variable_name(&token->value[*i + 1]);
+	if (!var_name)
+	{
+		(*i)++;
+		return 0;
+	}
+	// printf("var_name!!! %s\n",var_name);
+	t_env *node = find_env_node(data, var_name); 
+	//printf("Var value length: %zu\n", strlen(var_value));
+	if (node && node->value)
+	{
+		printf("var_value %s\n", node->value);
+		printf("Found variable %s = %s\n", var_name, node->value);
+		int status = replace_variable(token, *i, ft_strlen(var_name), node->value);
+		printf("STATUS %d\n ", status);
+		if (!replace_variable(token, *i, ft_strlen(var_name), node->value))
+		{
+			//fprintf(stderr, "Memory allocation failed during variable replacement.\n");
+			handle_error_arg(data, "memory", ": allocation failed\n", 1);
+			//*i += ft_strlen(var_name) + 1;
+			free(var_name);
+			return 0;
+		}
+		
+	}
+	else
+	{
+		printf("Variable %s not found, replacing with empty string\n", var_name);
+		if (!replace_undefined_variable(token, *i, ft_strlen(var_name)))
+		{
+			handle_error_arg(data, "memory", ": allocation failed\n", 1);
+			free(var_name);
+			return 0;
+		}
+	}
+	free(var_name);
+	return 1;
+}
+
+int expand_variables(t_token *token, t_data *data)
 {
 	t_token *current = token;
 
@@ -88,34 +123,22 @@ void expand_variables(t_token *token, t_data *data)
 			while (current->value[i])
 			{
 				if (current->value[i] == '$' && current->value[i + 1] == '?')
-					handle_status_var(current, data->status, &i);
-				else if (current->value[i] == '$' && current->value[i + 1])
 				{
-					handle_expantion(current, data, &i);
+					handle_status_var(current, data->status, &i);
 					continue;
 				}
-				i++;
+					
+				else if (current->value[i] == '$' && current->value[i + 1])
+				{
+					if(!handle_expantion(current, data, &i))
+						return 0;
+					continue;
+				}
+				else
+					i++;
 			}
-
-			// if (!current->in_db_quotes && ft_strchr(current->value, ' '))
-			// {
-			// 	char **split = quote_safe_split(current->value, ' ');
-			// 	if (split && split[1])
-			// 	{
-			// 		t_token *new_tokens = create_token_list_from_split(split);
-			// 		t_token *last = new_tokens;
-			// 		while (last->next)
-			// 			last = last->next;
-
-			// 		last->next = current->next;
-			// 		replace_current_with_multiple(&current, new_tokens);
-			// 		current = last->next;
-			// 		free_split_input(split);
-			// 		continue; // already advanced current
-			// 	}
-			// 	free_split_input(split);
-			// }
 		}
 		current = current->next;
 	}
+	return 1;
 }

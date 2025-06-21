@@ -133,6 +133,54 @@
     
 //     return tokens;
 // }
+// void replace_current_with_multiple(t_token **current, t_token *new_tokens)
+// {
+// 	if (!current || !*current || !new_tokens)
+// 		return;
+
+// 	t_token *old = *current;
+// 	t_token *tail = new_tokens;
+
+// 	// Find the last token in the new list
+// 	while (tail->next)
+// 		tail = tail->next;
+
+// 	// Link rest of old list after new tokens
+// 	tail->next = old->next;
+
+// 	// Replace current token pointer with new list head
+// 	*current = new_tokens;
+
+// 	// Free the original token
+// 	free(old->value);
+// 	free(old);
+// }
+
+static t_token *create_token_list_from_split(char **split)
+{
+	t_token *head = NULL;
+	t_token *last = NULL;
+	int i = 0;
+
+	while (split[i])
+	{
+		t_token *new = malloc(sizeof(t_token));
+		if (!new)
+			return NULL;
+		new->value = ft_strdup(split[i]);
+		new->type = WORD;
+		new->next = NULL;
+
+		if (!head)
+			head = new;
+		else
+			last->next = new;
+		last = new;
+		i++;
+	}
+	return head;
+}
+
 t_token *handle_word_splitting(t_token *tokens)
 {
 	t_token *current = tokens;

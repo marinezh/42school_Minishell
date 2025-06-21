@@ -45,7 +45,15 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
-		expand_variables(tokens, data);
+		if (!expand_variables(tokens, data))
+		{
+			//fprintf(stderr, "Expansion failed due to memory error.\n");
+    		//data->status = 1;
+    		free_tokens(tokens);
+    		free(cmd_input.input);
+    		continue; // Skip to next prompt
+		}
+
 
 		tokens = handle_word_splitting(tokens);
 		//remove_outer_quotes(tokens);

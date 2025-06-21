@@ -5,3 +5,6 @@ bash-3.2$ echo $?
 check on linux 
 ****
 
+history works only for successfull commands 
+
+//////////////////////////////////////////

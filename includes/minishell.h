@@ -9,6 +9,7 @@
 # include "utils.h"
 # include "libft.h"
 # include "exec.h"
+# include "expantion.h"
 # include "error_messages.h"
 # include <limits.h>
 # include <stdio.h>

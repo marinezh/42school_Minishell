@@ -7,11 +7,10 @@ int word_count(char *str, char delimeter)
 	int in_word = 0;
 
 	if (!str || !*str)
-        return 0;
-    // Special case: if string has no delimiter, return 1
-    if (!strchr(str, delimeter))
-        return 1;
-
+		return 0;
+	// Special case: if string has no delimiter, return 1
+	if (!strchr(str, delimeter))
+		return 1;
 	while (str[i])
 	{
 		if(str[i] == delimeter)
@@ -94,6 +93,7 @@ char **quote_safe_split(char *str, char delimiter)
 			i++;
 		}
 	}
+
 	result[i] = NULL;
 	return result;
 }
