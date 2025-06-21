@@ -91,6 +91,16 @@ struct					s_data
 	int					status;
 };
 
+typedef struct s_exp_parts
+{
+	char	*status_str;
+	char	*prefix;
+	char	*suffix;
+	char	*new_value;
+	char	*final_value;
+}	t_exp_parts;
+
+
 #endif
 
 // typedef struct s_command

@@ -4,6 +4,9 @@ int	read_prompt(t_cmd_input *cmd)
 {
 	sig_received = 0;
 	cmd->input = readline("minishell$ ");
+	char *check = ft_strdup(cmd->input);
+	free(cmd->input);
+	cmd->input = check;
 	if (sig_received)
 	{
 		if (cmd->input)

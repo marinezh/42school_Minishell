@@ -1,149 +1,59 @@
 #include "minishell.h"
 
-void replace_variable(t_token *token, int i, int var_len, const char *value)
+int	replace_variable(t_token *token, int i, int var_len, const char *value)
 {
-	char *prefix = ft_substr(token->value, 0, i);
-	if (!prefix)
-		return;
-	char *suffix = ft_strdup(&token->value[i + var_len + 1]);
-	if (!suffix)
-	{
-		free(prefix);
-		return;
-	}
-	char *new_value = ft_strjoin(prefix, value);
-	if (!new_value)
-	{
-		free(prefix);
-		free(suffix);
-		return;
-	}
-	char *final_value = ft_strjoin(new_value, suffix);
-	if (!final_value)
-	{
-		free(prefix);
-		free(suffix);
-		free(new_value);
-		return;
-	}
-	free(token->value);
-	token->value = final_value;
-
-	free(prefix);
-	free(suffix);
-	free(new_value);
-}
-void replace_undefined_variable(t_token *token, int i, int var_len)
-{
-	char *prefix;
-	char *suffix;
-	char *final_value;
+	char	*prefix;
+	char	*suffix;
+	char	*new_value;
+	char	*final_value;
 
 	prefix = ft_substr(token->value, 0, i);
 	if (!prefix)
-		return;
+		return (0);
+	new_value = ft_strjoin(prefix, value);
+	if (!new_value)
+		return (free_strings(prefix, NULL), 0);
 	suffix = ft_strdup(&token->value[i + var_len + 1]);
 	if (!suffix)
-	{
-		free(prefix);
-		return;
-	}
+		return (free_strings(prefix, new_value, NULL), 0);
+	final_value = ft_strjoin(new_value, suffix);
+	if (!final_value)
+		return (free_strings(prefix, suffix, new_value, NULL), 0);
+	free(token->value);
+	token->value = final_value;
+	free_strings(prefix, suffix, new_value, NULL);
+	return (1);
+}
+
+int	replace_undefined_variable(t_token *token, int i, int var_len)
+{
+	char	*prefix;
+	char	*suffix;
+	char	*final_value;
+
+	prefix = ft_substr(token->value, 0, i);
+	if (!prefix)
+		return (0);
+	suffix = ft_strdup(&token->value[i + var_len + 1]);
+	if (!suffix)
+		return (free_strings(prefix, NULL), 0);
 	final_value = ft_strjoin(prefix, suffix);
 	if (!final_value)
-	{
-		free(prefix);
-		free(suffix);
-		return;
-	}
+		return (free_strings(prefix, suffix, NULL), 0);
 	free(token->value);
 	token->value = final_value;
-	free(prefix);
-	free(suffix);
-}
-void handle_status_var(t_token *token, int status, int *i)
-{
-	char *status_str = ft_itoa(status);
-	if (!status_str)
-		return;
-	printf("STATUS %s\n", status_str);
-	char *prefix = ft_substr(token->value, 0, *i);
-	if (!prefix)
-	{
-		free(status_str);
-		return;
-	}
-	printf("prefix if there is a STATUS %s\n", prefix);
-	char *suffix = ft_strdup(&token->value[*i + 2]);
-	if (!suffix)
-	{
-		free(status_str);
-		free(prefix);
-		return;
-	}
-	printf("suffix if there is a STATUS %s\n", prefix);
-	char *new_value = ft_strjoin(prefix, status_str);
-	if (!new_value)
-	{
-		free(status_str);
-		free(prefix);
-		free(suffix);
-		return;
-	}
-	char *final_value = ft_strjoin(new_value, suffix);
-	if (!final_value)
-	{
-		free(status_str);
-		free(prefix);
-		free(suffix);
-		free(new_value);
-		return;
-	}
-	free(token->value);
-	token->value = final_value;
-
-	*i = *i + ft_strlen(status_str) - 1;
-
-	free(prefix);
-	free(suffix);
-	free(new_value);
-	free(status_str);
+	free_strings(prefix, suffix, NULL);
+	return (1);
 }
 
-void handle_expantion(t_token *token, t_data *data, int *i)
+char	*extract_variable_name(const char *input)
 {
-	printf("EXPANTION FOUND at posision %d in token %s\n", *i, token->value);
-	char *var_name = extract_variable_name(&token->value[*i + 1]);
-	if (!var_name)
-	{
-		(*i)++;
-		return;
-	}
-	// printf("var_name!!! %s\n",var_name);
-	t_env *node = find_env_node(data, var_name); 
-	//printf("Var value length: %zu\n", strlen(var_value));
-	if (node && node->value)
-	{
-		printf("var_value %s\n", node->value);
-		printf("Found variable %s = %s\n", var_name, node->value);
-		replace_variable(token, *i, ft_strlen(var_name), node->value);
-	}
-	else
-	{
-		printf("Variable %s not found, replacing with empty string\n", var_name);
-		replace_undefined_variable(token, *i, ft_strlen(var_name));
-	}
-	free(var_name);
-}
+	int		j;
+	char	*var_name;
 
-char *expand_heredoc_line(char *input, t_data *data)
-{
-	t_token temp;
-	(void)input;
-	temp.value = ft_strdup(input);
-	if (!temp.value)
-		return (NULL);
-	temp.type = WORD;
-	temp.next = NULL;
-	expand_variables(&temp, data);
-	return temp.value;
+	j = 0;
+	while (input[j] && (ft_isalnum(input[j]) || input[j] == '_'))
+		j++;
+	var_name = ft_substr(input, 0, j);
+	return (var_name);
 }
