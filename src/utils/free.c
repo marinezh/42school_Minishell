@@ -110,35 +110,14 @@ void free_strings(char *str, ...)
 
 	va_end(args);
 }
-// void replace_variable(t_token *token, int i, int var_len, const char *value)
-// {
-// 	char *prefix = ft_substr(token->value, 0, i);
-// 	if (!prefix)
-// 		return;
-
-// 	char *suffix = ft_strdup(&token->value[i + var_len + 1]);
-// 	if (!suffix)
-// 	{
-// 		free_strings(prefix, NULL);
-// 		return;
-// 	}
-
-// 	char *new_value = ft_strjoin(prefix, value);
-// 	if (!new_value)
-// 	{
-// 		free_strings(prefix, suffix, NULL);
-// 		return;
-// 	}
-
-// 	char *final_value = ft_strjoin(new_value, suffix);
-// 	if (!final_value)
-// 	{
-// 		free_strings(prefix, suffix, new_value, NULL);
-// 		return;
-// 	}
-
-// 	free(token->value);
-// 	token->value = final_value;
-
-// 	free_strings(prefix, suffix, new_value, NULL);
-// }
+void	free_exp_parts(t_exp_parts *parts)
+{
+	if (!parts)
+		return;
+	free(parts->status_str);
+	free(parts->prefix);
+	free(parts->suffix);
+	free(parts->new_value);
+	free(parts->final_value);
+	*parts = (t_exp_parts){0}; // resets all to NULL
+}
