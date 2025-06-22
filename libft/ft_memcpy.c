@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 17:57:03 by mzhivoto          #+#    #+#             */
-/*   Updated: 2024/11/19 18:21:04 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:08:37 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	unsigned char	*s;
 	size_t			i;
 
-	if (!dest && !src)
+	if (!dest || !src)
 		return (NULL);
 	i = 0;
 	d = (unsigned char *)dest;
