@@ -1,0 +1,11 @@
+             TOTAL TEST COUNT: 941  TESTS PASSED: 398  LEAKING: 28 
+                     STD_OUT: 346  STD_ERR: 129  EXIT_CODE: 337  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 812   
+                                     ✅ 2011  
+/////////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 483  LEAKING: 0 //run without leaks
+                     STD_OUT: 241  STD_ERR: 129  EXIT_CODE: 337  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 707   
+                                     ✅ 2116  
