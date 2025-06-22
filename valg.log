@@ -4,22 +4,81 @@
 ==638042== Command: ./minishell
 ==638042== Parent PID: 638040
 ==638042== 
-==638042== 
-==638042== FILE DESCRIPTORS: 4 open (3 std) at exit.
-==638042== Open file descriptor 3: /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/valg.log
-==638042==    <inherited from parent>
-==638042== 
-==638042== 
-==638042== HEAP SUMMARY:
-==638042==     in use at exit: 208,397 bytes in 237 blocks
-==638042==   total heap usage: 816 allocs, 579 frees, 240,620 bytes allocated
-==638042== 
-==638042== LEAK SUMMARY:
-==638042==    definitely lost: 0 bytes in 0 blocks
-==638042==    indirectly lost: 0 bytes in 0 blocks
-==638042==      possibly lost: 0 bytes in 0 blocks
-==638042==    still reachable: 0 bytes in 0 blocks
-==638042==         suppressed: 208,397 bytes in 237 blocks
-==638042== 
-==638042== For lists of detected and suppressed errors, rerun with: -s
-==638042== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==624989== 
+==624989== Process terminating with default action of signal 1 (SIGHUP)
+==624989==    at 0x49DED5F: tcsetattr (tcsetattr.c:52)
+==624989==    by 0x488F669: rl_prep_terminal (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x489FE81: rl_reset_after_signal (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x48A4F3E: _rl_signal_handler (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x48A5BD5: rl_getc (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x48A5460: rl_read_key (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x4889C86: readline_internal_char (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x4892D14: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==624989==    by 0x402945: read_prompt (lexer.c:6)
+==624989==    by 0x401349: shell_loop (main.c:13)
+==624989==    by 0x40153C: main (main.c:88)
+==624989== 
+==624989== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==624989== Open file descriptor 3: /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/valg.log
+==624989==    <inherited from parent>
+==624989== 
+==624989== 
+==624989== HEAP SUMMARY:
+==624989==     in use at exit: 220,012 bytes in 499 blocks
+==624989==   total heap usage: 680 allocs, 181 frees, 234,259 bytes allocated
+==624989== 
+==624989== 512 bytes in 1 blocks are still reachable in loss record 34 of 81
+==624989==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==624989==    by 0x407FC5: ft_calloc (in /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/minishell)
+==624989==    by 0x403589: fill_envp_array (init_data.c:32)
+==624989==    by 0x4036A8: rebuild_envp_array (init_data.c:61)
+==624989==    by 0x40383C: init_data (init_data.c:92)
+==624989==    by 0x401502: main (main.c:82)
+==624989== 
+==624989== 897 bytes in 63 blocks are still reachable in loss record 39 of 81
+==624989==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==624989==    by 0x408F4B: ft_strndup (in /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/minishell)
+==624989==    by 0x403CAA: create_env_node (utils_exec.c:36)
+==624989==    by 0x403508: build_envp_list (init_data.c:13)
+==624989==    by 0x403800: init_data (init_data.c:90)
+==624989==    by 0x401502: main (main.c:82)
+==624989== 
+==624989== 1,512 bytes in 63 blocks are still reachable in loss record 50 of 81
+==624989==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==624989==    by 0x407FC5: ft_calloc (in /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/minishell)
+==624989==    by 0x403BFE: init_node (utils_exec.c:7)
+==624989==    by 0x403D08: create_env_node (utils_exec.c:50)
+==624989==    by 0x403508: build_envp_list (init_data.c:13)
+==624989==    by 0x403800: init_data (init_data.c:90)
+==624989==    by 0x401502: main (main.c:82)
+==624989== 
+==624989== 2,990 bytes in 63 blocks are still reachable in loss record 55 of 81
+==624989==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==624989==    by 0x408134: ft_strdup (in /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/minishell)
+==624989==    by 0x403CCF: create_env_node (utils_exec.c:41)
+==624989==    by 0x403508: build_envp_list (init_data.c:13)
+==624989==    by 0x403800: init_data (init_data.c:90)
+==624989==    by 0x401502: main (main.c:82)
+==624989== 
+==624989== 3,824 bytes in 63 blocks are still reachable in loss record 57 of 81
+==624989==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==624989==    by 0x4085D2: ft_strjoin (in /home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell/minishell)
+==624989==    by 0x4035EF: fill_envp_array (init_data.c:40)
+==624989==    by 0x4036A8: rebuild_envp_array (init_data.c:61)
+==624989==    by 0x40383C: init_data (init_data.c:92)
+==624989==    by 0x401502: main (main.c:82)
+==624989== 
+==624989== LEAK SUMMARY:
+==624989==    definitely lost: 0 bytes in 0 blocks
+==624989==    indirectly lost: 0 bytes in 0 blocks
+==624989==      possibly lost: 0 bytes in 0 blocks
+==624989==    still reachable: 9,735 bytes in 253 blocks
+==624989==         suppressed: 210,277 bytes in 246 blocks
+==624989== 
+==624989== For lists of detected and suppressed errors, rerun with: -s
+==624989== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+in 253 blocks
+==630580==         suppressed: 214,412 bytes in 253 blocks
+==630580== 
+==630580== For lists of detected and suppressed errors, rerun with: -s
+==630580== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

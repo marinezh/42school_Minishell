@@ -194,7 +194,7 @@ t_token *handle_word_splitting(t_token *tokens)
 		if ((current->type == WORD || current->type == FILE_NAME) && 
 			ft_strchr(current->value, ' '))
 		{
-			printf("XXX there is a space found in token: [%s]\n", current->value);
+			//printf("XXX there is a space found in token: [%s]\n", current->value);
 
 			// Split the token value by spaces
 			char **split = quote_safe_split(current->value, ' ');
@@ -217,10 +217,10 @@ t_token *handle_word_splitting(t_token *tokens)
 				if (new_tokens)
 				{
 					// DEBUG PRINT: Show what was split
-					printf("Split and replaced token with: ");
-					for (t_token *t = new_tokens; t && t != next; t = t->next)
-						printf("[%s] ", t->value);
-					printf("\n");
+					// printf("Split and replaced token with: ");
+					// for (t_token *t = new_tokens; t && t != next; t = t->next)
+					// 	printf("[%s] ", t->value);
+					// printf("\n");
 
 					// Find end of new token list
 					t_token *last = new_tokens;

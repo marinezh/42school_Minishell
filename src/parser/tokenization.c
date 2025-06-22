@@ -88,7 +88,7 @@ char **preprocess_input(char *input)
 		printf("Failed to add spacing to input.\n");
 		return (NULL);
 	}
-	printf("new input: %s\n", cmd.spaced);
+	//printf("new input: %s\n", cmd.spaced);
 	split_input = quote_safe_split(cmd.spaced, ' ');
 	if (!split_input)
 	{
@@ -96,8 +96,8 @@ char **preprocess_input(char *input)
 		return (NULL);
 	}
 	// FOR DEBUGGIN , delete later
-	for (int j = 0; split_input[j]; j++)
-	printf("token[%d] = [%s]\n", j, split_input[j]);
+	// for (int j = 0; split_input[j]; j++)
+	// printf("token[%d] = [%s]\n", j, split_input[j]);
 	free(cmd.spaced);
 	return split_input;
 }

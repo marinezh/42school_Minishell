@@ -1,5 +1,83 @@
 #include "minishell.h"
 
+// int	read_prompt(t_cmd_input *cmd)
+// {
+// 	sig_received = 0;
+// 	cmd->input = readline("minishell$ ");
+// 	char *check = ft_strdup(cmd->input);
+// 	free(cmd->input);
+// 	cmd->input = check;
+// 	if (sig_received)
+// 	{
+// 		if (cmd->input)
+// 		{
+// 			free(cmd->input);
+// 			cmd->input = NULL;
+// 		}
+// 		return (0);
+// 	}
+// 	if (!cmd->input)
+// 	{
+// 		printf("exit\n");
+// 		return (-1);
+// 	}
+// 	if (cmd->input[0] == '\0')
+// 	{
+// 		free(cmd->input);
+// 		cmd->input = NULL;
+// 		return (0);
+// 	}
+// 	return (1);
+// }
+
+int	read_prompt(t_cmd_input *cmd)
+{
+	char	*line;
+
+	sig_received = 0;
+
+	if (isatty(STDIN_FILENO))
+	{
+		line = readline("minishell$ ");
+	}
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			// Remove trailing newline added by get_next_line
+			size_t len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
+	}
+	// Handle EOF or Ctrl+D
+	if (!line)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
+		return (-1);
+	}
+
+	if (sig_received)
+	{
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+	// Empty line (e.g., user just pressed Enter)
+	if (line[0] == '\0')
+	{
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+
+	cmd->input = line;
+	return (1);
+}
+
+
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
@@ -60,9 +138,7 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
-		printf("/////////////////////\n");
-		print_commands(commands);
-		printf("/////////////////////\n");
+		//print_commands(commands);
 		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
@@ -71,6 +147,27 @@ void	shell_loop(t_data *data)
 	}
 }
 
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_data	data;
+
+// 	(void)av;
+// 	if (ac < 1)
+// 		return (1);
+// 	// init struct where env are stored
+// 	if (init_data(&data, env) != 0)
+// 	{
+// 		ft_putstr_fd("Error initializing shell environment\n", 2);
+// 		return (1);
+// 	}
+// 	set_prompt_signals();
+// 	shell_loop(&data);
+// 	// clean struct where env are stored
+// 	free_env_list(&data.envp_list);
+// 	free_double_array(data.envp);
+// 	//rl_clear_history();
+// 	return (data.status);
+// }
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -78,17 +175,15 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	if (ac < 1)
 		return (1);
-	// init struct where env are stored
 	if (init_data(&data, env) != 0)
 	{
 		ft_putstr_fd("Error initializing shell environment\n", 2);
 		return (1);
 	}
-	set_prompt_signals();
+	if (isatty(STDIN_FILENO))
+		set_prompt_signals(); // only if interactive
 	shell_loop(&data);
-	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
-	//rl_clear_history();
 	return (data.status);
 }
