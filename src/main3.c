@@ -136,7 +136,7 @@ void	shell_loop(t_data *data)
 		tokens = handle_word_splitting(tokens);
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
-		//print_commands(commands);
+		print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
 		//print_commands(commands);
 		add_history(cmd_input.input);

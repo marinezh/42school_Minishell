@@ -9,3 +9,10 @@
                          TOTAL FAILED AND PASSED CASES:
                                      ❌ 707   
                                      ✅ 2116  
+////////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 548  LEAKING: 0  // run without leaks
+                     STD_OUT: 192  STD_ERR: 84  EXIT_CODE: 280  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 556   
+                                     ✅ 2267 
+//////////////////////////////////////////////////////////////////////////////////
