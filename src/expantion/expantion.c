@@ -9,15 +9,15 @@
 //     return (0);
 // }
 
-static int	in_single_quotes(t_token *token)
-{
-	int	len;
+// static int	in_single_quotes(t_token *token)
+// {
+// 	int	len;
 
-	len = ft_strlen(token->value);
-	if (len >= 2 && token->value[0] == '\'' && token->value[len - 1] == '\'')
-		return (1);
-	return (0);
-}
+// 	len = ft_strlen(token->value);
+// 	if (len >= 2 && token->value[0] == '\'' && token->value[len - 1] == '\'')
+// 		return (1);
+// 	return (0);
+// }
 
 // static int	handle_status_var(t_token *token, int status, int *i)
 // {
@@ -123,33 +123,54 @@ int	expand_variables(t_token *token, t_data *data)
 {
 	t_token	*current;
 	int		i;
+	int		in_single;
+	int		in_double;
 
 	current = token;
 	while (current)
 	{
-		if ((current->type == WORD || current->type == FILE_NAME)
-			&& !in_single_quotes(current))
+		if (current->type == WORD || current->type == FILE_NAME)
 		{
 			i = 0;
+			in_single = 0;
+			in_double = 0;
+
 			while (current->value[i])
 			{
-				if (current->value[i] == '$' && current->value[i + 1] == '?')
+				// Toggle quote state
+				if (current->value[i] == '\'' && !in_double)
+				{
+					in_single = !in_single;
+					i++;
+					continue;
+				}
+				else if (current->value[i] == '\"' && !in_single)
+				{
+					in_double = !in_double;
+					i++;
+					continue;
+				}
+
+				// Handle special variable $?
+				if (current->value[i] == '$' && current->value[i + 1] == '?' && !in_single)
 				{
 					if (!handle_status_var(current, data->status, &i))
 					{
 						handle_error_arg(data, "memory", ": allocation failed\n", 1);
 						return (0);
 					}
-					continue ;
+					continue;
 				}
-				else if (current->value[i] == '$' && current->value[i + 1])
+
+				// Handle regular variables
+				else if (current->value[i] == '$' && current->value[i + 1] && !in_single)
 				{
 					if (!handle_expantion(current, data, &i))
 						return (0);
-					continue ;
+					continue;
 				}
-				else
-					i++;
+
+				i++;
 			}
 		}
 		current = current->next;

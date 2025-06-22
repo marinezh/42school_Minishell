@@ -34,11 +34,11 @@ int skip_quoted_seg(char *input, int *i)
 	(*i)++; // skip openning quote
 	while (input[*i] && input[*i] != quote)
 		(*i)++;
-	if (input[*i] != quote)
+	if (!input[*i])
 	{
 		ft_putstr_fd("minishell:quotes are not closed", 2);
 		//ft_putstr_fd(ERR_QUOTES, 2);
-		return (ERR_PARSER);
+		return (-1);
 	}
 	(*i)++; // skip closing quote
 	return (0);

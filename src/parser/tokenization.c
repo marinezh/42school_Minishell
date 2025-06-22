@@ -125,5 +125,8 @@ t_token	*tokenize_input(char **split_input)
 		append_token(&head, &tail, new_token);
 		i++;
 	}
+	// for (int i = 0; split_input[i]; i++)
+    // 	free(split_input[i]);
+	// free(split_input);
 	return (head);
 }
