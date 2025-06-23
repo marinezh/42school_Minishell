@@ -16,9 +16,8 @@ int	copy_quoted_seg(char *input, char *output, int *i, int *j)
 	}
 	if (input[*i] != quote)
 	{
-		ft_putstr_fd("minishell:quotes are not closed", 2);
-		//ft_putstr_fd(ERR_QUOTES, 2);
-		return (ERR_PARSER);
+		ft_putstr_fd("minishell: quotes are not closed\n", 2);
+		return (-1);
 	}
 	output[*j] = input[*i]; // copy closing quotes
 	(*i)++;
@@ -57,7 +56,7 @@ void	add_space(t_cmd_input *cmd)
 			cmd->spaced[j++] = cmd->input[i++];
 	}
 	cmd->spaced[j] = '\0';
-	printf("DEBUG spaced: [%s]\n", cmd->spaced);
+	//printf("DEBUG spaced: [%s]\n", cmd->spaced);
 	// return (cmd->spaced);
 }
 
