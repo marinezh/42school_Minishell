@@ -43,65 +43,78 @@ void	print_eof_warning(t_files *node, int line_num)
 	ft_putstr_fd(full_msg, 2);
 	free(number);
 }
+int	handle_expansion(t_files *node, char **input, t_data *data)
+{
+	char	*expanded;
+
+	if (!node || !input || !*input || !data)
+		return (-1);
+	if (node->to_expand)
+	{
+		expanded = expand_heredoc_line(*input, data);
+		if (!expanded)
+			return (-1);
+		free(*input);
+		*input = expanded;
+	}
+	return (0);
+}
+void cleanup_and_close(char *input, int fd1, int fd2)
+{
+	if (input)
+		free(input);
+	if (fd1 >= 0)
+		close (fd1);
+	if (fd2 >= 0)
+		close (fd2);
+}
+int	write_line_to_file(char *input, int fd_write)
+{
+	char	*input_nl;
+
+	input_nl = ft_strjoin(input, "\n");
+	if (!input_nl)
+		return (-1);
+	if (write(fd_write, input_nl, ft_strlen(input_nl)) == -1)
+	{
+		free(input_nl);
+		perror("write");
+		return (-1);
+	}
+	free(input_nl);
+	return (0);
+}
+
+int	is_delimiter(char *input, char *delimiter)
+{
+	return (ft_strcmp(input, delimiter) == 0);
+}
 
 int	collect_input(t_files *node, int fd_read, int fd_write, t_data *data)
 {
 	char	*input;
-	char	*input_nl;
 	int		line_count;
 
 	line_count = 1;
 	while (1)
 	{
 		input = readline("> ");
-		if (sig_received)
-		{
-			if (input)
-				free(input);
-			return (-1);
-		}
 		if (!input)
 		{
 			print_eof_warning(node, line_count);
 			return (0);
 		}
-		if (ft_strcmp(input, node->name) == 0)
+		if (is_delimiter(input, node->name))
 		{
 			free(input);
 			break ;
 		}
-		//////////////////////////////////ADD this part for expantion in HEREDOC
-		if (node->to_expand)
+		if (handle_expansion(node, &input, data) == -1 ||
+			write_line_to_file(input, fd_write) == -1)
 		{
-			char *expanded = expand_heredoc_line(input, data);
-			free(input);
-			if (!expanded)
-			{
-				close(fd_write);
-				close(fd_read);
-				return (-1);
-			}
-			input = expanded;
-		}
-		////////////////////////////////////////////
-		input_nl = ft_strjoin(input, "\n");
-		if (!input_nl)
-		{
-			free(input);
-			close(fd_write);
-			close(fd_read);
+			cleanup_and_close(input, fd_read, fd_write);
 			return (-1);
 		}
-		if (write(fd_write, input_nl, ft_strlen(input_nl)) == -1)
-		{
-			free(input_nl);
-			free(input);
-			close(fd_write);
-			close(fd_read);
-			perror("write");
-			return (-1);
-		}
-		free(input_nl);
 		free(input);
 		line_count++;
 	}
@@ -140,49 +153,40 @@ int	collect_heredoc_process(t_files *cur_node, int fd_read, int fd_write, t_data
 	return (exit_code);
 }
 
-int	process_heredoc(t_data *data, t_files *cur_node)
+int	setup_heredoc_fds(int *fd_write, int *fd_read)
 {
-	int					fd_write;
-	int					fd_read;
-	char				*heredoc_name;
-	// struct sigaction	old_int;
-	// struct sigaction	old_quit;
+	char	*heredoc_name;
 
-	// sig_received = 0;
-	// sigaction(SIGINT, NULL, &old_int);
-	// sigaction(SIGQUIT, NULL, &old_quit);
 	heredoc_name = create_new_name();
 	if (!heredoc_name)
 		return (-1);
-	fd_write = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if (fd_write == -1)
+	*fd_write = open(heredoc_name, O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if (*fd_write == -1)
 	{
 		perror("open");
 		free(heredoc_name);
 		return (-1);
 	}
-	fd_read = open(heredoc_name, O_RDONLY);
+	*fd_read = open(heredoc_name, O_RDONLY);
 	unlink(heredoc_name);
 	free(heredoc_name);
-	if (fd_read == -1)
+	if (*fd_read == -1)
 	{
 		perror("open");
-		close(fd_write);
+		close(*fd_write);
 		return (-1);
 	}
+	return (0);
+}
 
+int	process_heredoc(t_data *data, t_files *cur_node)
+{
+	int					fd_write;
+	int					fd_read;
+
+	if (setup_heredoc_fds(&fd_write, &fd_read) == -1)
+		return (-1);
 	data->status = collect_heredoc_process(cur_node, fd_read, fd_write, data);
-	// set_heredoc_signals();
-	// if (collect_input(cur_node, fd_read, fd_write, data) == -1)
-	// {
-	// 	close(fd_read);
-	// 	close(fd_write);
-	// 	// sigaction(SIGINT, &old_int, NULL);
-	// 	// sigaction(SIGQUIT, &old_quit, NULL);
-	// 	if (sig_received)
-	// 		data->status = 1;
-	// 	return (-1);
-	// }
 	if (data->status == 130)
 	{
 		close(fd_read);
@@ -191,8 +195,5 @@ int	process_heredoc(t_data *data, t_files *cur_node)
 	}
 	close(fd_write);
 	cur_node->fd = fd_read;
-	// data->status = 0;
-	// sigaction(SIGINT, &old_int, NULL);
-	// sigaction(SIGQUIT, &old_quit, NULL);
 	return (0);
 }
