@@ -1,5 +1,35 @@
 #include "minishell.h"
 
+int	read_prompt(t_cmd_input *cmd)
+{
+	sig_received = 0;
+	cmd->input = readline("minishell$ ");
+	//char *check = ft_strdup(cmd->input);
+	//free(cmd->input);
+	//cmd->input = check;
+	if (sig_received)
+	{
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
+		return (0);
+	}
+	if (!cmd->input)
+	{
+		printf("exit\n");
+		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		free(cmd->input);
+		cmd->input = NULL;
+		return (0);
+	}
+	return (1);
+}
+
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;

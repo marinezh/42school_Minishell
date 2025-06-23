@@ -100,7 +100,21 @@ typedef struct s_exp_parts
 	char	*final_value;
 }	t_exp_parts;
 
+typedef struct s_word_pos
+{
+    int start;
+    int end;
+} t_word_pos;
 
+// Define a struct for position tracking
+typedef struct s_split_data
+{
+    char	**result;
+	int		i;        // Current position in result array
+    int		j;        // Current position in input string
+    int		start;    // Start position of current word
+    int		end; 	// End position of current word
+} t_split_data;
 #endif
 
 // typedef struct s_command

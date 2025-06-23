@@ -1,33 +1,29 @@
 #include "minishell.h"
 
-int	read_prompt(t_cmd_input *cmd)
+int	copy_quoted_seg(char *input, char *output, int *i, int *j)
 {
-	sig_received = 0;
-	cmd->input = readline("minishell$ ");
-	char *check = ft_strdup(cmd->input);
-	free(cmd->input);
-	cmd->input = check;
-	if (sig_received)
+	char quote; 
+	
+	quote = input[*i]; 
+	output[*j] = input[*i]; // copy openning quotes
+	(*i)++;
+	(*j)++;
+	while (input[*i] && input[*i] != quote) // copy everything in qutes
 	{
-		if (cmd->input)
-		{
-			free(cmd->input);
-			cmd->input = NULL;
-		}
-		return (0);
+		output[*j] = input[*i];
+		(*i)++;
+		(*j)++;
 	}
-	if (!cmd->input)
+	if (input[*i] != quote)
 	{
-		printf("exit\n");
-		return (-1);
+		ft_putstr_fd("minishell:quotes are not closed", 2);
+		//ft_putstr_fd(ERR_QUOTES, 2);
+		return (ERR_PARSER);
 	}
-	if (cmd->input[0] == '\0')
-	{
-		free(cmd->input);
-		cmd->input = NULL;
-		return (0);
-	}
-	return (1);
+	output[*j] = input[*i]; // copy closing quotes
+	(*i)++;
+	(*j)++;
+	return (0);
 }
 
 void	add_space(t_cmd_input *cmd)
