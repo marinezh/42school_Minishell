@@ -1,5 +1,35 @@
 #include "minishell.h"
 
+int	read_prompt(t_cmd_input *cmd)
+{
+	sig_received = 0;
+	cmd->input = readline("minishell$ ");
+	//char *check = ft_strdup(cmd->input);
+	//free(cmd->input);
+	//cmd->input = check;
+	if (sig_received)
+	{
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
+		return (0);
+	}
+	if (!cmd->input)
+	{
+		printf("exit\n");
+		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		free(cmd->input);
+		cmd->input = NULL;
+		return (0);
+	}
+	return (1);
+}
+
 void	shell_loop(t_data *data)
 {
 	t_cmd_input	cmd_input;
@@ -22,7 +52,7 @@ void	shell_loop(t_data *data)
 			continue ;
 		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
-		split_input = preprocess_input(cmd_input.input);
+		split_input = preprocess_input(cmd_input.input, data);
 		if (!split_input) // This will be NULL if fmt_quotes found an error
 		{
 			free(cmd_input.input);
@@ -60,9 +90,9 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
-		printf("/////////////////////\n");
-		print_commands(commands);
-		printf("/////////////////////\n");
+		//printf("/////////////////////\n");
+		//print_commands(commands);
+		//printf("/////////////////////\n");
 		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list

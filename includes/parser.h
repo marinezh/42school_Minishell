@@ -8,7 +8,7 @@ t_token *tokenize_input(char **split_input);
 //int error_check(t_token *token);
 int error_check(t_token *token, t_data *data);
 //t_files *parse_redir(t_token *token_list);
-char **preprocess_input(char *input);
+char **preprocess_input(char *input, t_data *data);
 char	**realloc_args(char **args, int count, char *value);
 void handle_pipe(t_command *current, t_token **token_list,t_command **current_cmd);
 int handle_redirection(t_command *current, t_token **token_list);
