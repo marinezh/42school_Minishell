@@ -1,0 +1,50 @@
+minishell$ /bin/echo ""$?""
+free(): invalid pointer
+Aborted (core dumped)
+line 6
+
+sh-5.2$ ./minishell 
+minishell$ echo ''$?''"42"
+free(): invalid pointer
+Aborted (core dumped)
+line 10
+
+sh-5.2$ ./minishell 
+minishell$ /bin/echo ""'$USER'""
+malloc(): unaligned tcache chunk detected
+Aborted (core dumped)
+
+16
+18
+22
+24
+88
+90
+94
+96
+98
+100
+102
+104
+
+Parsing hello
+22
+26
+54
+69
+72
+116
+118
+120
+123
+126
+129
+239
+272
+274
+276
+278
+280
+297
+299
+301
