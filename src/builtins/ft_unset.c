@@ -30,6 +30,8 @@ int	ft_unset(t_data *data, t_command *cmd)
 	int		i;
 	t_env	*env_node;
 
+	if (!cmd->args || !cmd->args[1])
+		return (0);
 	i = 1;
 	if (cmd->args[i][0] == '-')
 	{

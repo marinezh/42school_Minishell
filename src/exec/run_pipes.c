@@ -83,9 +83,30 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			close_unused_heredoc_fds(cmd, cur_cmd);
 			// redirect out/in
 			if (i != cmd_count - 1)
-				dup2(fds[i][1], STDOUT_FILENO);
+            {
+				if (dup2(fds[i][1], STDOUT_FILENO) == -1)
+                {
+                    perror("dup2");
+                    cleanup_process_data(data);
+                    free(pids);
+                    free_fds(fds, cmd_count - 2);
+                    free_command_list(cmd);
+                    exit(1);
+                }
+
+            }
 			if (i != 0)
-				dup2(fds[i - 1][0], STDIN_FILENO);
+            {
+				if (dup2(fds[i - 1][0], STDIN_FILENO) == -1)
+                {
+                    perror("dup2");
+                    cleanup_process_data(data);
+                    free(pids);
+                    free_fds(fds, cmd_count - 2);
+                    free_command_list(cmd);
+                    exit(1);
+                }
+            }
 			j = 0;
 			while (j < cmd_count - 1)
 			{
