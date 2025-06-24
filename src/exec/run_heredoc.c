@@ -121,19 +121,25 @@ int	collect_input(t_files *node, int fd_read, int fd_write, t_data *data)
 	return (0);
 }
 
-void	handle_heredoc_collection(t_files *cur_node, int fd_read, int fd_write, t_data *data)
+void	handle_heredoc_collection(t_files *cur_node, t_command *cmd, int fd_read, int fd_write, t_data *data)
 {
 	reset_signals_to_default();
 	if (collect_input(cur_node, fd_read, fd_write, data) == -1)
 	{
+		cleanup_process_data(data);
 		close(fd_read);
 		close(fd_write);
+		free_command_list(cmd);
 		exit (1);
 	}
+	cleanup_process_data(data);
+	close(fd_read);
+	close(fd_write);
+	free_command_list(cmd);
 	exit(0);
 }
 
-int	collect_heredoc_process(t_files *cur_node, int fd_read, int fd_write, t_data *data)
+int	collect_heredoc_process(t_files *cur_node, t_command *cmd, int fd_read, int fd_write, t_data *data)
 {
 	pid_t	pid;
 	int		exit_code;
@@ -147,7 +153,7 @@ int	collect_heredoc_process(t_files *cur_node, int fd_read, int fd_write, t_data
 		return (ERR_GENERIC);
 	}
 	if (pid == 0)
-		handle_heredoc_collection(cur_node, fd_read, fd_write, data);
+		handle_heredoc_collection(cur_node, cmd, fd_read, fd_write, data);
 	else
 		exit_code = handle_parent_process(pid);
 	return (exit_code);
@@ -179,14 +185,14 @@ int	setup_heredoc_fds(int *fd_write, int *fd_read)
 	return (0);
 }
 
-int	process_heredoc(t_data *data, t_files *cur_node)
+int	process_heredoc(t_data *data, t_command *cmd, t_files *cur_node)
 {
 	int					fd_write;
 	int					fd_read;
 
 	if (setup_heredoc_fds(&fd_write, &fd_read) == -1)
 		return (-1);
-	data->status = collect_heredoc_process(cur_node, fd_read, fd_write, data);
+	data->status = collect_heredoc_process(cur_node, cmd, fd_read, fd_write, data);
 	if (data->status == 130)
 	{
 		close(fd_read);
