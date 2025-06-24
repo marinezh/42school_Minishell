@@ -123,20 +123,17 @@ int	collect_input(t_files *node, int fd_read, int fd_write, t_data *data)
 
 void	handle_heredoc_collection(t_files *cur_node, t_command *cmd, int fd_read, int fd_write, t_data *data)
 {
+	int	exit_status;
+
+	exit_status = 0;
 	reset_signals_to_default();
 	if (collect_input(cur_node, fd_read, fd_write, data) == -1)
-	{
-		cleanup_process_data(data);
-		close(fd_read);
-		close(fd_write);
-		free_command_list(cmd);
-		exit (1);
-	}
+		exit_status = 1;
 	cleanup_process_data(data);
 	close(fd_read);
 	close(fd_write);
 	free_command_list(cmd);
-	exit(0);
+	exit(exit_status);
 }
 
 int	collect_heredoc_process(t_files *cur_node, t_command *cmd, int fd_read, int fd_write, t_data *data)
