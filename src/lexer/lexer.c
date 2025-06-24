@@ -16,8 +16,8 @@ int	copy_quoted_seg(char *input, char *output, int *i, int *j)
 	}
 	if (input[*i] != quote)
 	{
-		ft_putstr_fd("minishell: quotes are not closed\n", 2);
-		return (-1);
+		ft_putstr_fd("minishell: quotes are not closed 2\n", 2);
+		return (-2);
 	}
 	output[*j] = input[*i]; // copy closing quotes
 	(*i)++;
@@ -25,23 +25,24 @@ int	copy_quoted_seg(char *input, char *output, int *i, int *j)
 	return (1);
 }
 
-void	add_space(t_cmd_input *cmd)
+char	*add_space(t_cmd_input *cmd, t_data *data)
 {
 	cmd->i = 0;
 	cmd->j = 0;
 	cmd->len = ft_strlen(cmd->input);
 	cmd->spaced = malloc(cmd->len * 10 + 1);
 	if (!cmd->spaced)
-		return ;
+		return NULL;
 	while (cmd->i < cmd->len)
 	{
 		if (cmd->input[cmd->i] == '\'' || cmd->input[cmd->i] == '\"')
 		{
-			if (!copy_quoted_seg(cmd->input, cmd->spaced, &cmd->i, &cmd->j))
+			if (copy_quoted_seg(cmd->input, cmd->spaced, &cmd->i, &cmd->j) == -2)
 			{
 				free(cmd->spaced);
 				cmd->spaced = NULL;
-				return;
+				data->status = 2;
+				return NULL;
 			}
 			continue ;
 		}
@@ -54,6 +55,7 @@ void	add_space(t_cmd_input *cmd)
 	}
 	cmd->spaced[cmd->j] = '\0';
 	//printf("DEBUG spaced: [%s]\n", cmd->spaced);
+	return cmd->spaced;
 }
 
 // char	**run_lexer(t_cmd_input *cmd)

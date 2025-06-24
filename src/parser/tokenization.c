@@ -72,30 +72,32 @@ int	determine_token_type(t_token *token, char *value, int *pending_redirection)
 	return (1);
 }
 
-char **preprocess_input(char *input)
+char **preprocess_input(char *input, t_data *data)
 {
 	t_cmd_input cmd;
+	char *spaced;
 	char **split_input;
 	
 	ft_memset(&cmd, 0, sizeof(t_cmd_input));
 	split_input = NULL;
 	if (!input || input[0] == '\0')						// if set to NULL seg fault, do i need this extra check here?
 	{
-        ft_putstr_fd("minishell: empty command\n", 2);
-        return NULL;
+		data->status = 127;  // Consider empty input as non-error (or choose 1)
+		return NULL;
 	}
 	cmd.input = input;
-	add_space(&cmd);
-	if (!cmd.spaced)
+	spaced = add_space(&cmd, data);
+	if (!spaced)
 		return NULL; // error msg comes from add_space
 	//printf("new input: %s\n", cmd.spaced);
-	split_input = quote_safe_split(cmd.spaced, ' ');
+	split_input = quote_safe_split(spaced, ' ');
 	if (!split_input)
 	{
-		ft_putstr_fd("minishell: splitting input failed\n", 2);
+		ft_putstr_fd("minishell: splitting input failed QUOTES\n", 2);
+		//data->status = 2;
 		return (NULL);
 	}
-	free(cmd.spaced);
+	free(spaced);
 	// FOR DEBUGGIN , delete later
 	for (int j = 0; split_input[j]; j++)
 	printf("token[%d] = [%s]\n", j, split_input[j]);

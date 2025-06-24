@@ -18,7 +18,7 @@ int			getpwd(void);
 //char		**run_lexer(t_cmd_input *cmd);
 int			read_prompt(t_cmd_input *data);
 //char		*add_space(t_cmd_input *cmd);
-void		add_space(t_cmd_input *cmd);
+char		*add_space(t_cmd_input *cmd, t_data *data);
 int			word_count(char *str, char delimiter);
 char		*word_dup(char *str, int len);
 

@@ -31,7 +31,7 @@ static int find_word_end(char *str, char delimiter, int start)
 	// Check if quotes were properly closed
 	if (in_quote)
 	{
-		ft_putstr_fd("minishell: quotes are not closed\n", 2);
+		ft_putstr_fd("minishell: quotes are not closed 1\n", 2);
 		//handle_error_arg(data, "syntax error", ": unclosed quotes\n", 2); Think how to use this function
 		return -1;
 	}

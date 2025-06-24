@@ -52,7 +52,7 @@ void	shell_loop(t_data *data)
 			continue ;
 		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
-		split_input = preprocess_input(cmd_input.input);
+		split_input = preprocess_input(cmd_input.input, data);
 		if (!split_input) // This will be NULL if fmt_quotes found an error
 		{
 			free(cmd_input.input);
