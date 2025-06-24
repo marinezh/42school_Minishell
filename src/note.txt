@@ -8,3 +8,9 @@ check on linux
 history works only for successfull commands 
 
 //////////////////////////////////////////
+
+minishell$ env | grep USER
+USER=mzhivoto
+PYTHONUSERBASE=/var/data/python
+
+///////////////////////////////////////////

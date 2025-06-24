@@ -88,11 +88,11 @@ void	shell_loop(t_data *data)
 		tokens = handle_word_splitting(tokens);
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
-		print_commands(commands);
+		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
-		printf("/////////////////////\n");
-		print_commands(commands);
-		printf("/////////////////////\n");
+		//printf("/////////////////////\n");
+		//print_commands(commands);
+		//printf("/////////////////////\n");
 		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list

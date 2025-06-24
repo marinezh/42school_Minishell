@@ -99,8 +99,8 @@ char **preprocess_input(char *input, t_data *data)
 	}
 	free(spaced);
 	// FOR DEBUGGIN , delete later
-	for (int j = 0; split_input[j]; j++)
-	printf("token[%d] = [%s]\n", j, split_input[j]);
+	// for (int j = 0; split_input[j]; j++)
+	// printf("token[%d] = [%s]\n", j, split_input[j]);
 	
 	return split_input;
 }
