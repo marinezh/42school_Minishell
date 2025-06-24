@@ -1,82 +1,34 @@
 #include "minishell.h"
 
-// int	read_prompt(t_cmd_input *cmd)
-// {
-// 	sig_received = 0;
-// 	cmd->input = readline("minishell$ ");
-// 	char *check = ft_strdup(cmd->input);
-// 	free(cmd->input);
-// 	cmd->input = check;
-// 	if (sig_received)
-// 	{
-// 		if (cmd->input)
-// 		{
-// 			free(cmd->input);
-// 			cmd->input = NULL;
-// 		}
-// 		return (0);
-// 	}
-// 	if (!cmd->input)
-// 	{
-// 		printf("exit\n");
-// 		return (-1);
-// 	}
-// 	if (cmd->input[0] == '\0')
-// 	{
-// 		free(cmd->input);
-// 		cmd->input = NULL;
-// 		return (0);
-// 	}
-// 	return (1);
-// }
-
 int	read_prompt(t_cmd_input *cmd)
 {
-	char	*line;
-
 	sig_received = 0;
-
-	if (isatty(STDIN_FILENO))
-	{
-		line = readline("minishell$ ");
-	}
-	else
-	{
-		line = get_next_line(STDIN_FILENO);
-		if (line)
-		{
-			// Remove trailing newline added by get_next_line
-			size_t len = ft_strlen(line);
-			if (len > 0 && line[len - 1] == '\n')
-				line[len - 1] = '\0';
-		}
-	}
-	// Handle EOF or Ctrl+D
-	if (!line)
-	{
-		if (isatty(STDIN_FILENO))
-			printf("exit\n");
-		return (-1);
-	}
-
+	cmd->input = readline("minishell$ ");
+	//char *check = ft_strdup(cmd->input);
+	//free(cmd->input);
+	//cmd->input = check;
 	if (sig_received)
 	{
-		free(line);
-		cmd->input = NULL;
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
 		return (0);
 	}
-	// Empty line (e.g., user just pressed Enter)
-	if (line[0] == '\0')
+	if (!cmd->input)
 	{
-		free(line);
+		printf("exit\n");
+		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		free(cmd->input);
 		cmd->input = NULL;
 		return (0);
 	}
-
-	cmd->input = line;
 	return (1);
 }
-
 
 void	shell_loop(t_data *data)
 {
@@ -100,7 +52,7 @@ void	shell_loop(t_data *data)
 			continue ;
 		}
 		// tokens_lexer = run_lexer(&cmd_input); and this?
-		split_input = preprocess_input(cmd_input.input);
+		split_input = preprocess_input(cmd_input.input, data);
 		if (!split_input) // This will be NULL if fmt_quotes found an error
 		{
 			free(cmd_input.input);

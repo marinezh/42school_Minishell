@@ -1,48 +1,62 @@
 #include <minishell.h>
 
-int	copy_quoted_seg(char *input, char *output, int *i, int *j)
+int word_count(char *str, char delimiter)
 {
-	char quote; 
-	
-	quote = input[*i]; 
-	output[*j] = input[*i]; // copy openning quotes
-	(*i)++;
-	(*j)++;
-	while (input[*i] && input[*i] != quote) // copy everything in qutes
+	int i = 0;
+	int count = 0;
+	int in_word = 0;
+
+	if (!str || !*str)
+		return 0;
+	// Special case: if string has no delimiter, return 1
+	// if (!strchr(str, delimiter)) //double check , do i need this ?
+	// 	return 1;
+	while (str[i])
 	{
-		output[*j] = input[*i];
-		(*i)++;
-		(*j)++;
+		if(str[i] == delimiter)
+			in_word = 0;
+		else if (!in_word)
+		{
+			in_word = 1;
+			count++;
+		}
+		i++;
 	}
-	if (input[*i] != quote)
+	//printf("count %d\n", count);
+	return count;
+}
+char *word_dup(char *str, int len)
+{
+	int i = 0;
+	char *word = (char *)malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return NULL;
+	while(i < len)
 	{
-		ft_putstr_fd("minishell:quotes are not closed", 2);
-		//ft_putstr_fd(ERR_QUOTES, 2);
-		return (ERR_PARSER);
+		word[i] = str[i];
+		i++;
 	}
-	output[*j] = input[*i]; // copy closing quotes
-	(*i)++;
-	(*j)++;
-	return (0);
+	word[len] = '\0';
+	return word;
 }
 
-int skip_quoted_seg(char *input, int *i)
-{
-	char quote; 
+// int skip_quoted_seg(char *input, int *i)
+// {
+// 	char quote; 
 	
-	quote = input[*i];
-	(*i)++; // skip openning quote
-	while (input[*i] && input[*i] != quote)
-		(*i)++;
-	if (!input[*i])
-	{
-		ft_putstr_fd("minishell:quotes are not closed", 2);
-		//ft_putstr_fd(ERR_QUOTES, 2);
-		return (-1);
-	}
-	(*i)++; // skip closing quote
-	return (0);
-}
+// 	quote = input[*i];
+// 	(*i)++; // skip openning quote
+// 	while (input[*i] && input[*i] != quote)
+// 		(*i)++;
+// 	if (!input[*i])
+// 	{
+// 		ft_putstr_fd("minishell:quotes are not closed", 2);
+// 		//ft_putstr_fd(ERR_QUOTES, 2);
+// 		return (-1);
+// 	}
+// 	(*i)++; // skip closing quote
+// 	return (0);
+// }
 
 void	error_msg(char *msg)
 {

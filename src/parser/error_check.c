@@ -1,5 +1,22 @@
 #include "minishell.h"
+int check_unclosed_quotes(char *str)
+{
+	int i = 0;
+	char quote = 0;
 
+	while (str[i])
+	{
+		if ((str[i] == '\'' || str[i] == '"'))
+		{
+			if (!quote)
+				quote = str[i];
+			else if (str[i] == quote)
+				quote = 0;
+		}
+		i++;
+	}
+	return (quote != 0);
+}
 
 int error_check(t_token *token, t_data *data)
 {
@@ -11,6 +28,12 @@ int error_check(t_token *token, t_data *data)
 	}
 	while(token)
 	{
+		if (token->value && check_unclosed_quotes(token->value))
+		{
+			handle_error_arg(data, "", "minishell: unclosed quotes !!!", 2);
+			return (1);
+		}
+		
 		if(token->type == PIPE && (!token->next || token->next->type == PIPE))
 		{
 			handle_error_arg(data, "", ERR_PARSING_PIPE, 2);
