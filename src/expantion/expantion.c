@@ -147,64 +147,154 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 }
 
 // 
+// int expand_variables(t_token *token, t_data *data)
+// {
+// 	t_token	*current;
+// 	int		i;
+// 	int		in_single;
+// 	int		in_double;
+
+// 	current = token;
+// 	while (current)
+// 	{
+// 		if (current->type == WORD || current->type == FILE_NAME)
+// 		{
+// 			i = 0;
+// 			in_single = 0;
+// 			in_double = 0;
+
+// 			while (current->value[i])
+// 			{
+// 				if  (current->value[i] == '$' && current->value[i+1] == '\"')
+// 				{
+//         			// Skip the $ but keep the quote for quote tracking
+//     				i++;
+// 				    continue;		
+// 				}
+// 				// Toggle quote state
+// 				if (current->value[i] == '\'' && !in_double)
+// 				{
+// 					in_single = !in_single;
+// 					i++;
+// 					continue;
+// 				}
+// 				else if (current->value[i] == '\"' && !in_single)
+// 				{
+// 					in_double = !in_double;
+// 					i++;
+// 					continue;
+// 				}
+
+// 				// ✅ Changed: use new logic to handle all variable cases
+// 				if (should_expand_variable(&current->value[i], in_single))
+// 				{
+// 					// Handle special case of $?
+// 					if (current->value[i + 1] == '?')
+// 					{
+// 						if (!handle_status_var(current, data->status, &i))
+// 						{
+// 							handle_error_arg(data, "memory", ": allocation failed\n", 1);
+// 							return (0);
+// 						}
+// 					}
+// 					// Handle regular environment variables
+// 					else
+// 					{
+// 						if (!handle_expantion(current, data, &i))
+// 							return (0);
+// 					}
+// 					continue;
+// 				}
+
+// 				// If no expansion, just move forward
+// 				i++;
+// 			}
+// 		}
+// 		current = current->next;
+// 	}
+// 	return (1);
+// }
 int expand_variables(t_token *token, t_data *data)
 {
-	t_token	*current;
-	int		i;
-	int		in_single;
-	int		in_double;
+    t_token *current;
+    int i;
+    int in_single;
+    int in_double;
+    int in_dollar_quote;  // New flag to track $"..." construct
 
-	current = token;
-	while (current)
-	{
-		if (current->type == WORD || current->type == FILE_NAME)
-		{
-			i = 0;
-			in_single = 0;
-			in_double = 0;
+    current = token;
+    while (current)
+    {
+        if (current->type == WORD || current->type == FILE_NAME)
+        {
+            i = 0;
+            in_single = 0;
+            in_double = 0;
+            in_dollar_quote = 0;  // Initialize new flag
 
-			while (current->value[i])
-			{
-				// Toggle quote state
-				if (current->value[i] == '\'' && !in_double)
-				{
-					in_single = !in_single;
-					i++;
-					continue;
-				}
-				else if (current->value[i] == '\"' && !in_single)
-				{
-					in_double = !in_double;
-					i++;
-					continue;
-				}
+            // Special handling for tokens that start with $"
+            if (current->value[0] == '$' && current->value[1] == '\"')
+            {
+                // Remove the leading $ by shifting everything left
+                memmove(current->value, current->value + 1, strlen(current->value));
+                in_dollar_quote = 1;  // Mark that we're in a $" construct
+            }
 
-				// ✅ Changed: use new logic to handle all variable cases
-				if (should_expand_variable(&current->value[i], in_single))
-				{
-					// Handle special case of $?
-					if (current->value[i + 1] == '?')
-					{
-						if (!handle_status_var(current, data->status, &i))
-						{
-							handle_error_arg(data, "memory", ": allocation failed\n", 1);
-							return (0);
-						}
-					}
-					// Handle regular environment variables
-					else
-					{
-						if (!handle_expantion(current, data, &i))
-							return (0);
-					}
-					continue;
-				}
+            while (current->value[i])
+            {
+                // Check for embedded $" patterns (not at start)
+                if (i > 0 && current->value[i] == '$' && current->value[i+1] == '\"' 
+                    && !in_single && !in_double)
+                {
+                    // Remove the $ by shifting everything after it to the left
+                    memmove(&current->value[i], &current->value[i+1], 
+                           strlen(&current->value[i+1]) + 1);
+                    in_dollar_quote = 1;
+                    continue;  // Re-process the current position (now a quote)
+                }
 
-				// If no expansion, just move forward
-				i++;
-			}
-		}
-		current = current->next;
-	}
-	return (1);
+                // Toggle quote state
+                if (current->value[i] == '\'' && !in_double)
+                {
+                    in_single = !in_single;
+                    i++;
+                    continue;
+                }
+                else if (current->value[i] == '\"' && !in_single)
+                {
+                    in_double = !in_double;
+                    if (!in_double && in_dollar_quote)
+                        in_dollar_quote = 0;  // Exit $"..." construct
+                    i++;
+                    continue;
+                }
+
+                // Handle variable expansion - using existing code
+                if (should_expand_variable(&current->value[i], in_single))
+                {
+                    // Handle special case of $?
+                    if (current->value[i + 1] == '?')
+                    {
+                        if (!handle_status_var(current, data->status, &i))
+                        {
+                            handle_error_arg(data, "memory", ": allocation failed\n", 1);
+                            return (0);
+                        }
+                    }
+                    // Handle regular environment variables
+                    else
+                    {
+                        if (!handle_expantion(current, data, &i))
+                            return (0);
+                    }
+                    continue;
+                }
+
+                // If no expansion, just move forward
+                i++;
+            }
+        }
+        current = current->next;
+    }
+    return (1);
 }
