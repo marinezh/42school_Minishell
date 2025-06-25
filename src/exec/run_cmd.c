@@ -13,7 +13,7 @@ pid_t	create_process(void)
 	return (pid);
 }
 
-void	handle_child_process(t_data *data, char *path, char **args)
+void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 {
 	char	**envp;
 
@@ -22,6 +22,8 @@ void	handle_child_process(t_data *data, char *path, char **args)
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");
+		cleanup_process_data(data);
+		free_command_list(cmd);
 		if (errno == ENOENT)
 			exit(ERR_CMD_NOT_FOUND);
 		else if (errno == EACCES)
@@ -29,6 +31,9 @@ void	handle_child_process(t_data *data, char *path, char **args)
 		else
 			exit(ERR_GENERIC);
 	}
+	cleanup_process_data(data);
+	free_command_list(cmd);
+	exit(0);
 }
 
 int	handle_parent_process(pid_t pid)
@@ -67,9 +72,9 @@ int	execute_cmd(t_data *data, t_command *cmd, char *path)
 	exit_code = 0;
 	pid = create_process();
 	if (pid == -1)
-		return (-1);
+		return (1);
 	if (pid == 0)
-		handle_child_process(data, path, cmd->args);
+		handle_child_process(data, cmd, path, cmd->args);
 	else
 		exit_code = handle_parent_process(pid);
 	return (exit_code);

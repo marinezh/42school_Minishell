@@ -50,7 +50,7 @@ int	has_heredoc(t_data *data, t_command *cmd)
 		{
 			if (cur_redir->type == HEREDOC)
 			{
-				if (process_heredoc(data, cur_redir) == -1)
+				if (process_heredoc(data, cmd, cur_redir) == -1)
 					return (-1);
 			}
 			cur_redir = cur_redir->next;
@@ -78,10 +78,7 @@ void	execute(t_data *data, t_command *cmd)
 		}
 	}
 	if (has_heredoc(data, cmd) == -1)
-	{
-		data->status = ERR_GENERIC;
 		return ;
-	}
 	cmd_count = count_commands(cmd);
 	if (cmd_count > 1)
 		run_pipes(data, cmd, cmd_count);
