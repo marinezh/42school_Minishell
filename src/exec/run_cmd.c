@@ -31,9 +31,9 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 		else
 			exit(ERR_GENERIC);
 	}
-	cleanup_process_data(data);
-	free_command_list(cmd);
-	exit(0);
+	// cleanup_process_data(data);
+	// free_command_list(cmd);
+	// exit(0);
 }
 
 int	handle_parent_process(pid_t pid)
