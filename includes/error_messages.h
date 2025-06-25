@@ -11,6 +11,10 @@
 # define ERR_QUOTES "Quotes are not closed\n"
 # define ERR_PARSING_PIPE "syntax error near unexpected token `|'\n"
 # define ERR_PARSING_RED "syntax error near unexpected token `newline'\n"
+# define ERR_PARSING_OUT "syntax error near unexpected token `>'\n"
+# define ERR_PARSING_IN "syntax error near unexpected token `<'\n"
+# define ERR_PARSING_APP "syntax error near unexpected token `>>'\n"
+# define ERR_PARSING_HER "syntax error near unexpected token `<<'\n"
 # define MSG_IS_DIR ": Is a directory\n"
 
 #endif
