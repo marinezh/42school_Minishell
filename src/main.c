@@ -107,6 +107,7 @@ void	shell_loop(t_data *data)
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
+		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
 		//print_commands(commands);
 		add_history(cmd_input.input);
@@ -117,27 +118,7 @@ void	shell_loop(t_data *data)
 	}
 }
 
-// int	main(int ac, char **av, char **env)
-// {
-// 	t_data	data;
 
-// 	(void)av;
-// 	if (ac < 1)
-// 		return (1);
-// 	// init struct where env are stored
-// 	if (init_data(&data, env) != 0)
-// 	{
-// 		ft_putstr_fd("Error initializing shell environment\n", 2);
-// 		return (1);
-// 	}
-// 	set_prompt_signals();
-// 	shell_loop(&data);
-// 	// clean struct where env are stored
-// 	free_env_list(&data.envp_list);
-// 	free_double_array(data.envp);
-// 	//rl_clear_history();
-// 	return (data.status);
-// }
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;

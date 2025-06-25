@@ -94,8 +94,8 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	// printf("Var value length: %zu\n", strlen(var_value));
 	if (node && node->value)
 	{
-		//printf("var_value %s\n", node->value);
-		//printf("Found variable %s = %s\n", var_name, node->value);
+		// printf("var_value %s\n", node->value);
+		// printf("Found variable %s = %s\n", var_name, node->value);
 		if (!replace_variable(token, *i, ft_strlen(var_name), node->value))
 		{
 				handle_error_arg(data, "memory", ": allocation failed\n", 1);

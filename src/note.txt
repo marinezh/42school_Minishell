@@ -8,3 +8,17 @@ check on linux
 history works only for successfull commands 
 
 //////////////////////////////////////////
+
+minishell$ env | grep USER
+USER=mzhivoto
+PYTHONUSERBASE=/var/data/python
+
+///////////////////////////////////////////
+
+echo hi |  "|" 
+minishell$ echo hi |  "|" 
+minishell: |: command not found
+minishell$ echo $?
+0        // should be 127
+
+//////////////////////////////////////////////

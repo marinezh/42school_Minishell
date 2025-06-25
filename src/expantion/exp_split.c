@@ -217,7 +217,7 @@ t_token *handle_word_splitting(t_token *tokens)
 				if (new_tokens)
 				{
 					// DEBUG PRINT: Show what was split
-					// printf("Split and replaced token with: ");
+					//printf("Split and replaced token with: ");
 					// for (t_token *t = new_tokens; t && t != next; t = t->next)
 					// 	printf("[%s] ", t->value);
 					// printf("\n");
