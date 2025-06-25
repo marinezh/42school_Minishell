@@ -90,7 +90,7 @@ char **preprocess_input(char *input, t_data *data)
 	if (!spaced)
 		return NULL; // error msg comes from add_space
 	//printf("new input: %s\n", cmd.spaced);
-	split_input = quote_safe_split(spaced, ' ');
+	split_input = quote_safe_split(spaced);
 	if (!split_input)
 	{
 		ft_putstr_fd("minishell: splitting input failed QUOTES\n", 2);
@@ -98,7 +98,7 @@ char **preprocess_input(char *input, t_data *data)
 		return (NULL);
 	}
 	free(spaced);
-	// FOR DEBUGGIN , delete later
+	//FOR DEBUGGIN , delete later
 	// for (int j = 0; split_input[j]; j++)
 	// printf("token[%d] = [%s]\n", j, split_input[j]);
 	

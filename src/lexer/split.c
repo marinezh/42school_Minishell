@@ -15,13 +15,13 @@ static int process_quote_segment(char *str, int *j, int *in_quote, char *quote_c
 	return 0;
 }
 // Helper function to find the end of a word
-static int find_word_end(char *str, char delimiter, int start)
+static int find_word_end(char *str, int start)
 {
 	int j = start;
 	int in_quote = 0;
 	char quote_char = 0;
 
-	while (str[j] && (in_quote || str[j] != delimiter))
+	while (str[j] && (in_quote || !is_whitespace(str[j])))
 	{
 		if (str[j] == '\'' || str[j] == '\"')
 			process_quote_segment(str, &j, &in_quote, &quote_char);
@@ -57,24 +57,30 @@ static char **handle_split_error(char **result, int i)
 	free_split_result(result, i);
 	return NULL;
 }
-char **quote_safe_split(char *str, char del)
+int is_whitespace(char c)
+{
+    return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f');
+}
+
+
+char **quote_safe_split(char *str)
 {
 	char **res;
 	t_split_data pos;
 
-	res = (char **)malloc(sizeof(char *) * (word_count(str, del) + 1));
+	res = (char **)malloc(sizeof(char *) * (word_count(str) + 1));
 	pos.i = 0;
 	pos.j = 0;
 	if (!res)
 		return NULL;
 	while (str[pos.j])
 	{
-		while (str[pos.j] && str[pos.j] == del)
+		while (str[pos.j] && (is_whitespace(str[pos.j])))
 			pos.j++;
 		if (str[pos.j])
 		{
 			pos.start = pos.j;
-			pos.end = find_word_end(str, del, pos.start);
+			pos.end = find_word_end(str, pos.start);
 			if (pos.end == -1)
 				return handle_split_error(res, pos.i);
 			if (!add_word_to_res(res, pos.i, &str[pos.start], pos.end - pos.start))

@@ -47,6 +47,33 @@
 // 	free(parts.new_value);
 // 	return (1);
 // }
+
+
+int should_expand_variable(const char *str, int in_single)
+{
+	if (!str || !str[0] || str[0] != '$')
+		return (0);
+
+	// Inside single quotes, variables are not expanded
+	if (in_single)
+		return (0);
+
+	// Handle $' or $" (skip expansion, treat as literal)
+	if (str[1] == '\'' || str[1] == '\"')
+		return (0);
+
+	// Handle special case of $? (allowed)
+	if (str[1] == '?')
+		return (1);
+
+	// Check if valid variable name starts
+	if (ft_isalpha(str[1]) || str[1] == '_')
+		return (1);
+
+	// Otherwise, invalid variable start (e.g. space, punctuation, digit)
+	return (0);
+}
+
 static int	handle_status_var(t_token *token, int status, int *i)
 {
 	t_exp_parts	parts;
@@ -119,7 +146,8 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	return (1);
 }
 
-int	expand_variables(t_token *token, t_data *data)
+// 
+int expand_variables(t_token *token, t_data *data)
 {
 	t_token	*current;
 	int		i;
@@ -151,25 +179,28 @@ int	expand_variables(t_token *token, t_data *data)
 					continue;
 				}
 
-				// Handle special variable $?
-				if (current->value[i] == '$' && current->value[i + 1] == '?' && !in_single)
+				// ✅ Changed: use new logic to handle all variable cases
+				if (should_expand_variable(&current->value[i], in_single))
 				{
-					if (!handle_status_var(current, data->status, &i))
+					// Handle special case of $?
+					if (current->value[i + 1] == '?')
 					{
-						handle_error_arg(data, "memory", ": allocation failed\n", 1);
-						return (0);
+						if (!handle_status_var(current, data->status, &i))
+						{
+							handle_error_arg(data, "memory", ": allocation failed\n", 1);
+							return (0);
+						}
+					}
+					// Handle regular environment variables
+					else
+					{
+						if (!handle_expantion(current, data, &i))
+							return (0);
 					}
 					continue;
 				}
 
-				// Handle regular variables
-				else if (current->value[i] == '$' && current->value[i + 1] && !in_single)
-				{
-					if (!handle_expantion(current, data, &i))
-						return (0);
-					continue;
-				}
-
+				// If no expansion, just move forward
 				i++;
 			}
 		}

@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-int word_count(char *str, char delimiter)
+int word_count(char *str)
 {
 	int i = 0;
 	int count = 0;
@@ -13,7 +13,7 @@ int word_count(char *str, char delimiter)
 	// 	return 1;
 	while (str[i])
 	{
-		if(str[i] == delimiter)
+		if(is_whitespace(str[i]))
 			in_word = 0;
 		else if (!in_word)
 		{

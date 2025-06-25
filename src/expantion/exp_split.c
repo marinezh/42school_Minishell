@@ -197,7 +197,7 @@ t_token *handle_word_splitting(t_token *tokens)
 			//printf("XXX there is a space found in token: [%s]\n", current->value);
 
 			// Split the token value by spaces
-			char **split = quote_safe_split(current->value, ' ');
+			char **split = quote_safe_split(current->value);
 			if (!split)
 			{
 				// If splitting failed, skip to next token

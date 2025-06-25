@@ -4,34 +4,34 @@ int	read_prompt(t_cmd_input *cmd)
 {
 	sig_received = 0;
 
-	/////////////////////////////////////////////////////////////
-	// THIS IS OUR MAIN 
-	// cmd->input = readline("minishell$ ");
-	// //char *check = ft_strdup(cmd->input);
-	// //free(cmd->input);
-	// //cmd->input = check;
-	// if (sig_received)
-	// {
-	// 	if (cmd->input)
-	// 	{
-	// 		free(cmd->input);
-	// 		cmd->input = NULL;
-	// 	}
-	// 	return (0);
-	// }
-	// if (!cmd->input)
-	// {
-	// 	printf("exit\n");
-	// 	return (-1);
-	// }
-	// if (cmd->input[0] == '\0')
-	// {
-	// 	free(cmd->input);
-	// 	cmd->input = NULL;
-	// 	return (0);
-	// }
-	///////////////////////////////////////////////////////
-	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+// 	/////////////////////////////////////////////////////////////
+// 	// THIS IS OUR MAIN 
+// 	// cmd->input = readline("minishell$ ");
+// 	// //char *check = ft_strdup(cmd->input);
+// 	// //free(cmd->input);
+// 	// //cmd->input = check;
+// 	// if (sig_received)
+// 	// {
+// 	// 	if (cmd->input)
+// 	// 	{
+// 	// 		free(cmd->input);
+// 	// 		cmd->input = NULL;
+// 	// 	}
+// 	// 	return (0);
+// 	// }
+// 	// if (!cmd->input)
+// 	// {
+// 	// 	printf("exit\n");
+// 	// 	return (-1);
+// 	// }
+// 	// if (cmd->input[0] == '\0')
+// 	// {
+// 	// 	free(cmd->input);
+// 	// 	cmd->input = NULL;
+// 	// 	return (0);
+// 	// }
+// 	///////////////////////////////////////////////////////
+// 	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
 	char *line;
 	if (isatty(STDIN_FILENO))
 	{
@@ -69,9 +69,9 @@ int	read_prompt(t_cmd_input *cmd)
 		return (0);
 	}
 	cmd->input = line;
-	//END OF PART FOR BIG TESTER
-	///////////////////////////////////////////////////////////	
-	return (1);
+// 	//END OF PART FOR BIG TESTER
+// 	///////////////////////////////////////////////////////////	
+ 	return (1);
 }
 
 void	shell_loop(t_data *data)
@@ -109,7 +109,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue;
 		}
-		//printf("PURE TOKENS\n");
+		// printf("PURE TOKENS\n");
 		//print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
@@ -119,6 +119,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
+	
 		if (!expand_variables(tokens, data))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
@@ -132,9 +133,9 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
-		//printf("/////////////////////\n");
+		// printf("/////////////////////\n");
 		//print_commands(commands);
-		//printf("/////////////////////\n");
+		// printf("/////////////////////\n");
 		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
