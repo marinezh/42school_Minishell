@@ -79,7 +79,7 @@ char	*process_binary(t_data *data, char *path)
 	return (NULL);
 }
 
-void	run_external(t_data *data, t_command *cmd)
+int	run_external(t_data *data, t_command *cmd)
 {
 	char	*path;
 	char	*path_to_free;
@@ -96,11 +96,12 @@ void	run_external(t_data *data, t_command *cmd)
 			handle_error_arg(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127);
 	}
 	if (!path)
-		return ;
+		return (127);
 	exit_status = execute_cmd(data, cmd, path);
 	data->status = exit_status;
 	if (path_to_free)
 		free(path_to_free);
+	return (exit_status);
 }
 
 // bash command - test -x filename.c

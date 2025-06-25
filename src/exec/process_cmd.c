@@ -65,13 +65,15 @@ int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
 	return (0);
 }
 
-void	process_cmd(t_data *data, t_command *cmd)
+int	process_cmd(t_data *data, t_command *cmd)
 {
-	int	builtin_status;
+	// int	builtin_status;
 	int	orig_stdin;
 	int	orig_stdout;
 	int	is_redir;
+	int exit_status;
 
+	exit_status = 0;
 	is_redir = 0;
 	if (cmd->redirections)
 	{
@@ -79,15 +81,16 @@ void	process_cmd(t_data *data, t_command *cmd)
 		if (redirect_io(data, cmd, &orig_stdin, &orig_stdout) == -1)
 		{
 			data->status = 1;
-			return ;
+			return (1);
 		}
 	}
 	if (cmd->args)
 	{
-		builtin_status = run_bltin(data, cmd);
-		if (builtin_status == -1)
-			run_external(data, cmd);
+		exit_status = run_bltin(data, cmd);
+		if (exit_status == -1)
+			exit_status = run_external(data, cmd);
 	}
 	if (is_redir)
 		restore_streams(data, orig_stdin, orig_stdout);
+	return (exit_status);
 }

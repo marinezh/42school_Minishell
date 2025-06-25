@@ -20,14 +20,15 @@ void	print_error(char **args, char *msg)
 {
 	int i;
 
-	printf("usage: ");
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd("usage: ", STDERR_FILENO);
 	i = 0;
 	while (args[i])
 	{
-		printf("%s", args[i]);
+		ft_putstr_fd(args[i], STDERR_FILENO);
 		if (args[i + 1])
-			printf(" ");
+			ft_putstr_fd(" ", STDERR_FILENO);
 		i++;
 	}
-	printf("%s", msg);
+	ft_putstr_fd(msg, STDERR_FILENO);
 }
