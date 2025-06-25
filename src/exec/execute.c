@@ -63,7 +63,9 @@ int	has_heredoc(t_data *data, t_command *cmd)
 void	execute(t_data *data, t_command *cmd)
 {
 	int	cmd_count;
+	int	status;
 
+	status = 0;
 	if (!cmd)
 	{
 		data->status = ERR_GENERIC;
@@ -83,7 +85,10 @@ void	execute(t_data *data, t_command *cmd)
 	if (cmd_count > 1)
 		run_pipes(data, cmd, cmd_count);
 	else
-		process_cmd(data, cmd);
+	{		
+		status = process_cmd(data, cmd);
+		data->status = status;
+	}
 }
 //**command not found -> status changes to 127, but not exit bash
 

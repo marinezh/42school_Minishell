@@ -114,12 +114,12 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 				close(fds[j][1]);
 				j++;
 			}
-			process_cmd(data, cur_cmd);
+			exit_code = process_cmd(data, cur_cmd);
 			cleanup_process_data(data);
 			free(pids);
 			free_fds(fds, cmd_count - 2);
 			free_command_list(cmd);
-			exit(0);
+			exit(exit_code);
 		}
 		cur_cmd = cur_cmd->next;
 		i++;
@@ -132,12 +132,12 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		i++;
 	}
 	i = 0;
-	while (i < cmd_count)
+	while (i < cmd_count - 1)
 	{
-		exit_code = handle_parent_process(pids[i]);
-		data->status = exit_code;
+		handle_parent_process(pids[i]);
 		i++;
 	}
+	data->status = handle_parent_process(pids[cmd_count - 1]);
 	free(pids);
 	free_fds(fds, cmd_count - 2);
 	return (0);
