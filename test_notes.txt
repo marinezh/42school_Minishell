@@ -1,0 +1,24 @@
+             TOTAL TEST COUNT: 941  TESTS PASSED: 398  LEAKING: 28 
+                     STD_OUT: 346  STD_ERR: 129  EXIT_CODE: 337  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 812   
+                                     ✅ 2011  
+/////////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 483  LEAKING: 0 //run without leaks
+                     STD_OUT: 241  STD_ERR: 129  EXIT_CODE: 337  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 707   
+                                     ✅ 2116  
+////////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 548  LEAKING: 0  // run without leaks
+                     STD_OUT: 192  STD_ERR: 84  EXIT_CODE: 280  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 556   
+                                     ✅ 2267 
+//////////////////////////////////////////////////////////////////////////////////
+           TOTAL TEST COUNT: 941  TESTS PASSED: 548  LEAKING: 0 
+                     STD_OUT: 180  STD_ERR: 74  EXIT_CODE: 280  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 534   
+                                     ✅ 2289 
+///////////////////////////////////////////////////////////////////////////////////
