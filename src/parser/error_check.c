@@ -58,10 +58,11 @@ int error_check(t_token *token, t_data *data)
 		}
 	
         // Handle the special case of REDIR_APPEND followed by REDIR_OUT >>> case 
-        else if (token->type == REDIR_APPEND && token->next && token->next->type == REDIR_OUT)
+        else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND || token->type == REDIR_IN || token->type == HEREDOC)
+				 && token->next && (token->next->type == REDIR_OUT))
         {
-            handle_error_arg(data, "", ERR_PARSING_RED2, 2);
-			printf(" syntax error near unexpected token `>'\n");
+            handle_error_arg(data, "", ERR_PARSING_OUT, 2);
+			//printf(" syntax error near unexpected token `>'\n");
 			//printf(">>>\n");
             return 1;
         }
@@ -77,18 +78,26 @@ int error_check(t_token *token, t_data *data)
 		// 	//printf("FOUR\n");
 		// 	return (1);
 		// }
-		else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND) && token->next && (token->next->type == REDIR_OUT))
+		else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND || token->type == REDIR_IN || token->type == HEREDOC) && token->next && (token->next->type == REDIR_APPEND))
 		{
-			handle_error_arg(data, "", ERR_PARSING_RED2, 2);
-			printf(" syntax error near unexpected token `>'\n");
+			handle_error_arg(data, "", ERR_PARSING_APP, 2);
+			//printf(" syntax error near unexpected token `>'\n");
 		// 	//data->status = 2;
 		// 	//printf("FOUR\n");
 			return (1);
 		}
-		else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND) && token->next && (token->next->type == REDIR_APPEND))
+		else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND || token->type == REDIR_IN || token->type == HEREDOC) && token->next && (token->next->type == REDIR_IN))
 		{
-			handle_error_arg(data, "", ERR_PARSING_RED2, 2);
-			printf(" syntax error near unexpected token `>>'\n");
+			handle_error_arg(data, "", ERR_PARSING_IN, 2);
+			//printf(" syntax error near unexpected token `>>'\n");
+		// 	//data->status = 2;
+		// 	//printf("FOUR\n");
+			return (1);
+		}
+		else if ((token->type == REDIR_OUT || token->type == REDIR_APPEND || token->type == REDIR_IN || token->type == HEREDOC) && token->next && (token->next->type == HEREDOC))
+		{
+			handle_error_arg(data, "", ERR_PARSING_HER, 2);
+			//printf(" syntax error near unexpected token `>>'\n");
 		// 	//data->status = 2;
 		// 	//printf("FOUR\n");
 			return (1);
