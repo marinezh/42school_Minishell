@@ -20,8 +20,6 @@ void	update_var_value(t_data *data, t_env *env_var, char *arg)
 		data->envp_f = 1;
 	}
 }
-//if there is no '=' in args and var exit - do nothing (like export HOME)
-
 
 void	create_env_var(t_data *data, char *arg)
 {
@@ -35,7 +33,7 @@ void	create_env_var(t_data *data, char *arg)
 	}
 }
 
-int	is_var_name_valid(char *arg, char **args, int *special_var)
+int	is_var_name_valid(char *arg, int *special_var)
 {
 	int	i;
 
@@ -45,18 +43,12 @@ int	is_var_name_valid(char *arg, char **args, int *special_var)
         return(1);
     }
 	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
-	{
-		print_error(args, ": variable name is invalid\n");
 		return (0);
-	}
 	i = 1;
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!(ft_isalpha(arg[i]) || ft_isdigit(arg[i]) || arg[i] == '_'))
-		{
-			print_error(args, ": variable name is invalid\n");
 			return (0);
-		}
 		i++;
 	}
 	return (1);
@@ -76,9 +68,12 @@ int	ft_export(t_data *data, t_command *cmd)
 {
 	int		i;
     int     special_var;
+	int		had_error;
+	char	*cmd_name;
 
 	i = 1;
     special_var = 0;
+	had_error = 0;
 	if (!cmd->args[1])
 		return (print_current_envp(data, cmd));
 	else
@@ -88,17 +83,25 @@ int	ft_export(t_data *data, t_command *cmd)
 			if (cmd->args[i][0] == '-')
 			{
 				print_error(cmd->args, MSG_NO_OPTIONS);
-				break ;
+				return (1);
 			}
-			if (!is_var_name_valid(cmd->args[i], cmd->args, &special_var))
-				break ;
+			if (!is_var_name_valid(cmd->args[i], &special_var))
+			{
+				cmd_name = ft_strjoin("export: ", cmd->args[i]);
+				print_error_msg(cmd_name, ": not a valid identifier\n");
+				free(cmd_name);
+				had_error = 1;
+				i++;
+				continue ;
+			}
             if (!special_var)
                 process_env_var(data, cmd->args[i]);
 			i++;
 		}
 	}
-	return (0);
+	return (had_error);
 }
+
 
 //export - prints variables in alphabetic order!
 //export -p - program notify about not-handling flags!
