@@ -3,30 +3,74 @@
 int	read_prompt(t_cmd_input *cmd)
 {
 	sig_received = 0;
-	cmd->input = readline("minishell$ ");
-	//char *check = ft_strdup(cmd->input);
-	//free(cmd->input);
-	//cmd->input = check;
-	if (sig_received)
+
+	/////////////////////////////////////////////////////////////
+	// THIS IS OUR MAIN 
+	// cmd->input = readline("minishell$ ");
+	// //char *check = ft_strdup(cmd->input);
+	// //free(cmd->input);
+	// //cmd->input = check;
+	// if (sig_received)
+	// {
+	// 	if (cmd->input)
+	// 	{
+	// 		free(cmd->input);
+	// 		cmd->input = NULL;
+	// 	}
+	// 	return (0);
+	// }
+	// if (!cmd->input)
+	// {
+	// 	printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (cmd->input[0] == '\0')
+	// {
+	// 	free(cmd->input);
+	// 	cmd->input = NULL;
+	// 	return (0);
+	// }
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	char *line;
+	if (isatty(STDIN_FILENO))
 	{
-		if (cmd->input)
-		{
-			free(cmd->input);
-			cmd->input = NULL;
-		}
-		return (0);
+		line = readline("minishell$ ");
 	}
-	if (!cmd->input)
+	else
 	{
-		printf("exit\n");
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			// Remove trailing newline added by get_next_line
+			size_t len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
+	}
+	// Handle EOF or Ctrl+D
+	if (!line)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
 		return (-1);
 	}
-	if (cmd->input[0] == '\0')
+	if (sig_received)
 	{
-		free(cmd->input);
+		free(line);
 		cmd->input = NULL;
 		return (0);
 	}
+	// Empty line (e.g., user just pressed Enter)
+	if (line[0] == '\0')
+	{
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+	cmd->input = line;
+	//END OF PART FOR BIG TESTER
+	///////////////////////////////////////////////////////////	
 	return (1);
 }
 
@@ -83,8 +127,6 @@ void	shell_loop(t_data *data)
     		free(cmd_input.input);
     		continue; // Skip to next prompt
 		}
-
-
 		tokens = handle_word_splitting(tokens);
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
