@@ -5,7 +5,7 @@ int ft_pwd(t_data *data, t_command *cmd)
 	t_env	*pwd_node;
 	char 	*pwd;
 
-    if (cmd->args[1])
+    if (cmd->args[1] && cmd->args[1][0] == '-')
 	{
 		print_error_msg("pwd", MSG_NO_OPTIONS);
 		return(ERR_GENERIC);

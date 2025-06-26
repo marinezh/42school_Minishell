@@ -47,9 +47,19 @@ void	print_export_format(char **envp)
 			value = NULL;
 		}
 		if (value)
-			printf("declare -x %.*s=\"%s\"\n", key_len, envp[i], value);
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			write(STDOUT_FILENO, envp[i], key_len);
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(value, STDOUT_FILENO);
+			ft_putstr_fd("\"\n", STDOUT_FILENO);
+		}
 		else
-			printf("declare -x %.*s\n", key_len, envp[i]);
+		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			write(STDOUT_FILENO, envp[i], key_len); 
+			ft_putstr_fd("\n", STDOUT_FILENO);
+		}
 		i++;
 	}
 }
