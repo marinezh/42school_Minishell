@@ -77,10 +77,13 @@ t_command *parse_tokens(t_token *token_list)
 	
 	while (token_list)
 	{
+		 ///printf("Processing token: %s of type %d\n", token_list->value, token_list->type);
 		if (!process_token(&current, &token_list, &head, &tail, &command_index))
 		{
-			free_command_list(head);
-			return (NULL);
+			//printf("Error processing token, freeing resources\n");
+            free_command_list(head);
+            free_tokens(token_list);
+            return NULL;
 		}
 	}
 	return (head);

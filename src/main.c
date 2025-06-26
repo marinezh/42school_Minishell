@@ -69,9 +69,9 @@ int	read_prompt(t_cmd_input *cmd)
 		return (0);
 	}
 	cmd->input = line;
-	//END OF PART FOR BIG TESTER
-	///////////////////////////////////////////////////////////	
-	return (1);
+// 	//END OF PART FOR BIG TESTER
+// 	///////////////////////////////////////////////////////////	
+ 	return (1);
 }
 
 void	shell_loop(t_data *data)
@@ -108,7 +108,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue;
 		}
-		//printf("PURE TOKENS\n");
+		// printf("PURE TOKENS\n");
 		//print_tokens(tokens);
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
@@ -118,6 +118,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
+	
 		if (!expand_variables(tokens, data))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
@@ -131,9 +132,9 @@ void	shell_loop(t_data *data)
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
-		//printf("/////////////////////\n");
+		// printf("/////////////////////\n");
 		//print_commands(commands);
-		//printf("/////////////////////\n");
+		// printf("/////////////////////\n");
 		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list

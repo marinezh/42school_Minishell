@@ -47,6 +47,33 @@
 // 	free(parts.new_value);
 // 	return (1);
 // }
+
+
+int should_expand_variable(const char *str, int in_single)
+{
+	if (!str || !str[0] || str[0] != '$')
+		return (0);
+
+	// Inside single quotes, variables are not expanded
+	if (in_single)
+		return (0);
+
+	// Handle $' or $" (skip expansion, treat as literal)
+	if (str[1] == '\'' || str[1] == '\"')
+		return (0);
+
+	// Handle special case of $? (allowed)
+	if (str[1] == '?')
+		return (1);
+
+	// Check if valid variable name starts
+	if (ft_isalpha(str[1]) || str[1] == '_')
+		return (1);
+
+	// Otherwise, invalid variable start (e.g. space, punctuation, digit)
+	return (0);
+}
+
 static int	handle_status_var(t_token *token, int status, int *i)
 {
 	t_exp_parts	parts;
@@ -119,61 +146,155 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	return (1);
 }
 
-int	expand_variables(t_token *token, t_data *data)
+// 
+// int expand_variables(t_token *token, t_data *data)
+// {
+// 	t_token	*current;
+// 	int		i;
+// 	int		in_single;
+// 	int		in_double;
+
+// 	current = token;
+// 	while (current)
+// 	{
+// 		if (current->type == WORD || current->type == FILE_NAME)
+// 		{
+// 			i = 0;
+// 			in_single = 0;
+// 			in_double = 0;
+
+// 			while (current->value[i])
+// 			{
+// 				if  (current->value[i] == '$' && current->value[i+1] == '\"')
+// 				{
+//         			// Skip the $ but keep the quote for quote tracking
+//     				i++;
+// 				    continue;		
+// 				}
+// 				// Toggle quote state
+// 				if (current->value[i] == '\'' && !in_double)
+// 				{
+// 					in_single = !in_single;
+// 					i++;
+// 					continue;
+// 				}
+// 				else if (current->value[i] == '\"' && !in_single)
+// 				{
+// 					in_double = !in_double;
+// 					i++;
+// 					continue;
+// 				}
+
+// 				// ✅ Changed: use new logic to handle all variable cases
+// 				if (should_expand_variable(&current->value[i], in_single))
+// 				{
+// 					// Handle special case of $?
+// 					if (current->value[i + 1] == '?')
+// 					{
+// 						if (!handle_status_var(current, data->status, &i))
+// 						{
+// 							handle_error_arg(data, "memory", ": allocation failed\n", 1);
+// 							return (0);
+// 						}
+// 					}
+// 					// Handle regular environment variables
+// 					else
+// 					{
+// 						if (!handle_expantion(current, data, &i))
+// 							return (0);
+// 					}
+// 					continue;
+// 				}
+
+// 				// If no expansion, just move forward
+// 				i++;
+// 			}
+// 		}
+// 		current = current->next;
+// 	}
+// 	return (1);
+// }
+int expand_variables(t_token *token, t_data *data)
 {
-	t_token	*current;
-	int		i;
-	int		in_single;
-	int		in_double;
+    t_token *current;
+    int i;
+    int in_single;
+    int in_double;
+    int in_dollar_quote;  // New flag to track $"..." construct
 
-	current = token;
-	while (current)
-	{
-		if (current->type == WORD || current->type == FILE_NAME)
-		{
-			i = 0;
-			in_single = 0;
-			in_double = 0;
+    current = token;
+    while (current)
+    {
+        if (current->type == WORD || current->type == FILE_NAME)
+        {
+            i = 0;
+            in_single = 0;
+            in_double = 0;
+            in_dollar_quote = 0;  // Initialize new flag
 
-			while (current->value[i])
-			{
-				// Toggle quote state
-				if (current->value[i] == '\'' && !in_double)
-				{
-					in_single = !in_single;
-					i++;
-					continue;
-				}
-				else if (current->value[i] == '\"' && !in_single)
-				{
-					in_double = !in_double;
-					i++;
-					continue;
-				}
+            // Special handling for tokens that start with $"
+            if (current->value[0] == '$' && current->value[1] == '\"')
+            {
+                // Remove the leading $ by shifting everything left
+                memmove(current->value, current->value + 1, strlen(current->value));
+                in_dollar_quote = 1;  // Mark that we're in a $" construct
+            }
 
-				// Handle special variable $?
-				if (current->value[i] == '$' && current->value[i + 1] == '?' && !in_single)
-				{
-					if (!handle_status_var(current, data->status, &i))
-					{
-						handle_error_arg(data, "memory", ": allocation failed\n", 1);
-						return (0);
-					}
-					continue;
-				}
+            while (current->value[i])
+            {
+                // Check for embedded $" patterns (not at start)
+                if (i > 0 && current->value[i] == '$' && current->value[i+1] == '\"' 
+                    && !in_single && !in_double)
+                {
+                    // Remove the $ by shifting everything after it to the left
+                    memmove(&current->value[i], &current->value[i+1], 
+                           strlen(&current->value[i+1]) + 1);
+                    in_dollar_quote = 1;
+                    continue;  // Re-process the current position (now a quote)
+                }
 
-				// Handle regular variables
-				else if (current->value[i] == '$' && current->value[i + 1] && !in_single)
-				{
-					if (!handle_expantion(current, data, &i))
-						return (0);
-					continue;
-				}
+                // Toggle quote state
+                if (current->value[i] == '\'' && !in_double)
+                {
+                    in_single = !in_single;
+                    i++;
+                    continue;
+                }
+                else if (current->value[i] == '\"' && !in_single)
+                {
+                    in_double = !in_double;
+                    if (!in_double && in_dollar_quote)
+                        in_dollar_quote = 0;  // Exit $"..." construct
+                    i++;
+                    continue;
+                }
 
-				i++;
-			}
-		}
-		current = current->next;
-	}
-	return (1);
+                // Handle variable expansion - using existing code
+                if (should_expand_variable(&current->value[i], in_single))
+                {
+                    // Handle special case of $?
+                    if (current->value[i + 1] == '?')
+                    {
+                        if (!handle_status_var(current, data->status, &i))
+                        {
+                            handle_error_arg(data, "memory", ": allocation failed\n", 1);
+                            return (0);
+                        }
+                    }
+                    // Handle regular environment variables
+                    else
+                    {
+                        if (!handle_expantion(current, data, &i))
+                            return (0);
+                    }
+                    continue;
+                }
+
+                // If no expansion, just move forward
+                i++;
+            }
+        }
+        current = current->next;
+    }
+    return (1);
 }

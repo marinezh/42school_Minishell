@@ -115,7 +115,7 @@ typedef struct s_split_data
     int		start;    // Start position of current word
     int		end; 	// End position of current word
 } t_split_data;
-#endif
+#endif 
 
 // typedef struct s_command
 // {
