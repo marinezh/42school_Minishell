@@ -36,6 +36,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	if (!pids)
 	{
 		perror("calloc");
+		data->status = 1;
 		return (-1);
 	}
 	// create array for fds{0,1}, number of pipes
@@ -43,6 +44,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	if (!fds)
 	{
 		free(pids);
+		data->status = 1;
 		return (-1);
 	}
 	i = 0;
@@ -54,6 +56,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			perror("calloc");
 			free_fds(fds, i);
 			free(pids);
+			data->status = 1;
 			return (-1);
 		}
 		i++;
@@ -64,9 +67,10 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	{
 		if (pipe(fds[i]) == -1)
 		{
-			perror("pipe");
+			ft_putstr_fd("minishell: pipe: Too many open files\n", STDERR_FILENO);
 			free_fds(fds, i);
 			free(pids);
+			data->status = 1;
 			return (-1);
 		}
 		i++;
@@ -77,6 +81,14 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	while (i < cmd_count)
 	{
 		pids[i] = create_process();
+		if (pids[i] < 0)
+		{
+			ft_putstr_fd("minishell: fork: Cannot allocate memory\n", STDERR_FILENO);
+			free_fds(fds, cmd_count - 2);
+			free(pids);
+			data->status = 1;
+			return (-1);
+		}
 		if (pids[i] == 0)
 		{
 			reset_signals_to_default();
