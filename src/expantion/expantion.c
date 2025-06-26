@@ -114,15 +114,16 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	if (!var_name)
 	{
 		(*i)++;
-		return (0);
+		// do function which will delete current empty node
+		return (1);
 	}
 	// printf("var_name!!! %s\n",var_name);
 	node = find_env_node(data, var_name);
 	// printf("Var value length: %zu\n", strlen(var_value));
 	if (node && node->value)
 	{
-		// printf("var_value %s\n", node->value);
-		// printf("Found variable %s = %s\n", var_name, node->value);
+		printf("var_value %s\n", node->value);
+		printf("Found variable %s = %s\n", var_name, node->value);
 		if (!replace_variable(token, *i, ft_strlen(var_name), node->value))
 		{
 				handle_error_arg(data, "memory", ": allocation failed\n", 1);
@@ -233,7 +234,7 @@ int expand_variables(t_token *token, t_data *data)
             in_dollar_quote = 0;  // Initialize new flag
 
             // Special handling for tokens that start with $"
-            if (current->value[0] == '$' && current->value[1] == '\"')
+            while (current->value[0] == '$' && (current->value[1] == '\"' || current->value[1] == '\''))
             {
                 // Remove the leading $ by shifting everything left
                 memmove(current->value, current->value + 1, strlen(current->value));
@@ -243,7 +244,7 @@ int expand_variables(t_token *token, t_data *data)
             while (current->value[i])
             {
                 // Check for embedded $" patterns (not at start)
-                if (i > 0 && current->value[i] == '$' && current->value[i+1] == '\"' 
+                if (i > 0 && current->value[i] == '$' && (current->value[i+1] == '\"' || current->value[i+1] == '\'')
                     && !in_single && !in_double)
                 {
                     // Remove the $ by shifting everything after it to the left
