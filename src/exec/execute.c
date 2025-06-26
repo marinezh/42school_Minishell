@@ -71,13 +71,10 @@ void	execute(t_data *data, t_command *cmd)
 		data->status = ERR_GENERIC;
 		return ;
 	}
-	if (!cmd->redirections)
+	if (!cmd->redirections && (!cmd->args || !cmd->args[0]))
 	{
-		if (!cmd->args || !cmd->args[0] || cmd->args[0][0] == '\0')
-		{
-			data->status = 0;
-			return ;
-		}
+		data->status = 0;
+		return ;
 	}
 	if (has_heredoc(data, cmd) == -1)
 		return ;
