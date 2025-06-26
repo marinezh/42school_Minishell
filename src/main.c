@@ -4,34 +4,34 @@ int	read_prompt(t_cmd_input *cmd)
 {
 	sig_received = 0;
 
-// 	/////////////////////////////////////////////////////////////
-// 	// THIS IS OUR MAIN 
-// 	// cmd->input = readline("minishell$ ");
-// 	// //char *check = ft_strdup(cmd->input);
-// 	// //free(cmd->input);
-// 	// //cmd->input = check;
-// 	// if (sig_received)
-// 	// {
-// 	// 	if (cmd->input)
-// 	// 	{
-// 	// 		free(cmd->input);
-// 	// 		cmd->input = NULL;
-// 	// 	}
-// 	// 	return (0);
-// 	// }
-// 	// if (!cmd->input)
-// 	// {
-// 	// 	printf("exit\n");
-// 	// 	return (-1);
-// 	// }
-// 	// if (cmd->input[0] == '\0')
-// 	// {
-// 	// 	free(cmd->input);
-// 	// 	cmd->input = NULL;
-// 	// 	return (0);
-// 	// }
-// 	///////////////////////////////////////////////////////
-// 	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	/////////////////////////////////////////////////////////////
+	// THIS IS OUR MAIN 
+	// cmd->input = readline("minishell$ ");
+	// //char *check = ft_strdup(cmd->input);
+	// //free(cmd->input);
+	// //cmd->input = check;
+	// if (sig_received)
+	// {
+	// 	if (cmd->input)
+	// 	{
+	// 		free(cmd->input);
+	// 		cmd->input = NULL;
+	// 	}
+	// 	return (-2);
+	// }
+	// if (!cmd->input)
+	// {
+	// 	printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (cmd->input[0] == '\0')
+	// {
+	// 	free(cmd->input);
+	// 	cmd->input = NULL;
+	// 	return (0);
+	// }
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
 	char *line;
 	if (isatty(STDIN_FILENO))
 	{
@@ -59,7 +59,7 @@ int	read_prompt(t_cmd_input *cmd)
 	{
 		free(line);
 		cmd->input = NULL;
-		return (0);
+		return (-2);
 	}
 	// Empty line (e.g., user just pressed Enter)
 	if (line[0] == '\0')
@@ -86,15 +86,14 @@ void	shell_loop(t_data *data)
 	{
 		prompt_res = read_prompt(&cmd_input);
 		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
-		{
-			data->status = 0;
 			break ;
-		}
-		if (prompt_res == 0) //signal received or empty input
+		if (prompt_res == -2) //signal received
 		{
 			data->status = ERR_INTERUPTED_SIGINT;
 			continue ;
 		}
+		if (prompt_res == 0)
+			continue ;
 		// tokens_lexer = run_lexer(&cmd_input); and this?
 		split_input = preprocess_input(cmd_input.input, data);
 		if (!split_input) // This will be NULL if fmt_quotes found an error

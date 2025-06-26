@@ -61,6 +61,7 @@ int	go_home(t_data *data)
 int	change_cur_dir(t_data *data, char *path)
 {
 	char	*old_pwd;
+	char	*cmd_name;
 
 	if (get_cwd(&old_pwd) != 0)
 		return (ERR_GENERIC);
@@ -71,8 +72,10 @@ int	change_cur_dir(t_data *data, char *path)
 	}
 	if (chdir(path) != 0)
 	{
+		cmd_name = ft_strjoin("cd: ", path);
+		print_error_msg(cmd_name, MSG_NO_FILE);
+		free(cmd_name);
 		free(old_pwd);
-		perror("cd");
 		return (ERR_GENERIC);
 	}
 	if (set_pwd(data, "PWD", NULL) != 0)
@@ -83,6 +86,13 @@ int	change_cur_dir(t_data *data, char *path)
 	free(old_pwd);
 	return (0);
 }
+
+// void	print_error_msg(char *cmd, char *msg)
+// {
+//     ft_putstr_fd("minishell: ", STDERR_FILENO);
+//     ft_putstr_fd(cmd, STDERR_FILENO);
+//     ft_putstr_fd(msg, STDERR_FILENO);
+// }
 
 int	ft_cd(t_data *data, t_command *cmd)
 {

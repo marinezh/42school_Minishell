@@ -91,11 +91,19 @@ int	env_list_size(t_env *head)
 
 int	check_file_access(char *path)
 {
-	if (access(path, F_OK | X_OK) == 0)
-		return (1);
-	if (access(path, F_OK) == 0 && access(path, X_OK) != 0)
-		return (-1);
-	return (0);
+	DIR *dir;
+
+	if (access(path, F_OK) != 0)
+		return (0); //file doesn't exit
+	dir = opendir(path);
+	if (dir)
+	{
+		closedir(dir);
+		return(-2); //it's a directory
+	}
+	if (access(path, X_OK) != 0)
+		return (-1); //not executable
+	return (1); //file exist and executable
 }
 
 // int	cmd_list_size(t_command *head)
