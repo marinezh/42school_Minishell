@@ -74,6 +74,8 @@ char	*process_binary(t_data *data, char *path)
 		return (path);
 	if (access_res == -1)
 		handle_error_arg(data, path, MSG_NO_PERM, ERR_PERM_DENIED);
+	else if (access_res == -2)
+		handle_error_arg(data, path, MSG_IS_DIR, ERR_PERM_DENIED);
 	else
 		handle_error_arg(data, path, MSG_NO_FILE, ERR_CMD_NOT_FOUND);
 	return (NULL);
@@ -96,7 +98,7 @@ int	run_external(t_data *data, t_command *cmd)
 			handle_error_arg(data, cmd->args[0], MSG_CMD_NOT_FOUND, 127);
 	}
 	if (!path)
-		return (127);
+		return (data->status);
 	exit_status = execute_cmd(data, cmd, path);
 	data->status = exit_status;
 	if (path_to_free)

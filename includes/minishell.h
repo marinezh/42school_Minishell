@@ -22,6 +22,7 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <dirent.h>
 
 
 # define RESET "\033[0m"
