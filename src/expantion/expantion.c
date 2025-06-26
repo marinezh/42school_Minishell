@@ -234,7 +234,7 @@ int expand_variables(t_token *token, t_data *data)
             in_dollar_quote = 0;  // Initialize new flag
 
             // Special handling for tokens that start with $"
-            while (current->value[0] == '$' && (current->value[1] == '\"' || current->value[1] == '\''))
+            if (current->value[0] == '$' && (current->value[1] == '\"' || current->value[1] == '\''))
             {
                 // Remove the leading $ by shifting everything left
                 memmove(current->value, current->value + 1, strlen(current->value));
