@@ -80,12 +80,10 @@ void	execute(t_data *data, t_command *cmd)
 		return ;
 	cmd_count = count_commands(cmd);
 	if (cmd_count > 1)
-		run_pipes(data, cmd, cmd_count);
+		status = run_pipes(data, cmd, cmd_count);
 	else
-	{		
 		status = process_cmd(data, cmd);
-		data->status = status;
-	}
+	data->status = status;
 }
 //**command not found -> status changes to 127, but not exit bash
 

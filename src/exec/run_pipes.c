@@ -30,22 +30,21 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	int			j;
 	int			exit_code;
 	t_command	*cur_cmd;
+	int			final_status;
 
 	// created pids for processes == cmd_count
 	pids = ft_calloc(cmd_count, sizeof(pid_t));
 	if (!pids)
 	{
 		perror("calloc");
-		data->status = 1;
-		return (-1);
+		return (1);
 	}
 	// create array for fds{0,1}, number of pipes
 	fds = ft_calloc(cmd_count - 1, sizeof(int *));
 	if (!fds)
 	{
 		free(pids);
-		data->status = 1;
-		return (-1);
+		return (1);
 	}
 	i = 0;
 	while (i < cmd_count - 1)
@@ -56,8 +55,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			perror("calloc");
 			free_fds(fds, i);
 			free(pids);
-			data->status = 1;
-			return (-1);
+			return (1);
 		}
 		i++;
 	}
@@ -67,11 +65,11 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	{
 		if (pipe(fds[i]) == -1)
 		{
-			ft_putstr_fd("minishell: pipe: Too many open files\n", STDERR_FILENO);
+			ft_putstr_fd("minishell: pipe: Too many open files\n",
+				STDERR_FILENO);
 			free_fds(fds, i);
 			free(pids);
-			data->status = 1;
-			return (-1);
+			return (1);
 		}
 		i++;
 	}
@@ -83,11 +81,11 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		pids[i] = create_process();
 		if (pids[i] < 0)
 		{
-			ft_putstr_fd("minishell: fork: Cannot allocate memory\n", STDERR_FILENO);
+			ft_putstr_fd("minishell: fork: Cannot allocate memory\n",
+				STDERR_FILENO);
 			free_fds(fds, cmd_count - 2);
 			free(pids);
-			data->status = 1;
-			return (-1);
+			return (1);
 		}
 		if (pids[i] == 0)
 		{
@@ -95,30 +93,29 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			close_unused_heredoc_fds(cmd, cur_cmd);
 			// redirect out/in
 			if (i != cmd_count - 1)
-            {
+			{
 				if (dup2(fds[i][1], STDOUT_FILENO) == -1)
-                {
-                    perror("dup2");
-                    cleanup_process_data(data);
-                    free(pids);
-                    free_fds(fds, cmd_count - 2);
-                    free_command_list(cmd);
-                    exit(1);
-                }
-
-            }
+				{
+					perror("dup2");
+					cleanup_process_data(data);
+					free(pids);
+					free_fds(fds, cmd_count - 2);
+					free_command_list(cmd);
+					exit(1);
+				}
+			}
 			if (i != 0)
-            {
+			{
 				if (dup2(fds[i - 1][0], STDIN_FILENO) == -1)
-                {
-                    perror("dup2");
-                    cleanup_process_data(data);
-                    free(pids);
-                    free_fds(fds, cmd_count - 2);
-                    free_command_list(cmd);
-                    exit(1);
-                }
-            }
+				{
+					perror("dup2");
+					cleanup_process_data(data);
+					free(pids);
+					free_fds(fds, cmd_count - 2);
+					free_command_list(cmd);
+					exit(1);
+				}
+			}
 			j = 0;
 			while (j < cmd_count - 1)
 			{
@@ -149,10 +146,10 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		handle_parent_process(pids[i]);
 		i++;
 	}
-	data->status = handle_parent_process(pids[cmd_count - 1]);
+	final_status = handle_parent_process(pids[cmd_count - 1]);
 	free(pids);
 	free_fds(fds, cmd_count - 2);
-	return (0);
+	return (final_status);
 }
 
 // each process has its own fd table which is a copy of parent fd table
