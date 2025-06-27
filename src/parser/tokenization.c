@@ -20,9 +20,47 @@ t_token	*create_token_node(char *value)
 	token->next = NULL;
 	token->prev = NULL;
 	token->type = NONE;
+	token->in_db_quotes = 0;
+	
 	return (token);
 }
+// t_token	*create_token_node(char *value)
+// {
+// 	t_token	*token = malloc(sizeof(t_token));
+// 	if (!token)
+// 		return (NULL);
 
+// 	token->value = ft_strdup(value);
+// 	if (!token->value)
+// 	{
+// 		free(token);
+// 		return (NULL);
+// 	}
+
+// 	size_t len = ft_strlen(token->value);
+// 	token->in_db_quotes = 0;
+
+// 	if (len >= 2 && ((token->value[0] == '"' && token->value[len - 1] == '"') ||
+// 	                 (token->value[0] == '\'' && token->value[len - 1] == '\'')))
+// 	{
+// 		token->in_db_quotes = (token->value[0] == '"');
+// 		// remove outer quotes
+// 		char *unquoted = ft_substr(token->value, 1, len - 2);
+// 		free(token->value);
+// 		token->value = unquoted;
+// 	}
+
+// 	// expansion flag: only allow if unquoted or inside double quotes
+// 	token->expantion = (ft_strchr(token->value, '$') != NULL);
+
+// 	token->next = NULL;
+// 	token->prev = NULL;
+// 	token->type = NONE;
+// 	token->file = NULL;
+// 	printf("[TOKEN CREATE] %s, exp=%d (quoted=%d)\n", value, token->expantion, token->in_db_quotes);
+
+// 	return token;
+// }
 void	append_token(t_token **head, t_token **tail, t_token *new_token)
 {
 	if (!*head)
