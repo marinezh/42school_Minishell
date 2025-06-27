@@ -28,17 +28,27 @@ void	free_env_list(t_env **env)
 	{
 		tmp = node;
 		node = node->next;
-		free(tmp->key);
-		free(tmp->value);
-		free(tmp);
+		free_env_node(tmp);
 	}
 	*env = NULL;
+}
+
+void	free_env_node(t_env *node)
+{
+	if (node)
+	{
+		free(node->value);
+		free(node->key);
+		free(node);
+	}
 }
 
 void	free_fds(int **fds, int i)
 {
 	while (i >= 0)
 	{
+		close(fds[i][0]);
+		close(fds[i][1]);
 		free(fds[i]);
 		i--;
 	}
@@ -49,5 +59,5 @@ void	cleanup_process_data(t_data *data)
 {
 	free_env_list(&data->envp_list);
 	free_double_array(data->envp);
-	// rl_clear_history();
+	rl_clear_history();
 }

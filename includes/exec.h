@@ -38,6 +38,7 @@ int	    process_cmd(t_data *data, t_command *cmd);
 void	free_fds(int **fds, int i);
 int     handle_parent_process(pid_t pid);
 void	cleanup_process_data(t_data *data);
+void	free_env_node(t_env *node);
 
 void    set_prompt_signals(void);
 void	set_heredoc_signals(void);

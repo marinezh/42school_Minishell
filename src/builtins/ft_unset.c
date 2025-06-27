@@ -5,6 +5,8 @@ void	delete_node(t_data *data, t_env *node)
 	t_env 	*cur;
 	t_env	*tmp_next;
 
+	if (!node)
+		return ;
 	tmp_next = node->next;
 	cur = data->envp_list;
 	if (data->envp_list == node)
@@ -21,7 +23,7 @@ void	delete_node(t_data *data, t_env *node)
 			cur = cur->next;
 		}
 	}
-	free(node);
+	free_env_node(node);
 	data->envp_f = 1;
 }
 
@@ -45,6 +47,7 @@ int	ft_unset(t_data *data, t_command *cmd)
 			delete_node(data, env_node);
 		i++;
 	}
+	env_node = NULL;
 	return (0);
 }
 
