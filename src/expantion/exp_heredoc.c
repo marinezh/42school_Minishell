@@ -9,6 +9,6 @@ char *expand_heredoc_line(char *input, t_data *data)
 		return (NULL);
 	temp.type = WORD;
 	temp.next = NULL;
-	expand_variables(&temp, data);
+	expand_variables_her(&temp, data);
 	return temp.value;
 }
