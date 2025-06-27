@@ -79,7 +79,7 @@ void	shell_loop(t_data *data)
 	t_cmd_input	cmd_input;
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
-	t_files		*files = NULL;
+	//t_files		*files = NULL;
 	char **split_input = NULL;
 	int		prompt_res;
 
@@ -110,18 +110,18 @@ void	shell_loop(t_data *data)
 			continue;
 		}
 		// printf("PURE TOKENS\n");
-		//print_tokens(tokens);
+		print_tokens(tokens);
 		//print_tokens_full(tokens);
-		print_files_nodes(files);
-		check_tokens(tokens);
-		print_tokens_full(tokens);
+		//print_files_nodes(files);
+		//check_tokens(tokens);
+		//print_tokens_full(tokens);
 		if (error_check(tokens, data))
 		{
 			free_tokens(tokens);
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
-	
+		//remove_outer_quotes(tokens);
 		if (!expand_variables(tokens, data))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
@@ -130,8 +130,8 @@ void	shell_loop(t_data *data)
     		free(cmd_input.input);
     		continue; // Skip to next prompt
 		}
+		
 		tokens = handle_word_splitting(tokens);
-		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
