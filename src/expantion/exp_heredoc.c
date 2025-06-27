@@ -22,28 +22,13 @@ void handle_heredoc_delimiter(t_files *node, char *delimiter)
 
 char *expand_heredoc_line(char *input, t_data *data)
 {
-    t_token temp;
-    
-    // Check for NULL input
-    if (!input)
-        return NULL;
-        
-    // Create a temporary token with the input line
-    temp.value = ft_strdup(input);
-    if (!temp.value)
-        return NULL;
-        
-    temp.type = WORD;
-    temp.next = NULL;
-    
-    // Expand variables and check for success
-    if (!expand_variables(&temp, data))
-    {
-        // Handle expansion failure
-        free(temp.value);
-        return NULL;
-    }
-    
-    // Return the expanded line
-    return temp.value;
+	t_token temp;
+	(void)input;
+	temp.value = ft_strdup(input);
+	if (!temp.value)
+		return (NULL);
+	temp.type = WORD;
+	temp.next = NULL;
+	expand_variables_her(&temp, data);
+	return temp.value;
 }
