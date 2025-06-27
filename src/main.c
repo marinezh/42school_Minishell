@@ -79,6 +79,7 @@ void	shell_loop(t_data *data)
 	t_cmd_input	cmd_input;
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
+	t_files		*files = NULL;
 	char **split_input = NULL;
 	int		prompt_res;
 
@@ -109,9 +110,11 @@ void	shell_loop(t_data *data)
 			continue;
 		}
 		// printf("PURE TOKENS\n");
-		print_tokens(tokens);
-		//  files = parse_redir(tokens);
-		//  print_files_nodes(files);
+		//print_tokens(tokens);
+		//print_tokens_full(tokens);
+		print_files_nodes(files);
+		check_tokens(tokens);
+		print_tokens_full(tokens);
 		if (error_check(tokens, data))
 		{
 			free_tokens(tokens);

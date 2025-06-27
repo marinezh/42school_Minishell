@@ -61,7 +61,32 @@ void	print_tokens(t_token *tok)
 {
 	while (tok)
 	{
-		printf("       [%d] %s\n", tok->type, tok->value);
+		printf("       [%d] %s, qoutes[%d], expantion [%d]\n", tok->type, tok->value, tok->in_db_quotes, tok->expantion);
+
+		tok = tok->next;
+	}
+}
+void	print_tokens_full(t_token *tok)
+{
+	while (tok)
+	{
+		printf("       [%d] %s, quotes[%d], expansion [%d]\n",
+			tok->type,
+			tok->value ? tok->value : "(null)",
+			tok->in_db_quotes,
+			tok->expantion);
+
+		if (tok->file)
+		{
+			printf("         file => type: %d, name: %s, to_expand: %d\n",
+				tok->file->type,
+				tok->file->name ? tok->file->name : "(null)",
+				tok->file->to_expand);
+		}
+		else
+		{
+			printf("         file => NULL\n");
+		}
 		tok = tok->next;
 	}
 }

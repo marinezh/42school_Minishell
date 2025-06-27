@@ -40,8 +40,10 @@ typedef struct s_token
 	t_token_type		type;
 	char				*value;
 	int					in_db_quotes;
+	int					expantion;
 	struct s_token		*prev;
 	struct s_token		*next;
+	struct s_files		*file;
 }						t_token;
 
 // osibilities for code improvement

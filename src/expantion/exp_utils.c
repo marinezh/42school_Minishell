@@ -57,3 +57,52 @@ char	*extract_variable_name(const char *input)
 	var_name = ft_substr(input, 0, j);
 	return (var_name);
 }
+void check_tokens(t_token *token)
+{
+	t_token *current = token;
+
+	while (current)
+	{
+		if (current->type == HEREDOC && current->next)
+		{
+			t_token *delim = current->next;
+
+			// ❗ Disable expansion for HEREDOCs no matter what
+			delim->expantion = 0;
+			if (delim->file)
+				delim->file->to_expand = 0;
+
+			printf("HEREDOC: disabling expansion for delimiter '%s'\n", delim->value);
+			printf("[DEBUG] check_tokens: HEREDOC found, setting '%s' to expantion=0\n", delim->value);
+
+		}
+		else if ((current->type == WORD || current->type == FILE_NAME) && current->value)
+		{
+			// Normal tokens can expand variables
+			current->expantion = (ft_strchr(current->value, '$') != NULL);
+			if (current->file)
+				current->file->to_expand = current->expantion;
+		}
+		current = current->next;
+	}
+}
+// typedef struct s_token
+// {
+// 	t_token_type		type;
+// 	char				*value;
+// 	int					in_db_quotes;
+// 	int					expantion;
+// 	struct s_token		*prev;
+// 	struct s_token		*next;
+// 	struct s_files		*file;
+// }						t_token;
+
+// // osibilities for code improvement
+// typedef struct s_files
+// {
+// 	int				fd;               // File descriptor for the opened file
+// 	char			*name;           // File name or heredoc delimiter
+// 	t_token_type	type;            // Type of redirection: > >> < <<
+// 	int				to_expand;	// Flag to control variable expansion in heredocs
+// 	struct s_files	*next; 			// Pointer to the next redirection
+// }						t_files;

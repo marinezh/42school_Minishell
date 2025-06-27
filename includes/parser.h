@@ -37,5 +37,6 @@ void print_tokens(t_token *tok);
 const char *token_type_to_str(t_token_type type);
 void print_commands(t_command *cmd_list);
 void print_files_nodes(t_files *files);
+void	print_tokens_full(t_token *tok);
 
 # endif
