@@ -2,76 +2,70 @@
 
 int	read_prompt(t_cmd_input *cmd)
 {
-	sig_received = 0;
-
-	/////////////////////////////////////////////////////////////
-	// THIS IS OUR MAIN 
-	// cmd->input = readline("minishell$ ");
-	// //char *check = ft_strdup(cmd->input);
-	// //free(cmd->input);
-	// //cmd->input = check;
-	// if (sig_received)
-	// {
-	// 	if (cmd->input)
-	// 	{
-	// 		free(cmd->input);
-	// 		cmd->input = NULL;
-	// 	}
-	// 	return (-2);
-	// }
-	// if (!cmd->input)
-	// {
-	// 	printf("exit\n");
-	// 	return (-1);
-	// }
-	// if (cmd->input[0] == '\0')
-	// {
-	// 	free(cmd->input);
-	// 	cmd->input = NULL;
-	// 	return (0);
-	// }
-	///////////////////////////////////////////////////////
-	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
-	char *line;
-	if (isatty(STDIN_FILENO))
-	{
-		line = readline("minishell$ ");
-	}
-	else
-	{
-		line = get_next_line(STDIN_FILENO);
-		if (line)
-		{
-			// Remove trailing newline added by get_next_line
-			size_t len = ft_strlen(line);
-			if (len > 0 && line[len - 1] == '\n')
-				line[len - 1] = '\0';
-		}
-	}
-	// Handle EOF or Ctrl+D
-	if (!line)
-	{
-		if (isatty(STDIN_FILENO))
-			printf("exit\n");
-		return (-1);
-	}
+	cmd->input = readline("minishell$ ");
 	if (sig_received)
 	{
-		free(line);
-		cmd->input = NULL;
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
 		return (-2);
 	}
-	// Empty line (e.g., user just pressed Enter)
-	if (line[0] == '\0')
+	if (!cmd->input)
 	{
-		free(line);
+		printf("exit\n");
+		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		free(cmd->input);
 		cmd->input = NULL;
 		return (0);
 	}
-	cmd->input = line;
+ 	return (1);
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	// char *line;
+	// if (isatty(STDIN_FILENO))
+	// {
+	// 	line = readline("minishell$ ");
+	// }
+	// else
+	// {
+	// 	line = get_next_line(STDIN_FILENO);
+	// 	if (line)
+	// 	{
+	// 		// Remove trailing newline added by get_next_line
+	// 		size_t len = ft_strlen(line);
+	// 		if (len > 0 && line[len - 1] == '\n')
+	// 			line[len - 1] = '\0';
+	// 	}
+	// }
+	// // Handle EOF or Ctrl+D
+	// if (!line)
+	// {
+	// 	if (isatty(STDIN_FILENO))
+	// 		printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (sig_received)
+	// {
+	// 	free(line);
+	// 	cmd->input = NULL;
+	// 	return (-2);
+	// }
+	// // Empty line (e.g., user just pressed Enter)
+	// if (line[0] == '\0')
+	// {
+	// 	free(line);
+	// 	cmd->input = NULL;
+	// 	return (0);
+	// }
+	// cmd->input = line;
+	// return (1);
 // 	//END OF PART FOR BIG TESTER
 // 	///////////////////////////////////////////////////////////	
- 	return (1);
 }
 
 void	shell_loop(t_data *data)
@@ -84,6 +78,7 @@ void	shell_loop(t_data *data)
 
 	while (!data->exit_f)
 	{
+		sig_received = 0;
 		prompt_res = read_prompt(&cmd_input);
 		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
 			break ;
@@ -94,6 +89,8 @@ void	shell_loop(t_data *data)
 		}
 		if (prompt_res == 0)
 			continue ;
+		if (cmd_input.input && cmd_input.input[0] != '\0')
+			add_history(cmd_input.input);
 		// tokens_lexer = run_lexer(&cmd_input); and this?
 		split_input = preprocess_input(cmd_input.input, data);
 		if (!split_input) // This will be NULL if fmt_quotes found an error
@@ -133,9 +130,8 @@ void	shell_loop(t_data *data)
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
 		// printf("/////////////////////\n");
-		//print_commands(commands);
+		// print_commands(commands);
 		// printf("/////////////////////\n");
-		add_history(cmd_input.input);
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
 		execute(data, commands);
@@ -161,6 +157,6 @@ int	main(int ac, char **av, char **env)
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
-	//rl_clear_history();
+	rl_clear_history();
 	return (data.status);
 }

@@ -2,6 +2,7 @@
 # define STRUCTS_H
 
 extern volatile sig_atomic_t sig_received;
+extern int rl_done;
 
 typedef enum e_token_type
 {
