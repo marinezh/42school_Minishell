@@ -109,12 +109,14 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	char	*var_name;
 	t_env	*node;
 
+	if (!token || !token->value || !data || !i)
+    	return (0);
 	//printf("EXPANTION FOUND at posision %d in token %s\n", *i, token->value);
 	var_name = extract_variable_name(&token->value[*i + 1]);
-	if (!var_name)
+	if (!var_name || var_name[0] == '\0')
 	{
+		free(var_name);
 		(*i)++;
-		// do function which will delete current empty node
 		return (1);
 	}
 	// printf("var_name!!! %s\n",var_name);
@@ -122,8 +124,8 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	// printf("Var value length: %zu\n", strlen(var_value));
 	if (node && node->value)
 	{
-		printf("var_value %s\n", node->value);
-		printf("Found variable %s = %s\n", var_name, node->value);
+		//printf("var_value %s\n", node->value);
+		//printf("Found variable %s = %s\n", var_name, node->value);
 		if (!replace_variable(token, *i, ft_strlen(var_name), node->value))
 		{
 				handle_error_arg(data, "memory", ": allocation failed\n", 1);
@@ -131,6 +133,7 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 				free(var_name);
 				return (0);
 		}
+		  *i += strlen(node->value) - 1;
 	}
 	else
 	{
@@ -299,3 +302,4 @@ int expand_variables(t_token *token, t_data *data)
     }
     return (1);
 }
+

@@ -100,11 +100,11 @@ typedef struct s_exp_parts
 	char	*final_value;
 }	t_exp_parts;
 
-typedef struct s_word_pos
-{
-    int start;
-    int end;
-} t_word_pos;
+// typedef struct s_word_pos
+// {
+//     int start;
+//     int end;
+// } t_word_pos;
 
 // Define a struct for position tracking
 typedef struct s_split_data
@@ -117,11 +117,4 @@ typedef struct s_split_data
 } t_split_data;
 #endif 
 
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;            // Command + arguments
-// 	t_files *redirections;       // Linked list of redirections (<, <<, >, >>)
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command *next; // Pointer to the next command
-// }						t_command;
+

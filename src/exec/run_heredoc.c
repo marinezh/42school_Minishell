@@ -43,7 +43,7 @@ void	print_eof_warning(t_files *node, int line_num)
 	ft_putstr_fd(full_msg, 2);
 	free(number);
 }
-int	handle_expansion(t_files *node, char **input, t_data *data)
+static int	handle_expansion(t_files *node, char **input, t_data *data)
 {
 	char	*expanded;
 
@@ -109,6 +109,7 @@ int	collect_input(t_files *node, int fd_read, int fd_write, t_data *data)
 			free(input);
 			break ;
 		}
+		
 		if (handle_expansion(node, &input, data) == -1 ||
 			write_line_to_file(input, fd_write) == -1)
 		{
