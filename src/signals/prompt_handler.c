@@ -1,4 +1,9 @@
 #include "minishell.h"
+#include <readline/readline.h>
+#include <readline/history.h>
+
+// declared JUST for MacOS
+extern void rl_replace_line(const char *text, int clear_undo);
 
 volatile sig_atomic_t sig_received = 0;
 
@@ -8,9 +13,10 @@ static void	handler(int sig)
 	{
 		sig_received = 1;
 		write(1, "\n", 1);
-		//rl_on_new_line(); //tells readline that cursor has moved to a new line
-		//rl_replace_line("", 0); //clear the current input line
-		//rl_redisplay(); //display a fresh prompt
+		rl_on_new_line(); //tells readline that cursor has moved to a new line
+		rl_replace_line("", 0); //clear the current input line
+		rl_redisplay(); //display a fresh prompt
+		rl_done = 1;
 	}
 }
 
