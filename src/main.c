@@ -152,6 +152,7 @@ int	main(int ac, char **av, char **env)
 		ft_putstr_fd("Error initializing shell environment\n", 2);
 		return (1);
 	}
+	initialize_terminal_settings();
 	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored

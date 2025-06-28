@@ -23,6 +23,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <dirent.h>
+#include <termios.h>
+#include <sys/ioctl.h>
 
 
 # define RESET "\033[0m"

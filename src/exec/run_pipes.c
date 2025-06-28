@@ -22,6 +22,22 @@ void	close_unused_heredoc_fds(t_command *cmd, t_command *cur_cmd)
 	}
 }
 
+void prepare_child_terminal(void)
+{
+    if (isatty(STDIN_FILENO)) {
+        struct termios child_term;
+        
+        // Get current terminal settings
+        if (tcgetattr(STDIN_FILENO, &child_term) == 0) {
+            // Disable ECHOCTL - this prevents ^C from being printed
+            child_term.c_lflag &= ~(ECHO | ECHOE | ECHOK | ECHONL);
+            
+            // Apply the modified settings
+            tcsetattr(STDIN_FILENO, TCSANOW, &child_term);
+        }
+    }
+}
+
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
 	pid_t		*pids;
@@ -67,6 +83,13 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		{
 			ft_putstr_fd("minishell: pipe: Too many open files\n",
 				STDERR_FILENO);
+			j = 0;
+			while (j < cmd_count - 1)
+			{
+				close(fds[j][0]);
+				close(fds[j][1]);
+				j++;
+			}
 			free_fds(fds, i);
 			free(pids);
 			return (1);
@@ -89,6 +112,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		}
 		if (pids[i] == 0)
 		{
+			prepare_child_terminal();
 			reset_signals_to_default();
 			close_unused_heredoc_fds(cmd, cur_cmd);
 			// redirect out/in

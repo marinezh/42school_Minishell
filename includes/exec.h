@@ -43,5 +43,6 @@ void	free_env_node(t_env *node);
 void    set_prompt_signals(void);
 void	set_heredoc_signals(void);
 void    reset_signals_to_default(void);
+void    initialize_terminal_settings(void);
 
 #endif
