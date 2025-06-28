@@ -5,48 +5,17 @@
 // declared JUST for MacOS
 extern void rl_replace_line(const char *text, int clear_undo);
 
-static struct termios original_term;
-static int term_stored = 0;
 volatile sig_atomic_t sig_received = 0;
-
-// Initialize the terminal settings - call this at the start of your program
-void initialize_terminal_settings(void)
-{
-    if (isatty(STDIN_FILENO)) {
-        tcgetattr(STDIN_FILENO, &original_term);
-        term_stored = 1;
-    }
-}
-
-// Check if we're in a child process
-static int is_in_child_process(void)
-{
-    struct termios current_term;
-    
-    if (!term_stored || !isatty(STDIN_FILENO))
-        return 0;
-        
-    // Get current terminal settings
-    if (tcgetattr(STDIN_FILENO, &current_term) != 0)
-        return 0;
-        
-    // Compare with original settings
-    return (ft_memcmp(&current_term, &original_term, sizeof(struct termios)) != 0);
-}
-
 
 static void	handler(int sig)
 {
 	if (sig == SIGINT)
 	{
 		sig_received = 1;
-		if (!is_in_child_process())
-		{
-			write(1, "\n", 1);
-			rl_on_new_line(); //tells readline that cursor has moved to a new line
-			rl_replace_line("", 0); //clear the current input line
-			rl_redisplay(); //display a fresh prompt
-		}
+		write(1, "\n", 1);
+		rl_on_new_line(); //tells readline that cursor has moved to a new line
+		rl_replace_line("", 0); //clear the current input line
+		rl_redisplay(); //display a fresh prompt
 		rl_done = 1;
 	}
 }

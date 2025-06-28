@@ -65,7 +65,7 @@ int	read_prompt(t_cmd_input *cmd)
 	// cmd->input = line;
 	// return (1);
 // 	//END OF PART FOR BIG TESTER
-// 	///////////////////////////////////////////////////////////	
+// 	///////////////////////////////////////////////////////////
 }
 
 void	shell_loop(t_data *data)
@@ -115,7 +115,7 @@ void	shell_loop(t_data *data)
 			free(cmd_input.input);
 			continue ; // skip to next input
 		}
-	
+
 		if (!expand_variables(tokens, data))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
@@ -152,7 +152,6 @@ int	main(int ac, char **av, char **env)
 		ft_putstr_fd("Error initializing shell environment\n", 2);
 		return (1);
 	}
-	initialize_terminal_settings();
 	set_prompt_signals();
 	shell_loop(&data);
 	// clean struct where env are stored
