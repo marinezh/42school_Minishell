@@ -86,3 +86,70 @@ marinezh
 /////////////////////
 minishell: : No such file or directory - have to be bash: $USER1: ambiguous redirect
 minishell$ echo hello >"$USER1"
+
+minishell$ export PATH=""
+minishell$ ls
+minishell: ls: command not found
+minishell$ ..
+minishell: ..: command not found
+minishell$ exit
+exit
+
+mzhivoto@c1r5p9 ~/42cursus/PROJECTS/GitHub/42school_Minishell
+ % bash
+mzhivoto@c1r5p9:~/42cursus/PROJECTS/GitHub/42school_Minishell$ ..
+..: command not found
+mzhivoto@c1r5p9:~/42cursus/PROJECTS/GitHub/42school_Minishell$ export PATH=""
+mzhivoto@c1r5p9:~/42cursus/PROJECTS/GitHub/42school_Minishell$ ..
+bash: ..: Is a directory
+mzhivoto@c1r5p9:~/42cursus/PROJECTS/GitHub/42school_Minishell$ 
+//////////////////////////////////////////////////////////////////////////////
+
+mzhivoto@c1r5p9 ~/42cursus/PROJECTS/GitHub/42school_Minishell
+ % env -i ./minishell
+minishell$ cd /usr/bin
+minishell$ pwd
+/home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell
+minishell$
+
+mzhivoto@c1r5p9 ~/42cursus/PROJECTS/GitHub/42school_Minishell
+ % env -i bash 
+mzhivoto@c1r5p9:/home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell$ cd /usr/bin
+mzhivoto@c1r5p9:/usr/bin$ pwd
+/usr/bin
+mzhivoto@c1r5p9:/usr/bin$ 
+
+////////////////////////////////////////////////////////////////////////
+minishell$ ls | cat | cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+ cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+  cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+    cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat
+	| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| 
+	cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+	 cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+	  cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+	   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+	    cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| 
+		cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+		 cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat
+		 | cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+		  cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+		   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+		    cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+			 cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+			  cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+			   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| 
+			   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+			    cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat
+				| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+				 cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+				  cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+				   cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+				    cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat
+					| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat|
+					 cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat| cat
+minishell: pipe: Too many open files
+
+why do we have limit for quontity of pipes and why we d0 exit ???
+/////////////////////////////////////////////////////////////////////////////////////////

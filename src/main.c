@@ -119,7 +119,7 @@ void	shell_loop(t_data *data)
 			continue ; // skip to next input
 		}
 	
-		if (!expand_variables(tokens, data))
+		if (!expand_variables(tokens, data, 1))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
     		//data->status = 1;
