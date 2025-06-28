@@ -229,7 +229,7 @@ int expand_variables(t_token *token, t_data *data)
     current = token;
     while (current)
     {
-        if ((current->prev && current->prev->type != HEREDOC) && (current->type == WORD || current->type == FILE_NAME))
+        if ((!current->prev || current->prev->type != HEREDOC) && (current->type == WORD || current->type == FILE_NAME))
         {
             i = 0;
             in_single = 0;
