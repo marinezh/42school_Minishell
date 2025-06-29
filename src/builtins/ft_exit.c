@@ -81,10 +81,6 @@ int	ft_exit(t_data *data, t_command *cmd)
 		return (data->status);
 	}
 	data->exit_f = 1;
-	data->status = exit_code % 256;
+	data->status = (unsigned short int)exit_code % 256;
 	return(data->status);
 }
-//check errors on linux terminal
-//Invalid command options (like ls --invalid-flag)
-//Invalid exit arguments (like exit abc)
-// in bash "ERROR_INVALID_OPTION = 2 and ERROR_INVALID_EXIT_CODE = 2"

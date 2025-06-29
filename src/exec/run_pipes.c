@@ -22,6 +22,7 @@ void	close_unused_heredoc_fds(t_command *cmd, t_command *cur_cmd)
 	}
 }
 
+
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
 	pid_t		*pids;
@@ -67,6 +68,13 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		{
 			ft_putstr_fd("minishell: pipe: Too many open files\n",
 				STDERR_FILENO);
+			j = 0;
+			while (j < cmd_count - 1)
+			{
+				close(fds[j][0]);
+				close(fds[j][1]);
+				j++;
+			}
 			free_fds(fds, i);
 			free(pids);
 			return (1);
