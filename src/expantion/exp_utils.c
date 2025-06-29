@@ -60,3 +60,17 @@ char	*extract_variable_name(const char *input)
 	var_name = ft_substr(input, 0, j);
 	return (var_name);
 }
+int	ft_tlsize(t_token *tokens)
+{
+	int		count;
+	t_token	*pnt;
+
+	pnt = tokens;
+	count = 0;
+	while (pnt != NULL)
+	{
+		count++;
+		pnt = pnt->next;
+	}
+	return (count);
+}

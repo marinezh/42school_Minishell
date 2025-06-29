@@ -104,7 +104,7 @@ static int	handle_status_var(t_token *token, int status, int *i)
 }
 
 
-static int	handle_expantion(t_token *token, t_data *data, int *i)
+static int	handle_expantion(t_token *tokens, t_token *cur, t_data *data, int *i)
 {
 	char	*var_name;
 	t_env	*node;
@@ -112,7 +112,7 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	// if (!token || !token->value || !data || !i)
     // 	return (0);
 	//printf("EXPANTION FOUND at posision %d in token %s\n", *i, token->value);
-	var_name = extract_variable_name(&token->value[*i + 1]);
+	var_name = extract_variable_name(&cur->value[*i + 1]);
 	if (!var_name || var_name[0] == '\0')
 	{
 		//free(var_name);
@@ -121,12 +121,24 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	}
 	// printf("var_name!!! %s\n",var_name);
 	node = find_env_node(data, var_name);
-	// printf("Var value length: %zu\n", strlen(var_value));
+
 	if (node && node->value)
 	{
+		//printf("TOKEN PREV TYPE %d , %s, variable is %s\n", token->prev->type, ft_strchr(node->value, ' '), node->value );
+		if (ft_tlsize(tokens) > 1 && cur->prev
+			&& (cur->prev->type == REDIR_OUT
+				|| cur->prev->type == REDIR_APPEND
+				|| cur->prev->type == REDIR_IN)
+				&& (ft_strchr(node->value, ' ') || node->value[0] == '\0'))
+		{
+			//printf("AMBIGOUS REDIRECT\n");
+			handle_error_arg(data, var_name, ERR_AMB_RED, 1);
+			//data->status = 1;
+			return 0;
+		}
 		//printf("var_value %s\n", node->value);
 		//printf("Found variable %s = %s\n", var_name, node->value);
-		if (!replace_variable(token, *i, ft_strlen(var_name), node->value))
+		if (!replace_variable(cur, *i, ft_strlen(var_name), node->value))
 		{
 				handle_error_arg(data, "memory", ": allocation failed\n", 1);
 				//*i += ft_strlen(var_name) + 1;
@@ -139,7 +151,7 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	{
 		//printf("Variable %s not found, replacing with empty string\n",
 			//var_name);
-		if (!replace_undefined_variable(token, *i, ft_strlen(var_name)))
+		if (!replace_undefined_variable(cur, *i, ft_strlen(var_name)))
 		{
 			handle_error_arg(data, "memory", ": allocation failed\n", 1);
 			free(var_name);
@@ -151,7 +163,7 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 }
 
 
-int expand_variables(t_token *token, t_data *data, int skip_after_heredoc)
+int expand_variables(t_token *tokens, t_data *data, int skip_after_heredoc)
 {
     t_token *current;
     int i;
@@ -159,7 +171,7 @@ int expand_variables(t_token *token, t_data *data, int skip_after_heredoc)
     int in_double;
     int in_dollar_quote;  // New flag to track $"..." construct
 
-    current = token;
+    current = tokens;
     while (current)
     {
       if ((!skip_after_heredoc || !current->prev || current->prev->type != HEREDOC) &&
@@ -223,7 +235,7 @@ int expand_variables(t_token *token, t_data *data, int skip_after_heredoc)
                     // Handle regular environment variables
                     else
                     {
-                        if (!handle_expantion(current, data, &i))
+                        if (!handle_expantion(tokens, current, data, &i))
                             return (0);
                     }
                     continue;
@@ -297,3 +309,29 @@ void delete_empty_tokens(t_token **head)
 		}
 	}
 }
+// int	check_ambiguous_redirects(t_token *tokens, t_data *data)
+// {
+// 	t_token *curr = tokens;
+// 	while (curr)
+// 	{
+// 		if (curr->prev && curr->prev->type == REDIR_OUT) // TOKEN_REDIR == 3
+// 		{
+// 			if (curr->value && (ft_strchr(curr->value, ' ') || curr->value[0] == '\0'))
+// 			{
+// 				handle_error_arg(data, curr->value, ERR_AMB_RED, 1);
+// 				return (0);
+// 			}
+// 		}
+// 		curr = curr->next;
+// 	}
+// 	return (1);
+// }
+
+	// if (token->prev && token->prev->type == 3 && (node->value[0] == '\0'))
+	// {
+	// 	printf("AMBIGOUS REDIRECT\n");
+	// 	//handle_error_arg(data, var_name, "AMBIGOUS REDIRECT\n", 1);
+	// 	data->status = 1;
+	// 	return 0;
+	// }
+	// printf("Var value length: %zu\n", strlen(var_value));

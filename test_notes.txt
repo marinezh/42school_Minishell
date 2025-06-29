@@ -62,7 +62,19 @@
                      STD_OUT: 109  STD_ERR: 28  EXIT_CODE: 53  
                          TOTAL FAILED AND PASSED CASES:
                                      ❌ 190   
-                                     ✅ 2633   
+                                     ✅ 2633
+/////////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 813  LEAKING: 0 
+                     STD_OUT: 109  STD_ERR: 26  EXIT_CODE: 51  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 186   
+                                     ✅ 2637
+////////////////////////////////////////////////////////////////////////////////////
+                     STD_OUT: 109  STD_ERR: 25  EXIT_CODE: 25  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 159   
+                                     ✅ 2664   
+////////////////////////////////////////////////////////////////////////////////////
 
 litte tester:
 126/146
@@ -75,5 +87,75 @@ litte tester:
 😭 😭 😭
 140/146
 😭 😭 😭
+144/146
+😭 😭 😭
 
 
+Test  15: ✅ echo "exit_code ->$? user ->$USER home -> $HOME" 
+Test  16: ✅ echo 'exit_code ->$? user ->$USER home -> $HOME' 
+
+
+Syntax errors
+19
+~
+
+43 
+>echo>
+/bin/rm -f echo
+
+46
+ <echo<
+/bin/rm -f echo
+
+49
+>>echo>>
+/bin/rm -f echo
+
+Parsing hell
+32
+cat << $USER
+why
+not
+$USER
+
+40
+cat << "$USER"
+why
+not
+$USER
+
+45
+cat << "$US"E"R"
+because
+we
+love
+bash
+$USER
+
+313
+exit 9223372036854775805
+
+315
+exit 123"123"
+
+319
+>| echo sure
+
+321
+cd --   minishell: cd: options not supported
+
+
+
+mzhivoto@c1r5p3:~$ exit 9223372036854775805
+exit
+mzhivoto@c1r5p3 ~ % echo $?
+253
+mzhivoto@c1r5p3 ~ % bash
+mzhivoto@c1r5p3:~$ exit 123"123"
+exit
+mzhivoto@c1r5p3 ~ % echo $?
+243
+
+mzhivoto@c1r5p3:~/42cursus/PROJECTS/GitHub/42school_Minishell$ >| echo sure
+Command 'sure' not found, but can be installed with:
+apt install python3-sure

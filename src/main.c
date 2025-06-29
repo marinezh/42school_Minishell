@@ -2,70 +2,71 @@
 
 int	read_prompt(t_cmd_input *cmd)
 {
-	cmd->input = readline("minishell$ ");
-	if (sig_received)
-	{
-		if (cmd->input)
-		{
-			free(cmd->input);
-			cmd->input = NULL;
-		}
-		return (-2);
-	}
-	if (!cmd->input)
-	{
-		printf("exit\n");
-		return (-1);
-	}
-	if (cmd->input[0] == '\0')
-	{
-		free(cmd->input);
-		cmd->input = NULL;
-		return (0);
-	}
- 	return (1);
-	///////////////////////////////////////////////////////
-	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
-	// char *line;
-	// if (isatty(STDIN_FILENO))
-	// {
-	// 	line = readline("minishell$ ");
-	// }
-	// else
-	// {
-	// 	line = get_next_line(STDIN_FILENO);
-	// 	if (line)
-	// 	{
-	// 		// Remove trailing newline added by get_next_line
-	// 		size_t len = ft_strlen(line);
-	// 		if (len > 0 && line[len - 1] == '\n')
-	// 			line[len - 1] = '\0';
-	// 	}
-	// }
-	// // Handle EOF or Ctrl+D
-	// if (!line)
-	// {
-	// 	if (isatty(STDIN_FILENO))
-	// 		printf("exit\n");
-	// 	return (-1);
-	// }
+	//cmd->input = readline("minishell$ ");
 	// if (sig_received)
 	// {
-	// 	free(line);
-	// 	cmd->input = NULL;
+	// 	if (cmd->input)
+	// 	{
+	// 		free(cmd->input);
+	// 		cmd->input = NULL;
+	// 	}
 	// 	return (-2);
 	// }
-	// // Empty line (e.g., user just pressed Enter)
-	// if (line[0] == '\0')
+	// if (!cmd->input)
 	// {
-	// 	free(line);
+	// 	printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (cmd->input[0] == '\0')
+	// {
+	// 	free(cmd->input);
 	// 	cmd->input = NULL;
 	// 	return (0);
 	// }
-	// cmd->input = line;
-	// return (1);
+ 	// return (1);
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	char *line;
+	if (isatty(STDIN_FILENO))
+	{
+		line = readline("minishell$ ");
+	}
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			// Remove trailing newline added by get_next_line
+			size_t len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
+	}
+	// Handle EOF or Ctrl+D
+	if (!line)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
+		return (-1);
+	}
+	if (sig_received)
+	{
+		free(line);
+		cmd->input = NULL;
+		return (-2);
+	}
+	// Empty line (e.g., user just pressed Enter)
+	if (line[0] == '\0')
+	{
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+	cmd->input = line;
+	return (1);
 // 	//END OF PART FOR BIG TESTER
 // 	///////////////////////////////////////////////////////////
+	
 }
 
 void	shell_loop(t_data *data)
@@ -107,6 +108,7 @@ void	shell_loop(t_data *data)
 		}
 		// printf("PURE TOKENS\n");
 		//print_tokens(tokens);
+		//printf("/////////////////////\n");
 		//  files = parse_redir(tokens);
 		//  print_files_nodes(files);
 		if (error_check(tokens, data))
@@ -124,7 +126,16 @@ void	shell_loop(t_data *data)
     		free(cmd_input.input);
     		continue; // Skip to next prompt
 		}
+
+		//print_tokens(tokens);
+		
 		tokens = handle_word_splitting(tokens);
+		// if (!check_ambiguous_redirects(tokens, data))
+		// {
+		// 	free_tokens(tokens);
+		// 	free(cmd_input.input);
+		// 	continue;
+		// }
 		delete_empty_tokens(&tokens);
 		//print_tokens(tokens);
 		//remove_outer_quotes(tokens);
@@ -132,7 +143,7 @@ void	shell_loop(t_data *data)
 		//print_commands(commands);
 		remove_quotes_from_command_args(commands); // New function
 		// printf("/////////////////////\n");
-		// print_commands(commands);
+		//print_commands(commands);
 		// printf("/////////////////////\n");
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list

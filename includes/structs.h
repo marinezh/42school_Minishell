@@ -23,7 +23,9 @@ typedef enum e_error_code
 	ERR_PERM_DENIED = 126,
 	ERR_CMD_NOT_FOUND = 127,
 	ERR_INTERUPTED_SIGINT = 130,
-	ERR_INVALID_EXIT_CODE = 255,
+	//ERR_INVALID_EXIT_CODE = 255,
+	ERR_INVALID_EXIT_CODE = 2,
+	ERR_AMB_RED = 1,
     ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing DOUBLE CHECK
 }						t_error_code;
 
