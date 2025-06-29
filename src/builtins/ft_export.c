@@ -69,7 +69,6 @@ int	ft_export(t_data *data, t_command *cmd)
 	int		i;
     int     special_var;
 	int		had_error;
-	char	*cmd_name;
 
 	i = 1;
     special_var = 0;
@@ -82,14 +81,12 @@ int	ft_export(t_data *data, t_command *cmd)
 		{
 			if (cmd->args[i][0] == '-')
 			{
-				print_error(cmd->args, MSG_NO_OPTIONS);
+				print_error("export: ", cmd->args[i], MSG_NO_OPTIONS);
 				return (1);
 			}
 			if (!is_var_name_valid(cmd->args[i], &special_var))
 			{
-				cmd_name = ft_strjoin("export: ", cmd->args[i]);
-				print_error_msg(cmd_name, ": not a valid identifier\n");
-				free(cmd_name);
+				print_error("export: ", cmd->args[i], MSG_INVALID_NAME);
 				had_error = 1;
 				i++;
 				continue ;
