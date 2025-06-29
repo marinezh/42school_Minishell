@@ -106,7 +106,7 @@ int	ft_cd(t_data *data, t_command *cmd)
 		return (go_home(data));
 	if (path[0] == '-')
 	{
-		print_error_msg("cd", MSG_NO_OPTIONS);
+		print_error("cd: ", path, MSG_NO_OPTIONS);
 		return (2);
 	}
 	return (change_cur_dir(data, path));
