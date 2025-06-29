@@ -43,6 +43,9 @@ int	replace_undefined_variable(t_token *token, int i, int var_len)
 	free(token->value);
 	token->value = final_value;
 	free_strings(prefix, suffix, NULL);
+	// printf("[%d] '%s' (len: %zu)\n", i, token->value, strlen(token->value));
+	// printf("[%d] >%s<\n", i, token->value);
+
 	return (1);
 }
 

@@ -150,74 +150,7 @@ static int	handle_expantion(t_token *token, t_data *data, int *i)
 	return (1);
 }
 
-// 
-// int expand_variables(t_token *token, t_data *data)
-// {
-// 	t_token	*current;
-// 	int		i;
-// 	int		in_single;
-// 	int		in_double;
 
-// 	current = token;
-// 	while (current)
-// 	{
-// 		if (current->type == WORD || current->type == FILE_NAME)
-// 		{
-// 			i = 0;
-// 			in_single = 0;
-// 			in_double = 0;
-
-// 			while (current->value[i])
-// 			{
-// 				if  (current->value[i] == '$' && current->value[i+1] == '\"')
-// 				{
-//         			// Skip the $ but keep the quote for quote tracking
-//     				i++;
-// 				    continue;		
-// 				}
-// 				// Toggle quote state
-// 				if (current->value[i] == '\'' && !in_double)
-// 				{
-// 					in_single = !in_single;
-// 					i++;
-// 					continue;
-// 				}
-// 				else if (current->value[i] == '\"' && !in_single)
-// 				{
-// 					in_double = !in_double;
-// 					i++;
-// 					continue;
-// 				}
-
-// 				// ✅ Changed: use new logic to handle all variable cases
-// 				if (should_expand_variable(&current->value[i], in_single))
-// 				{
-// 					// Handle special case of $?
-// 					if (current->value[i + 1] == '?')
-// 					{
-// 						if (!handle_status_var(current, data->status, &i))
-// 						{
-// 							handle_error_arg(data, "memory", ": allocation failed\n", 1);
-// 							return (0);
-// 						}
-// 					}
-// 					// Handle regular environment variables
-// 					else
-// 					{
-// 						if (!handle_expantion(current, data, &i))
-// 							return (0);
-// 					}
-// 					continue;
-// 				}
-
-// 				// If no expansion, just move forward
-// 				i++;
-// 			}
-// 		}
-// 		current = current->next;
-// 	}
-// 	return (1);
-// }
 int expand_variables(t_token *token, t_data *data, int skip_after_heredoc)
 {
     t_token *current;
@@ -303,4 +236,64 @@ int expand_variables(t_token *token, t_data *data, int skip_after_heredoc)
         current = current->next;
     }
     return (1);
+}
+// void delete_empty_tokens(t_token **head)
+// {
+//     t_token *current = *head;
+//     t_token *prev = NULL;
+//     t_token *tmp;
+
+//     while (current)
+//     {
+//         if (current->value && current->value[0] == '\0')
+//         {
+//             tmp = current;
+//             if (prev) // not head
+//                 prev->next = current->next;
+//             else // head node is empty
+//                 *head = current->next;
+
+//             current = current->next;
+//             free(tmp->value);
+//             free(tmp);
+//         }
+//         else
+//         {
+//             prev = current;
+//             current = current->next;
+//         }
+//     }
+// }
+
+void delete_empty_tokens(t_token **head)
+{
+	t_token *current = *head;
+	t_token *tmp;
+
+	while (current)
+	{
+		if (current->value && current->value[0] == '\0')
+		{
+			tmp = current;
+
+			// Fix links
+			if (current->prev)
+				current->prev->next = current->next;
+			else
+				*head = current->next;  // If we're deleting the head
+
+			if (current->next)
+				current->next->prev = current->prev;
+
+			current = current->next;
+
+			// Free memory
+			free(tmp->value);
+			free(tmp);
+		}
+		else
+		{
+			current = current->next;
+		}
+	}
 }

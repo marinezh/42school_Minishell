@@ -128,6 +128,8 @@ void	shell_loop(t_data *data)
     		continue; // Skip to next prompt
 		}
 		tokens = handle_word_splitting(tokens);
+		delete_empty_tokens(&tokens);
+		//print_tokens(tokens);
 		//remove_outer_quotes(tokens);
 		commands = parse_tokens(tokens);
 		//print_commands(commands);

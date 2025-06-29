@@ -15,6 +15,6 @@
 # define ERR_PARSING_IN "syntax error near unexpected token `<'\n"
 # define ERR_PARSING_APP "syntax error near unexpected token `>>'\n"
 # define ERR_PARSING_HER "syntax error near unexpected token `<<'\n"
-# define MSG_IS_DIR ": is a directory\n"
+# define MSG_IS_DIR ": Is a directory\n"
 
 #endif
