@@ -133,25 +133,25 @@ bash
 $USER
 
 313
-exit 9223372036854775805
+exit 9223372036854775805 - works!!!!
 
 315
-exit 123"123"
+exit 123"123"            - works !!!!
 
 319
->| echo sure
+>| echo sure    - >| is trying to redirect output to a file named echo, overriding noclobber. This command valid but we do not implemment it
 
 321
 cd --   minishell: cd: options not supported
 
 
 
-mzhivoto@c1r5p3:~$ exit 9223372036854775805
-exit
-mzhivoto@c1r5p3 ~ % echo $?
+mzhivoto@c1r5p3:~$ exit 9223372036854775805 
+exit 
+mzhivoto@c1r5p3 ~ % echo $? 
 253
 mzhivoto@c1r5p3 ~ % bash
-mzhivoto@c1r5p3:~$ exit 123"123"
+mzhivoto@c1r5p3:~$ exit 123"123"    
 exit
 mzhivoto@c1r5p3 ~ % echo $?
 243
