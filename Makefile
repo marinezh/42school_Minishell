@@ -23,7 +23,7 @@ VALGRIND = valgrind --show-leak-kinds=all --leak-check=full --track-fds=yes --lo
 
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -I./includes/
+CFLAGS = -Wall -Wextra -Werror -Wunused -I./includes/
 # Check if we're on macOS and add readline paths
 ifeq ($(shell uname), Darwin)
     # For Apple Silicon (arm64)

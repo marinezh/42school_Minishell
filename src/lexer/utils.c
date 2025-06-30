@@ -58,7 +58,7 @@ char *word_dup(char *str, int len)
 // 	return (0);
 // }
 
-void	error_msg(char *msg)
-{
-	ft_putendl_fd(msg, 2);
-}
+// void	error_msg(char *msg)
+// {
+// 	ft_putendl_fd(msg, 2);
+// }

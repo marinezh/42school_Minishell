@@ -26,7 +26,7 @@ typedef enum e_error_code
 	//ERR_INVALID_EXIT_CODE = 255,
 	ERR_INVALID_EXIT_CODE = 2,
 	ERR_AMB_RED = 1,
-    ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing DOUBLE CHECK
+   // ERR_PARSER_MEMORY = 12,		// Memory allocation failure during parsing DOUBLE CHECK
 }						t_error_code;
 
 typedef struct s_cmd_input
