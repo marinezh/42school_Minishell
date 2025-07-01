@@ -23,8 +23,10 @@ typedef enum e_error_code
 	ERR_PERM_DENIED = 126,
 	ERR_CMD_NOT_FOUND = 127,
 	ERR_INTERUPTED_SIGINT = 130,
-	ERR_INVALID_EXIT_CODE = 255,
-    ERR_PARSER_MEMORY = 260,		// Memory allocation failure during parsing DOUBLE CHECK
+	//ERR_INVALID_EXIT_CODE = 255,
+	ERR_INVALID_EXIT_CODE = 2,
+	ERR_AMB_RED = 1,
+   // ERR_PARSER_MEMORY = 12,		// Memory allocation failure during parsing DOUBLE CHECK
 }						t_error_code;
 
 typedef struct s_cmd_input
@@ -101,11 +103,11 @@ typedef struct s_exp_parts
 	char	*final_value;
 }	t_exp_parts;
 
-typedef struct s_word_pos
-{
-    int start;
-    int end;
-} t_word_pos;
+// typedef struct s_word_pos
+// {
+//     int start;
+//     int end;
+// } t_word_pos;
 
 // Define a struct for position tracking
 typedef struct s_split_data
@@ -118,11 +120,4 @@ typedef struct s_split_data
 } t_split_data;
 #endif 
 
-// typedef struct s_command
-// {
-// 	int					index;
-// 	char **args;            // Command + arguments
-// 	t_files *redirections;       // Linked list of redirections (<, <<, >, >>)
-// 	t_token *tokens; // linked list of tokens
-// 	struct s_command *next; // Pointer to the next command
-// }						t_command;
+

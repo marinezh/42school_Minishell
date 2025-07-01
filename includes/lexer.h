@@ -2,22 +2,17 @@
 # define LEXER_H
 
 # define SPACING_FACTOR 4
+# define QUOTE_ERROR_PTR ((char **)(-2))
 
 #include "minishell.h"
-// typedef struct s_cmd_input
-// {
-// 	char	*input;
-// 	char	*spaced;
-// 	int		len;
-// 	int		i;
-// 	int		j;
-// 	// t_list  env; // need to do linkedlist part in libft
-// }			t_cmd_input;
+
+
 
 int			getpwd(void);
 //char		**run_lexer(t_cmd_input *cmd);
 int			read_prompt(t_cmd_input *data);
 //char		*add_space(t_cmd_input *cmd);
+char		**preprocess_input(char *input, t_data *data);
 char		*add_space(t_cmd_input *cmd, t_data *data);
 int			word_count(char *str);
 char		*word_dup(char *str, int len);

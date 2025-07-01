@@ -68,7 +68,8 @@ void	execute(t_data *data, t_command *cmd)
 	status = 0;
 	if (!cmd)
 	{
-		data->status = ERR_GENERIC;
+		//data->status = ERR_GENERIC;
+		data->status = 0;
 		return ;
 	}
 	if (!cmd->redirections && (!cmd->args || !cmd->args[0]))
