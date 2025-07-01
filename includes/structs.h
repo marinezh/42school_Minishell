@@ -116,6 +116,14 @@ typedef struct s_split_data
     int		start;    // Start position of current word
     int		end; 	// End position of current word
 } t_split_data;
+
+typedef struct s_pipe {
+    t_command *cur_cmd;      
+    int cmd_count;          
+    int input_pipe[2];       
+    int cur_pipe[2];         
+} t_pipe;
+
 #endif 
 
 // typedef struct s_command

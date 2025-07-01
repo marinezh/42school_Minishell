@@ -21,17 +21,74 @@ void	close_unused_heredoc_fds(t_command *cmd, t_command *cur_cmd)
 		iter_cmd = iter_cmd->next;
 	}
 }
+static int	setup_pipe(int cur_pipe[2], int input_pipe[2])
+{
+	if (pipe(cur_pipe) == -1)
+	{
+		ft_putstr_fd("minishell: pipe: Too many open files\n",
+			STDERR_FILENO);
+		if (input_pipe[0] != -1)
+			close(input_pipe[0]);
+		return (1);
+	}
+	return (0);
+}
+static int	handle_fork_error(int cur_pipe[2], int input_pipe[2])
+{
+	ft_putstr_fd("minishell: fork: Cannot allocate memory\n",
+		STDERR_FILENO);
+	if (input_pipe[0] != -1)
+		close(input_pipe[0]);
+	if (cur_pipe[0] != -1) 
+	{ 
+		close(cur_pipe[0]); 
+		close(cur_pipe[1]); 
+	}
+	return (1);
+}	
+void	handle_parent_pipe(int cur_pipe[2], int input_pipe[2], int i, int count)
+{
+	if (i > 0) 
+	{
+		close(input_pipe[0]);
+		if (input_pipe[1] != -1)
+			close(input_pipe[1]);
+	}
+	if (i < count - 1) 
+	{
+		close(cur_pipe[1]); 
+		input_pipe[0] = cur_pipe[0];
+		input_pipe[1] = -1; 
+	}
+}
+
+static int	wait_for_processes(pid_t *pids, int cmd_count)
+{
+	int i;
+	int	status;
+
+	i = 0;
+	while (i < cmd_count - 1)
+		handle_parent_process(pids[i++]);
+	status = handle_parent_process(pids[cmd_count - 1]);
+	return (status);
+}
+typedef struct s_pipe {
+    t_command *cur_cmd;      
+    int cmd_count;          
+    int input_pipe[2];       
+    int cur_pipe[2];         
+} t_pipe;
 
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
 	int input_pipe[2] = {-1, -1};
 	int cur_pipe[2] = {-1, -1};
-	// pid_t		pid;
 	pid_t		pids[cmd_count];
 	int			i;
 	int			exit_code;
 	t_command	*cur_cmd;
-	int			status;
+	// int			status;
 	
 
 	cur_cmd = cmd;
@@ -40,31 +97,35 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	{
 		if (i < cmd_count - 1)
 		{
-			if (pipe(cur_pipe) == -1)
-			{
-				ft_putstr_fd("minishell: pipe: Too many open files\n",
-					STDERR_FILENO);
-				if (input_pipe[0] != -1)
-					close(input_pipe[0]);
-				return (1);
-			}
+			setup_pipe(cur_pipe, input_pipe);
+			// if (pipe(cur_pipe) == -1)
+			// {
+			// 	ft_putstr_fd("minishell: pipe: Too many open files\n",
+			// 		STDERR_FILENO);
+			// 	if (input_pipe[0] != -1)
+			// 		close(input_pipe[0]);
+			// 	return (1);
+			// }
 		}
 		pids[i] = create_process();
 		if (pids[i] < 0)
 		{
-			ft_putstr_fd("minishell: fork: Cannot allocate memory\n",
-				STDERR_FILENO);
-			if (input_pipe[0] != -1)
-				close(input_pipe[0]);
-			if (cur_pipe[0] != -1) 
-			{ 
-				close(cur_pipe[0]); 
-				close(cur_pipe[1]); 
-			}
-			return (1);
+			return (handle_fork_error(cur_pipe, input_pipe));
+			// ft_putstr_fd("minishell: fork: Cannot allocate memory\n",
+			// 	STDERR_FILENO);
+			// if (input_pipe[0] != -1)
+			// 	close(input_pipe[0]);
+			// if (cur_pipe[0] != -1) 
+			// { 
+			// 	close(cur_pipe[0]); 
+			// 	close(cur_pipe[1]); 
+			// }
+			// return (1);
 		}
 		if (pids[i] == 0)
 		{
+			// static void handle_child_process(t_data *data, t_command *cmd, t_command *cur_cmd,
+			// int i, int cmd_count, int *input_pipe, int *cur_pipe);
 			reset_signals_to_default();
 			close_unused_heredoc_fds(cmd, cur_cmd);
 			// redirect out/in
@@ -78,7 +139,6 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 					exit(1);
 				}
 				close(input_pipe[0]);
-				// close(input_pipe[1]);
 			}
 			if (i < cmd_count - 1)
 			{
@@ -99,26 +159,28 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			free_command_list(cmd);
 			exit(exit_code);
 		}
-		if (i > 0) 
-		{
-            close(input_pipe[0]);
-			if (input_pipe[1] != -1)  // This check is important!
-				close(input_pipe[1]);
-        }
-		if (i < cmd_count - 1) 
-		{
-			close(cur_pipe[1]);  // Close write end we just passed to child
-			input_pipe[0] = cur_pipe[0];  // Save read end for next iteration
-			input_pipe[1] = -1; 
-        }
+		handle_parent_pipe(cur_pipe, input_pipe, i, cmd_count);
+		// if (i > 0) 
+		// {
+        //     close(input_pipe[0]);
+		// 	if (input_pipe[1] != -1)
+		// 		close(input_pipe[1]);
+        // }
+		// if (i < cmd_count - 1) 
+		// {
+		// 	close(cur_pipe[1]); 
+		// 	input_pipe[0] = cur_pipe[0];
+		// 	input_pipe[1] = -1; 
+        // }
 		cur_cmd = cur_cmd->next; 
 		i++;
 	}
-	i = 0;
-	while (i < cmd_count - 1)
-		waitpid(pids[i++], NULL, 0);
-	status = handle_parent_process(pids[cmd_count - 1]);
-	return (status);
+	return(wait_for_processes(pids, cmd_count));
+	// i = 0;
+	// while (i < cmd_count - 1)
+	// 	handle_parent_process(pids[i++]);
+	// status = handle_parent_process(pids[cmd_count - 1]);
+	// return (status);
 }
 
 
