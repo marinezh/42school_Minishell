@@ -104,8 +104,7 @@ void	shell_loop(t_data *data)
 	t_command	*commands;
 	int			prompt_res;
 
-	ft_memset(&cmd_input, 0, sizeof(t_cmd_input)); // cmd_input initialization of cmd_input
-	//commands = NULL;
+	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
 	while (!data->exit_f)
 	{
 		sig_received = 0;
@@ -126,7 +125,7 @@ void	shell_loop(t_data *data)
 		if (!commands)
 			continue ;
 		execute(data, commands);
-		free_command_list(commands); // Free the commands list
+		free_command_list(commands);
 	}
 }
 

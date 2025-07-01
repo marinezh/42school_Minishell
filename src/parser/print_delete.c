@@ -234,3 +234,9 @@ void	print_commands(t_command *cmd_list)
 	// 	debug_env = debug_env->next;
 	// }
 	// printf("--- END DEBUG ---\n");
+
+
+	// from  preproccess input function
+	// FOR DEBUGGIN , delete later for
+	// for (int j = 0; split_input[j]; j++)
+	// printf("token[%d] = [%s]\n", j, split_input[j]);
