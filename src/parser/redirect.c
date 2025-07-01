@@ -28,7 +28,7 @@ t_files	*create_file_node(char *name, int type)
 			}
 			new_file->name = unquoted_name;
 			new_file->to_expand = 0;
-			//printf("DEBUG: Setting expand_vars=0 (no expansion)\n");
+			//printf("DEBUG: Quoted heredoc delimiter: '%s', to_expand=0\n", new_file->name);
 		}
 		else
 		{
@@ -39,7 +39,7 @@ t_files	*create_file_node(char *name, int type)
 				return (NULL);
 			}
 			new_file->to_expand = 1;
-			//printf("DEBUG: Setting expand_vars=1 (do expansion)\n");
+			//printf("DEBUG: Unquoted heredoc delimiter: '%s', to_expand=1\n", new_file->name);
 		}
 	}
 	else

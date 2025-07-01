@@ -42,8 +42,6 @@ int handle_redirection(t_command *current, t_token **token_list)
 		*token_list = (*token_list)->next;
 		return (1);
 	}
-	
-
 	return (0);
 }
 

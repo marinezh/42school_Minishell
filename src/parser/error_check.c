@@ -30,13 +30,11 @@ int error_check(t_token *token, t_data *data)
 	}
 	while(token)
 	{
-		// if (token->value && check_unclosed_quotes(token->value))
+		// if ((token->type == REDIR_OUT || token->type == REDIR_APPEND || token->type == REDIR_IN) && (token->next))  
 		// {
-		// 	handle_error_arg(data, "", "minishell: unclosed quotes !!!", 2);
-		// 	//makedata->status = 2;
-		// 	//printf("QUOTES\n");
-		// 	return (1);
+
 		// }
+		
 		
 		if(token->type == PIPE && (!token->next || token->next->type == PIPE))
 		{

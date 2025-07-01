@@ -43,6 +43,9 @@ int	replace_undefined_variable(t_token *token, int i, int var_len)
 	free(token->value);
 	token->value = final_value;
 	free_strings(prefix, suffix, NULL);
+	// printf("[%d] '%s' (len: %zu)\n", i, token->value, strlen(token->value));
+	// printf("[%d] >%s<\n", i, token->value);
+
 	return (1);
 }
 
@@ -56,4 +59,18 @@ char	*extract_variable_name(const char *input)
 		j++;
 	var_name = ft_substr(input, 0, j);
 	return (var_name);
+}
+int	ft_tlsize(t_token *tokens)
+{
+	int		count;
+	t_token	*pnt;
+
+	pnt = tokens;
+	count = 0;
+	while (pnt != NULL)
+	{
+		count++;
+		pnt = pnt->next;
+	}
+	return (count);
 }
