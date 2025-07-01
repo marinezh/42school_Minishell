@@ -3,7 +3,7 @@
 int	read_prompt(t_cmd_input *cmd)
 {
 	cmd->input = readline("minishell$ ");
-	if (sig_received)
+	if (g_sig_received)
 	{
 		if (cmd->input)
 		{
@@ -49,7 +49,7 @@ int	read_prompt(t_cmd_input *cmd)
 	// 		printf("exit\n");
 	// 	return (-1);
 	// }
-	// if (sig_received)
+	// if (g_sig_received)
 	// {
 	// 	free(line);
 	// 	cmd->input = NULL;
@@ -78,7 +78,7 @@ void	shell_loop(t_data *data)
 
 	while (!data->exit_f)
 	{
-		sig_received = 0;
+		g_sig_received = 0;
 		prompt_res = read_prompt(&cmd_input);
 		if (prompt_res == -1)  //EOF (Cntl + D)/ exit
 			break ;
@@ -153,6 +153,7 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	}
 	set_prompt_signals();
+	rl_event_hook = rl_signal_handler;
 	shell_loop(&data);
 	// clean struct where env are stored
 	free_env_list(&data.envp_list);

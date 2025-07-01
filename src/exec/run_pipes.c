@@ -39,26 +39,26 @@ static int	handle_fork_error(int cur_pipe[2], int input_pipe[2])
 		STDERR_FILENO);
 	if (input_pipe[0] != -1)
 		close(input_pipe[0]);
-	if (cur_pipe[0] != -1) 
-	{ 
-		close(cur_pipe[0]); 
-		close(cur_pipe[1]); 
+	if (cur_pipe[0] != -1)
+	{
+		close(cur_pipe[0]);
+		close(cur_pipe[1]);
 	}
 	return (1);
-}	
+}
 void	handle_parent_pipe(int cur_pipe[2], int input_pipe[2], int i, int count)
 {
-	if (i > 0) 
+	if (i > 0)
 	{
 		close(input_pipe[0]);
 		if (input_pipe[1] != -1)
 			close(input_pipe[1]);
 	}
-	if (i < count - 1) 
+	if (i < count - 1)
 	{
-		close(cur_pipe[1]); 
+		close(cur_pipe[1]);
 		input_pipe[0] = cur_pipe[0];
-		input_pipe[1] = -1; 
+		input_pipe[1] = -1;
 	}
 }
 
@@ -68,17 +68,17 @@ static int	wait_for_processes(pid_t *pids, int cmd_count)
 	int	status;
 
 	i = 0;
-	while (i < cmd_count - 1)
+	while (i < cmd_count)
 		handle_parent_process(pids[i++]);
-	status = handle_parent_process(pids[cmd_count - 1]);
+	// status = handle_parent_process(pids[cmd_count - 1]);
 	return (status);
 }
-typedef struct s_pipe {
-    t_command *cur_cmd;      
-    int cmd_count;          
-    int input_pipe[2];       
-    int cur_pipe[2];         
-} t_pipe;
+// typedef struct s_pipe {
+//     t_command *cur_cmd;
+//     int cmd_count;
+//     int input_pipe[2];
+//     int cur_pipe[2];
+// } t_pipe;
 
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
@@ -89,7 +89,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 	int			exit_code;
 	t_command	*cur_cmd;
 	// int			status;
-	
+
 
 	cur_cmd = cmd;
 	i = 0;
@@ -115,14 +115,14 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			// 	STDERR_FILENO);
 			// if (input_pipe[0] != -1)
 			// 	close(input_pipe[0]);
-			// if (cur_pipe[0] != -1) 
-			// { 
-			// 	close(cur_pipe[0]); 
-			// 	close(cur_pipe[1]); 
+			// if (cur_pipe[0] != -1)
+			// {
+			// 	close(cur_pipe[0]);
+			// 	close(cur_pipe[1]);
 			// }
 			// return (1);
 		}
-		if (pids[i] == 0)
+		else if (pids[i] == 0)
 		{
 			// static void handle_child_process(t_data *data, t_command *cmd, t_command *cur_cmd,
 			// int i, int cmd_count, int *input_pipe, int *cur_pipe);
@@ -159,20 +159,25 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			free_command_list(cmd);
 			exit(exit_code);
 		}
-		handle_parent_pipe(cur_pipe, input_pipe, i, cmd_count);
-		// if (i > 0) 
+		else
+		{
+			cur_cmd->pid = pids[i];
+			handle_parent_pipe(cur_pipe, input_pipe, i, cmd_count);
+
+		}
+		// if (i > 0)
 		// {
         //     close(input_pipe[0]);
 		// 	if (input_pipe[1] != -1)
 		// 		close(input_pipe[1]);
         // }
-		// if (i < cmd_count - 1) 
+		// if (i < cmd_count - 1)
 		// {
-		// 	close(cur_pipe[1]); 
+		// 	close(cur_pipe[1]);
 		// 	input_pipe[0] = cur_pipe[0];
-		// 	input_pipe[1] = -1; 
+		// 	input_pipe[1] = -1;
         // }
-		cur_cmd = cur_cmd->next; 
+		cur_cmd = cur_cmd->next;
 		i++;
 	}
 	return(wait_for_processes(pids, cmd_count));
