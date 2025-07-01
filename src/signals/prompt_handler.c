@@ -5,19 +5,20 @@
 // declared JUST for MacOS
 extern void rl_replace_line(const char *text, int clear_undo);
 
-volatile sig_atomic_t sig_received = 0;
+volatile sig_atomic_t g_sig_received = 0;
 
 static void	handler(int sig)
 {
-	if (sig == SIGINT)
-	{
-		sig_received = 1;
-		write(1, "\n", 1);
-		rl_on_new_line(); //tells readline that cursor has moved to a new line
-		rl_replace_line("", 0); //clear the current input line
-		rl_redisplay(); //display a fresh prompt
-		rl_done = 1;
-	}
+	//if (sig == SIGINT)
+	//{
+		g_sig_received = sig;
+		// write(1, "\n", 1);
+		// rl_on_new_line(); //tells readline that cursor has moved to a new line
+		// rl_replace_line("", 0); //clear the current input line
+		// rl_redisplay(); //display a fresh prompt
+		// rl_done = 1;
+		// g_sig_received = 0;
+	//}
 }
 
 void	set_prompt_signals(void)
@@ -46,4 +47,17 @@ void    reset_signals_to_default(void)
     sa.sa_flags = 0;
     sigaction(SIGINT, &sa, NULL);
     sigaction(SIGQUIT, &sa, NULL);
+}
+
+int	rl_signal_handler(void)
+{
+	if (g_sig_received == SIGINT)
+	{
+		// ft_putzendl("^C");
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+		g_sig_received = 0;
+	}
+	return (EXIT_SUCCESS);
 }

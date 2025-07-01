@@ -1,7 +1,7 @@
 #ifndef EXEC_H
 # define EXEC_H
 
-int     init_data(t_data *data, char **env);
+int		init_data(t_data *data, char **env);
 int		ft_pwd(t_data *data, t_command *cmd);
 int		ft_echo(t_data *data, t_command *cmd);
 int		ft_env(t_data *data, t_command *cmd);
@@ -11,7 +11,7 @@ int		ft_cd(t_data *data, t_command *cmd);
 int		ft_exit(t_data *data, t_command *cmd);
 void	free_double_array(char **envp);
 void	free_env_list(t_env **env);
-int     rebuild_envp_array(t_data *data, t_env *envp_list);
+int		rebuild_envp_array(t_data *data, t_env *envp_list);
 void	node_add_last(t_env **envp_list, t_env *new_node);
 t_env	*create_env_node(char *str);
 int		env_list_size(t_env *env);
@@ -23,7 +23,7 @@ t_env	*find_env_node(t_data *data, char *env_var);
 int		count_args(char **args);
 void	execute(t_data *data, t_command *cmd);
 int		run_bltin(t_data *data, t_command *cmd);
-int     run_external(t_data *data, t_command *cmd);
+int		run_external(t_data *data, t_command *cmd);
 int		handle_error_arg(t_data *data, char *arg, char *msg, int error_code);
 int		execute_cmd(t_data *data, t_command *cmd, char *path);
 int		check_file_access(char *path);
@@ -31,18 +31,17 @@ char	*process_binary(t_data *data, char *arg);
 int		check_file_access(char *path);
 int		redirect_stream(t_data *data, int old_fd, int new_fd);
 int		handle_redirs(t_data *data, t_command *cmd);
-int	    process_heredoc(t_data *data, t_command *cmd, t_files *cur_node);
-int     run_pipes(t_data *data, t_command *cmd, int cmd_count);
+int		process_heredoc(t_data *data, t_command *cmd, t_files *cur_node);
+int		run_pipes(t_data *data, t_command *cmd, int cmd_count);
 pid_t	create_process(void);
-int	    process_cmd(t_data *data, t_command *cmd);
+int		process_cmd(t_data *data, t_command *cmd);
 void	free_fds(int **fds, int i);
-int     handle_parent_process(pid_t pid);
+int		handle_parent_process(pid_t pid);
 void	cleanup_process_data(t_data *data);
 void	free_env_node(t_env *node);
 
-void    set_prompt_signals(void);
-void	set_heredoc_signals(void);
-void    reset_signals_to_default(void);
-void    initialize_terminal_settings(void);
+void	set_prompt_signals(void);
+void	reset_signals_to_default(void);
+int		rl_signal_handler(void);
 
 #endif

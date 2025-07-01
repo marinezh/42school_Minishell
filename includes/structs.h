@@ -1,8 +1,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-extern volatile sig_atomic_t sig_received;
-extern int rl_done;
+extern volatile sig_atomic_t	g_sig_received;
+extern int						rl_done;
 
 typedef enum e_token_type
 {
@@ -14,7 +14,7 @@ typedef enum e_token_type
 	REDIR_IN,     // 5 <
 	HEREDOC,      // 6 <<
 	FILE_NAME     // 7
-}						t_token_type;
+}								t_token_type;
 
 typedef enum e_error_code
 {
@@ -31,77 +31,78 @@ typedef enum e_error_code
 
 typedef struct s_cmd_input
 {
-	char				*input;
-	char				*spaced;
-	int					len;
-	int					i;
-	int					j;
-}						t_cmd_input;
+	char						*input;
+	char						*spaced;
+	int							len;
+	int							i;
+	int							j;
+}								t_cmd_input;
 
 typedef struct s_token
 {
-	t_token_type		type;
-	char				*value;
-	int					in_db_quotes;
-	struct s_token		*prev;
-	struct s_token		*next;
-}						t_token;
+	t_token_type				type;
+	char						*value;
+	int							in_db_quotes;
+	struct s_token				*prev;
+	struct s_token				*next;
+}								t_token;
 
 // osibilities for code improvement
 typedef struct s_files
 {
-	int				fd;               // File descriptor for the opened file
-	char			*name;           // File name or heredoc delimiter
-	t_token_type	type;            // Type of redirection: > >> < <<
-	int				to_expand;	// Flag to control variable expansion in heredocs
-	struct s_files	*next; 			// Pointer to the next redirection
-}						t_files;
+	int fd;               // File descriptor for the opened file
+	char *name;           // File name or heredoc delimiter
+	t_token_type type;    // Type of redirection: > >> < <<
+	int to_expand;        // Flag to control variable expansion in heredocs
+	struct s_files *next; // Pointer to the next redirection
+}								t_files;
 
 // linked list of structs split by pipe
 typedef struct s_command
 {
-	int					index;
-	char				**args;
-	t_files				*in;
-	t_files				*out;
-	t_files				*redirections; // think about creation arr of pointers
-	int					pipe; 
-	struct s_command	*next;
-}						t_command;
+	int							index;
+	char						**args;
+	t_files						*in;
+	t_files						*out;
+	t_files						*redirections; // think about creation arr of pointers
+	int							pid;
+	int							pipe;
+	struct s_command			*next;
+}								t_command;
 
 // declaration of main exection struct
-typedef struct s_data	t_data;
+typedef struct s_data			t_data;
 // function pointer type declaration
-typedef int				(*t_bltin)(t_data *, t_command *);
+typedef int						(*t_bltin)(t_data *, t_command *);
 
 // struct for one environment variable (as linked list)
 typedef struct s_env
 {
-	char				*key;
-	char				*value;
-	struct s_env		*next;
-}						t_env;
+	char						*key;
+	char						*value;
+	struct s_env				*next;
+}								t_env;
 
 // main data struct for execution
-struct					s_data
+struct							s_data
 {
-	char				*cmd_names[7];
-	t_bltin				builtins[7];
-	char				**envp;
-	t_env				*envp_list;
-	char				envp_f;
-	char				exit_f;
-	int					status;
+	char						*cmd_names[7];
+	t_bltin						builtins[7];
+	char						**envp;
+	t_env						*envp_list;
+	char						envp_f;
+	char						exit_f;
+	int							status;
 };
 
 typedef struct s_exp_parts
 {
-	char	*status_str;
-	char	*prefix;
-	char	*suffix;
-	char	*new_value;
-	char	*final_value;
-}	t_exp_parts;
+	char						*status_str;
+	char						*prefix;
+	char						*suffix;
+	char						*new_value;
+	char						*final_value;
+}								t_exp_parts;
 
 // typedef struct s_word_pos
 // {
@@ -112,12 +113,21 @@ typedef struct s_exp_parts
 // Define a struct for position tracking
 typedef struct s_split_data
 {
-    char	**result;
-	int		i;        // Current position in result array
-    int		j;        // Current position in input string
-    int		start;    // Start position of current word
-    int		end; 	// End position of current word
-} t_split_data;
-#endif 
+	char						**result;
+	int i;     // Current position in result array
+	int j;     // Current position in input string
+	int start; // Start position of current word
+	int end;   // End position of current word
+}								t_split_data;
+
+typedef struct s_pipe
+{
+	t_command					*cur_cmd;
+	int							cmd_count;
+	int							input_pipe[2];
+	int							cur_pipe[2];
+}								t_pipe;
+
+#endif
 
 
