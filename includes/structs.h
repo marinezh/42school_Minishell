@@ -123,7 +123,7 @@ typedef struct s_pipe
 {
 	t_command					*cur_cmd;
 	int							cmd_count;
-	int							input_pipe[2];
+	int							in_pipe[2];
 	int							cur_pipe[2];
 }								t_pipe;
 
