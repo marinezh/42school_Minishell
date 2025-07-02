@@ -39,6 +39,7 @@ void	free_fds(int **fds, int i);
 int		handle_parent_process(pid_t pid);
 void	cleanup_process_data(t_data *data);
 void	free_env_node(t_env *node);
+int     get_process_exit_code(int wstatus);
 
 void	set_prompt_signals(void);
 void	reset_signals_to_default(void);

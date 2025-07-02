@@ -35,6 +35,24 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 	// free_command_list(cmd);
 	// exit(0);
 }
+int	get_process_exit_code(int wstatus)
+{
+    int exit_code;
+    
+    if (WIFEXITED(wstatus))
+        exit_code = WEXITSTATUS(wstatus);
+    else if (WIFSIGNALED(wstatus))
+    {
+        exit_code = 128 + WTERMSIG(wstatus);
+        if (WTERMSIG(wstatus) == SIGINT)
+            ft_putstr_fd("\n", STDERR_FILENO);
+        else if (WTERMSIG(wstatus) == SIGQUIT)
+            ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+    }
+    else
+        exit_code = ERR_GENERIC;
+    return exit_code;
+}
 
 int	handle_parent_process(pid_t pid)
 {
@@ -42,20 +60,7 @@ int	handle_parent_process(pid_t pid)
 	int	exit_code;
 
 	if (waitpid(pid, &wstatus, 0) != -1)
-	{
-		if (WIFEXITED(wstatus))
-			exit_code = WEXITSTATUS(wstatus);
-		else if (WIFSIGNALED(wstatus))
-		{
-			exit_code = 128 + WTERMSIG(wstatus);
-			if (WTERMSIG(wstatus) == SIGINT)
-				ft_putstr_fd("\n", STDERR_FILENO);
-			else if (WTERMSIG(wstatus) == SIGQUIT)
-				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		}
-		else
-			exit_code = ERR_GENERIC;
-	}
+		exit_code = get_process_exit_code(wstatus);
 	else
 	{
 		perror("waitpid");

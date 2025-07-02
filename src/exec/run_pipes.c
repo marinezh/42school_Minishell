@@ -64,21 +64,29 @@ void	handle_parent_pipe(int cur_pipe[2], int input_pipe[2], int i, int count)
 
 static int	wait_for_processes(pid_t *pids, int cmd_count)
 {
-	int i;
-	int	status;
+	int	waiting_count;
+	int	wstatus;
+	int	exit_code;
+	pid_t	pid;
 
-	i = 0;
-	while (i < cmd_count)
-		handle_parent_process(pids[i++]);
-	// status = handle_parent_process(pids[cmd_count - 1]);
-	return (status);
+	waiting_count = cmd_count;
+	while (waiting_count--)
+	{
+		pid = waitpid(-1, &wstatus, 0);
+		if (pid != -1)
+		{
+			if (pid == pids[cmd_count -1])
+				exit_code = get_process_exit_code(wstatus);
+		}
+		else
+		{
+			perror("waitpid");
+			exit_code = ERR_GENERIC;
+			break ;
+		}
+	}
+	return (exit_code);
 }
-// typedef struct s_pipe {
-//     t_command *cur_cmd;
-//     int cmd_count;
-//     int input_pipe[2];
-//     int cur_pipe[2];
-// } t_pipe;
 
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
@@ -160,11 +168,7 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 			exit(exit_code);
 		}
 		else
-		{
-			cur_cmd->pid = pids[i];
 			handle_parent_pipe(cur_pipe, input_pipe, i, cmd_count);
-
-		}
 		// if (i > 0)
 		// {
         //     close(input_pipe[0]);
