@@ -34,12 +34,11 @@ t_command *add_command_to_chain(t_command **head, t_command **tail, int *cmd_ind
 
 
 
-int process_token(t_command **current, t_token **token_list,
-		t_command **head, t_command **tail, int *cmd_index)
+int process_token(t_command **current, t_token **token_list, t_cmd_chain *chain)
 {
 	if (!(*current)) // Create a new command if needed
 	{
-		*current = add_command_to_chain(head, tail, cmd_index);
+		*current = add_command_to_chain( &chain->head, &chain->tail, &chain->cmd_index);
 		if (!(*current))
 			return (0);
 	}
@@ -65,26 +64,26 @@ int process_token(t_command **current, t_token **token_list,
 
 t_command *parse_tokens(t_token *token_list)
 {
-	t_command *head;
-	t_command *tail;
-	t_command *current;
-	int command_index;
 
-	head = NULL;
-	tail = NULL;
+	t_cmd_chain chain;
+	t_command *current;
+	//int command_index;
+
+	chain.head = NULL;
+	chain.tail = NULL;
 	current = NULL;
-	command_index = 0;
+	chain.cmd_index = 0;
 	
 	while (token_list)
 	{
 		 ///printf("Processing token: %s of type %d\n", token_list->value, token_list->type);
-		if (!process_token(&current, &token_list, &head, &tail, &command_index))
+		if (!process_token(&current, &token_list, &chain))
 		{
 			//printf("Error processing token, freeing resources\n");
-            free_command_list(head);
+            free_command_list(chain.head);
             free_tokens(token_list);
             return NULL;
 		}
 	}
-	return (head);
+	return (chain.head);
 }
