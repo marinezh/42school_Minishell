@@ -9,7 +9,6 @@ t_files	*create_file_node(char *name, int type)
 	new_file = malloc(sizeof(t_files));
 	if (!new_file)
 		return (NULL);
-
 	if (type == HEREDOC)
 	{
 		len = ft_strlen(name);
@@ -17,7 +16,6 @@ t_files	*create_file_node(char *name, int type)
 		if (len >= 2 &&
  				((name[0] == '\'' && name[len - 1] == '\'') ||
     			(name[0] == '"' && name[len - 1] == '"')))
-
 		{
 			//printf("DEBUG: Found single quotes in heredoc delimiter\n");
 			char *unquoted_name = ft_substr(name, 1, len - 2);
@@ -76,6 +74,7 @@ void append_to_list(t_files **list, t_files *node)
 		current = current->next;
 	current->next = node;
 }
+
 void add_redirection(t_command *cmd, char *filename, int type)
 {
 	t_files	*global_redir_node;
@@ -83,7 +82,6 @@ void add_redirection(t_command *cmd, char *filename, int type)
 	
 	if (!cmd || !filename)
 		return;
-	
 	global_redir_node = create_file_node(filename, type); 
 	if (!global_redir_node)
 		return;

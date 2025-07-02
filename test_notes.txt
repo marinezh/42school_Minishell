@@ -107,22 +107,22 @@ Test  15: ✅ echo "exit_code ->$? user ->$USER home -> $HOME"
 Test  16: ✅ echo 'exit_code ->$? user ->$USER home -> $HOME' 
 
 
-Syntax errors
+Syntax errors   - we do not implement ~
 19
 ~
 
 43 
->echo>
+>echo>              gives the same result as our minishell
 /bin/rm -f echo
 
 46
- <echo<
+ <echo<              gives the same result as our minishell
 /bin/rm -f echo
 
 49
->>echo>>
+>>echo>>             gives the same result as our minishell
 /bin/rm -f echo
-
+/////////////////////////////////////////
 Parsing hell
 32
 cat << $USER

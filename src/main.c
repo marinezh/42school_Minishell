@@ -79,6 +79,7 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	if (!split_input)
 		return (NULL);
 	tokens = tokenize_input(split_input);
+	//print_tokens(tokens);
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
@@ -121,6 +122,7 @@ void	shell_loop(t_data *data)
 		if (cmd_input.input && cmd_input.input[0] != '\0')
 			add_history(cmd_input.input);
 		commands = parse_input(commands, data, cmd_input.input);
+		//print_commands(commands);
 		free(cmd_input.input);
 		if (!commands)
 			continue ;
