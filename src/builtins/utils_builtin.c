@@ -2,7 +2,7 @@
 
 int var_name_len(char *name)
 {
-	int count;
+	int     count;
 
 	count = 0;
 	while (name[count] && name[count] != '=')
@@ -14,7 +14,7 @@ int var_name_len(char *name)
 
 t_env *find_env_node(t_data *data, char *env_var)
 {
-    int name_len;
+    int     name_len;
     t_env	*cur;
 
     name_len = var_name_len(env_var);
@@ -28,6 +28,7 @@ t_env *find_env_node(t_data *data, char *env_var)
     }
     return (NULL);
 }
+
 int	count_args(char **args)
 {
 	int		count;

@@ -26,7 +26,3 @@ int ft_env(t_data *data, t_command *cmd)
 	}
 	return(0);
 }
-//print only variables with value, don't print empty variables
-//if anything is typied after env - no other parameters are allowed after env
-//order - printed as they are created!
-//in bash env - argv and options possible

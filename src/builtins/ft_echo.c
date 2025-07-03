@@ -42,5 +42,3 @@ int	ft_echo(t_data *data, t_command *cmd)
 		ft_putchar('\n');
 	return(0);
 }
-
-//prints instead of "g   g" (which is stored in env var) this "g g" (single space)
