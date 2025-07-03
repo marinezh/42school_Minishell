@@ -1,10 +1,14 @@
 #include "minishell.h"
 
+// declared JUST for MacOS
+extern rl_hook_func_t *rl_event_hook;
+
 int	read_prompt(t_cmd_input *cmd)
 {
 	cmd->input = readline("minishell$ ");
 	if (g_sig_received)
 	{
+		g_sig_received = 0;
 		if (cmd->input)
 		{
 			free(cmd->input);
@@ -116,7 +120,7 @@ void	shell_loop(t_data *data)
 			continue ; // skip to next input
 		}
 
-		if (!expand_variables(tokens, data))
+		if (!expand_variables(tokens, data, 1))
 		{
 			//fprintf(stderr, "Expansion failed due to memory error.\n");
     		//data->status = 1;

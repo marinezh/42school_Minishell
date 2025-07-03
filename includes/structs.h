@@ -65,7 +65,6 @@ typedef struct s_command
 	t_files						*in;
 	t_files						*out;
 	t_files						*redirections; // think about creation arr of pointers
-	int							pid;
 	int							pipe;
 	struct s_command			*next;
 }								t_command;
@@ -124,7 +123,7 @@ typedef struct s_pipe
 {
 	t_command					*cur_cmd;
 	int							cmd_count;
-	int							input_pipe[2];
+	int							in_pipe[2];
 	int							cur_pipe[2];
 }								t_pipe;
 
