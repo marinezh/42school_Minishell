@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void sort_envp_by_key(char **envp)
+static void sort_envp_by_key(char **envp)
 {
 	int		i;
 	int		swap;
@@ -25,11 +25,23 @@ void sort_envp_by_key(char **envp)
 	}
 }
 
-void	print_export_format(char **envp)
+static void	print_env_variable(char *key, int key_len, char *value)
+{
+	ft_putstr_fd("declare -x ", STDOUT_FILENO);
+	write(STDOUT_FILENO, key, key_len);
+	if (value)
+	{
+		ft_putstr_fd("=\"", STDOUT_FILENO);
+		ft_putstr_fd(value, STDOUT_FILENO);
+		ft_putstr_fd("\"", STDOUT_FILENO);
+	}
+	ft_putstr_fd("\n", STDOUT_FILENO);
+}
+
+static void	print_export_format(char **envp)
 {
 	int		i;
 	char	*ptr;
-	char	*value;
 	int		key_len;
 
 	i = 0;
@@ -39,26 +51,12 @@ void	print_export_format(char **envp)
 		if (ptr)
 		{
 			key_len = ptr - envp[i];
-			value = ptr + 1;
+			print_env_variable(envp[i], key_len, ptr + 1);
 		}
 		else
 		{
 			key_len = (int)ft_strlen(envp[i]);
-			value = NULL;
-		}
-		if (value)
-		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			write(STDOUT_FILENO, envp[i], key_len);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(value, STDOUT_FILENO);
-			ft_putstr_fd("\"\n", STDOUT_FILENO);
-		}
-		else
-		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			write(STDOUT_FILENO, envp[i], key_len); 
-			ft_putstr_fd("\n", STDOUT_FILENO);
+			print_env_variable(envp[i], key_len, NULL);
 		}
 		i++;
 	}
@@ -69,7 +67,11 @@ int	print_current_envp(t_data *data, t_command *cmd)
 	(void)cmd;
 	if (data->envp_f)
 	{
-		rebuild_envp_array(data, data->envp_list);
+		if (rebuild_envp_array(data, data->envp_list) == -1)
+		{
+			ft_putstr_fd("export: Error rebuilding environment array\n", 2);
+            return (1); 
+		}
 		data->envp_f = 0;
 	}
 	if (data->envp)

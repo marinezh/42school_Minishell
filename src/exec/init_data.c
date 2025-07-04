@@ -60,7 +60,10 @@ int	rebuild_envp_array(t_data *data, t_env *envp_list)
 	list_size = env_list_size(envp_list);
 	envp_arr = fill_envp_array(envp_list, list_size);
 	if (!envp_arr)
+	{
+        ft_putstr_fd("Error: Memory allocation failed\n", 2);
 		return (-1);
+	}
 	if (data->envp)
 	{
 		free_double_array(data->envp);
