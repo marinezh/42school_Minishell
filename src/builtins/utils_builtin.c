@@ -38,3 +38,20 @@ int	count_args(char **args)
 		count++;
 	return (count);
 }
+
+void	node_add_last(t_env **envp_list, t_env *new_node)
+{
+	t_env	*ptr;
+
+	if (!envp_list || !new_node)
+		return ;
+	ptr = *envp_list;
+	if (*envp_list == NULL)
+	{
+		*envp_list = new_node;
+		return ;
+	}
+	while (ptr->next != NULL)
+		ptr = ptr->next;
+	ptr->next = new_node;
+}

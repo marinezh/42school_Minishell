@@ -91,7 +91,7 @@ int	init_data(t_data *data, char **env)
 	data->builtins[5] = ft_cd;
 	data->builtins[6] = ft_exit;
 	if (build_envp_list(data, env) != 0)
-		ft_putstr_fd("Warning: Some environment variables were not loaded\n", 2);
+		ft_putstr_fd("Warning: Some environment variables not loaded\n", 2);
 	if (data->envp_list && (rebuild_envp_array(data, data->envp_list)) != 0)
 	{
 		ft_putstr_fd("Error rebuilding environment array\n", 2);
