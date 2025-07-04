@@ -4,22 +4,28 @@ static int	update_var_value(t_data *data, t_env *env_var, char *arg)
 {
 	char	*ptr;
 	char	*dup_str;
-	char	*newstr;
+	char	*newkey;
 
 	ptr	= ft_strchr(arg, '=');
-	if (ptr)
+	if (!ptr)
+		return (0);
+	if (!ft_strchr(env_var->key, '='))
 	{
-		newstr = ptr + 1;
-		if (*newstr == '\0')
-			dup_str = ft_strdup("");
-		else
-			dup_str = ft_strdup(newstr);
-		if (!dup_str)
+		newkey = ft_strjoin(env_var->key, "=");
+		if (!newkey)
 			return (1);
-		free(env_var->value);
-		env_var->value = dup_str;
-		data->envp_f = 1;
+		free(env_var->key);
+		env_var->key = newkey;
 	}
+	if (*(ptr + 1) == '\0')
+		dup_str = ft_strdup("");
+	else
+		dup_str = ft_strdup(ptr + 1);
+	if (!dup_str)
+		return (1);
+	free(env_var->value);
+	env_var->value = dup_str;
+	data->envp_f = 1;
 	return (0);
 }
 
