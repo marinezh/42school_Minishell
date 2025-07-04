@@ -8,11 +8,7 @@ int	set_pwd(t_data *data, char *env, char *old_pwd)
 	if (!old_pwd)
 		cwd = getcwd(NULL, 0);
 	else
-	{
 		cwd = strdup(old_pwd);
-		if (!cwd)
-			return (ERR_GENERIC);
-	}
 	if (!cwd)
 		return (ERR_GENERIC);
 	env_ptr = find_env_node(data, env);

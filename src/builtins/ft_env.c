@@ -12,7 +12,8 @@ int ft_env(t_data *data, t_command *cmd)
     }
 	if (data->envp_f)
 	{
-		rebuild_envp_array(data, data->envp_list);
+		if (rebuild_envp_array(data, data->envp_list) == -1)
+			return (ERR_GENERIC);
 		data->envp_f = 0;
 	}
 	if (data->envp)
