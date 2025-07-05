@@ -15,11 +15,11 @@ int	count_commands(t_command *head)
 	return(count);
 }
 
-int	has_heredoc(t_data *data, t_command *cmd)
+int	check_heredoc_limit(t_data *data, t_command *cmd)
 {
+	int			count;
 	t_command	*cur_cmd;
 	t_files		*cur_redir;
-	int			count;
 
 	count = 0;
 	cur_cmd = cmd;
@@ -28,20 +28,26 @@ int	has_heredoc(t_data *data, t_command *cmd)
 		cur_redir = cur_cmd->redirections;
 		while (cur_redir)
 		{
-			if (cur_redir->type == HEREDOC)
+			if (cur_redir->type == HEREDOC && ++count > 16)
 			{
-				count++;
-				if (count > 16)
-				{
-					ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
-					data->exit_f = 1;
-					return (-1);
-				}
+				ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+				data->exit_f = 1;
+				return (-1);
 			}
 			cur_redir = cur_redir->next;
 		}
 		cur_cmd = cur_cmd->next;
 	}
+	return (0);
+}
+
+int	has_heredoc(t_data *data, t_command *cmd)
+{
+	t_command	*cur_cmd;
+	t_files		*cur_redir;
+
+	if (check_heredoc_limit(data, cmd) == -1)
+		return (-1);
 	cur_cmd = cmd;
 	while (cur_cmd)
 	{
@@ -68,7 +74,6 @@ void	execute(t_data *data, t_command *cmd)
 	status = 0;
 	if (!cmd)
 	{
-		//data->status = ERR_GENERIC;
 		data->status = 0;
 		return ;
 	}
@@ -86,17 +91,3 @@ void	execute(t_data *data, t_command *cmd)
 		status = process_cmd(data, cmd);
 	data->status = status;
 }
-//**command not found -> status changes to 127, but not exit bash
-
-//CHEcK code for this commands (command->status)
-/*
-bash-3.2$ cat <s1 <z1
-bash: z1: Permission denied
-bash-3.2$ echo $?
-1
-bash-3.2$ cat <s1 <w1  <z1
-bash: w1: No such file or directory
-bash-3.2$ echo $?
-1
-*/
-// CHECK run cat <f1 empty file with valgrind
