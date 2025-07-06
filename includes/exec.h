@@ -42,6 +42,8 @@ void	free_env_node(t_env *node);
 int     get_process_exit_code(int wstatus);
 void    handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i);
 void	init_pipe_data(t_pipe *p_data, t_command *cmd, int cmd_count);
+void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data);
+void	print_eof_warning(t_files *node, int line_num);
 
 void	set_prompt_signals(void);
 void	reset_signals_to_default(void);
