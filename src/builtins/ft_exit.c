@@ -59,7 +59,7 @@ long long custom_strtoll(char *str, int *error)
 int	ft_exit(t_data *data, t_command *cmd)
 {
 	long long	exit_code;
-	int	error;
+	int			error;
 
 	printf("exit\n");
 	if (count_args(cmd->args) == 1)

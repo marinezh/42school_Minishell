@@ -13,40 +13,43 @@ t_env	*init_node(char *key, char *value)
 	return (ptr);
 }
 
-t_env	*create_env_node(char *str)
+int	create_key_value(char *str, char **key, char **value)
 {
 	char	*ptr;
-	char	*key;
-	char	*value;
-	t_env	*node;
 	size_t	len;
-	char	*src;
 
 	ptr = ft_strchr(str, '=');
 	if (ptr)
 	{
 		len = (ptr - str) + 1;
-		src = ptr + 1;
-	}
-	else
-	{
-		len = ft_strlen(str);
-		src = NULL;
-	}
-	key = ft_strndup(str, len);
-	if (!key)
-		return (NULL);
-	if (src)
-	{
-		value = ft_strdup(src);
-		if (!value)
+		*key = ft_strndup(str, len);
+		if (!*key)
+			return (0);
+		*value = ft_strdup(ptr + 1);
+		if (!*value)
 		{
-			free(key);
-			return (NULL);
+			free(*key);
+			return (0);
 		}
 	}
 	else
-		value = NULL;
+	{
+		*key = ft_strdup(str);
+        if (!*key)
+            return (0);
+        *value = NULL;
+	}
+	return (1);
+}
+
+t_env	*create_env_node(char *str)
+{
+	char	*key;
+	char	*value;
+	t_env	*node;
+
+	if (!create_key_value(str, &key, &value))
+		return (NULL);
 	node = init_node(key, value);
 	if (!node)
 	{
@@ -55,23 +58,6 @@ t_env	*create_env_node(char *str)
 		return (NULL);
 	}
 	return (node);
-}
-
-void	node_add_last(t_env **envp_list, t_env *new_node)
-{
-	t_env	*ptr;
-
-	ptr = *envp_list;
-	if (!envp_list || !new_node)
-		return ;
-	if (*envp_list == NULL)
-	{
-		*envp_list = new_node;
-		return ;
-	}
-	while (ptr->next != NULL)
-		ptr = ptr->next;
-	ptr->next = new_node;
 }
 
 int	env_list_size(t_env *head)
@@ -91,32 +77,17 @@ int	env_list_size(t_env *head)
 
 int	check_file_access(char *path)
 {
-	DIR *dir;
+	DIR	*dir;
 
 	if (access(path, F_OK) != 0)
-		return (0); //file doesn't exit
+		return (0);
 	dir = opendir(path);
 	if (dir)
 	{
 		closedir(dir);
-		return(-2); //it's a directory
+		return(-2);
 	}
 	if (access(path, X_OK) != 0)
-		return (-1); //not executable
-	return (1); //file exist and executable
+		return (-1);
+	return (1);
 }
-
-// int	cmd_list_size(t_command *head)
-// {
-// 	int	count;
-// 	t_command *cur;
-
-// 	count = 0;
-// 	cur = head;
-// 	while (cur)
-// 	{
-// 		count++;
-// 		cur = cur->next;
-// 	}
-// 	return(count);
-// }

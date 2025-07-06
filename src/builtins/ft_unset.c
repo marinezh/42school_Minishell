@@ -50,7 +50,3 @@ int	ft_unset(t_data *data, t_command *cmd)
 	env_node = NULL;
 	return (0);
 }
-
-//bash unset doesn't check if var name valid identifier or not
-//just checks if it exist as it is in env
-//if can't find match, do nothing and return 0, no error

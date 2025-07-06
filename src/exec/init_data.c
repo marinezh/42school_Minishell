@@ -60,7 +60,10 @@ int	rebuild_envp_array(t_data *data, t_env *envp_list)
 	list_size = env_list_size(envp_list);
 	envp_arr = fill_envp_array(envp_list, list_size);
 	if (!envp_arr)
+	{
+        ft_putstr_fd("Error: Memory allocation failed\n", 2);
 		return (-1);
+	}
 	if (data->envp)
 	{
 		free_double_array(data->envp);
@@ -88,11 +91,8 @@ int	init_data(t_data *data, char **env)
 	data->builtins[5] = ft_cd;
 	data->builtins[6] = ft_exit;
 	if (build_envp_list(data, env) != 0)
-		ft_putstr_fd("Warning: Some environment variables were not loaded\n", 2);
+		ft_putstr_fd("Warning: Some environment variables not loaded\n", 2);
 	if (data->envp_list && (rebuild_envp_array(data, data->envp_list)) != 0)
-	{
-		ft_putstr_fd("Error rebuilding environment array\n", 2);
 		return (-1);
-	}
 	return (0);
 }

@@ -12,7 +12,8 @@ int ft_env(t_data *data, t_command *cmd)
     }
 	if (data->envp_f)
 	{
-		rebuild_envp_array(data, data->envp_list);
+		if (rebuild_envp_array(data, data->envp_list) == -1)
+			return (ERR_GENERIC);
 		data->envp_f = 0;
 	}
 	if (data->envp)
@@ -26,7 +27,3 @@ int ft_env(t_data *data, t_command *cmd)
 	}
 	return(0);
 }
-//print only variables with value, don't print empty variables
-//if anything is typied after env - no other parameters are allowed after env
-//order - printed as they are created!
-//in bash env - argv and options possible
