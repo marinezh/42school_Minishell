@@ -24,6 +24,7 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 		perror("execve");
 		cleanup_process_data(data);
 		free_command_list(cmd);
+		free(path);
 		if (errno == ENOENT)
 			exit(ERR_CMD_NOT_FOUND);
 		else if (errno == EACCES)
@@ -31,14 +32,11 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 		else
 			exit(ERR_GENERIC);
 	}
-	// cleanup_process_data(data);
-	// free_command_list(cmd);
-	// exit(0);
 }
 int	get_process_exit_code(int wstatus)
 {
     int exit_code;
-    
+
     if (WIFEXITED(wstatus))
         exit_code = WEXITSTATUS(wstatus);
     else if (WIFSIGNALED(wstatus))

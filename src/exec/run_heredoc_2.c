@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+
 static int	handle_exp(t_files *node, char **input, t_data *data)
 {
 	char	*expanded;
@@ -46,8 +47,6 @@ static int	handle_line(t_data *data, char *input, t_files *node, int *fds)
 	{
 		if (input)
 			free(input);
-		if (fds[0] >= 0)
-			close (fds[0]);
 		if (fds[1] >= 0)
 			close (fds[1]);
 		return (-1);
@@ -87,10 +86,10 @@ void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data)
 
 	exit_status = 0;
 	reset_signals_to_default();
+	close(fds[0]);
 	if (collect_input(node, fds, data) == -1)
 		exit_status = 1;
 	cleanup_process_data(data);
-	close(fds[0]);
 	close(fds[1]);
 	free_command_list(cmd);
 	exit(exit_status);
