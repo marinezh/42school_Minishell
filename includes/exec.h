@@ -48,7 +48,6 @@ void	print_eof_warning(t_files *node, int line_num);
 void	set_prompt_signals(void);
 void	reset_signals_to_default(void);
 int		rl_signal_handler(void);
-void	handler(int sig);
 void	set_heredoc_signals(void);
 int		heredoc_signal_hook(void);
 

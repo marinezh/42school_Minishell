@@ -38,7 +38,6 @@ static int  setup_stdin_redir(t_pipe pdata, int i)
 	{
 		if (dup2(pdata.in_pipe[0], STDIN_FILENO) == -1)
 		{
-            printf("here\n");
 			perror("dup2");
             return (1);
 		}
@@ -68,7 +67,7 @@ void handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i)
 {
 	int			exit_code;
 
-	reset_signals_to_default();
+	// reset_signals_to_default();
 	close_unused_heredoc_fds(cmd, pdata.cur_cmd);
 	if (setup_stdin_redir(pdata, i))
 	{

@@ -48,6 +48,7 @@ int	rl_signal_handler(void)
 		rl_replace_line("", 0);
 		rl_redisplay();
 		rl_done = 1;
+		return (1);
 	}
 	return (0);
 }
@@ -72,6 +73,7 @@ int	heredoc_signal_hook(void)
 	if (g_sig_received == SIGINT)
 	{
 		rl_done = 1;
+		return(1);
 	}
 	return (0);
 }
