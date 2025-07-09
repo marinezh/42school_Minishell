@@ -88,7 +88,7 @@ static int	process_export_arg(t_data *data, char *arg, int *has_error)
 	}
 	if (!is_var_name_valid(arg, &special_var))
 	{
-		print_error("export: ", arg, MSG_INVALID_NAME);
+		print_error("export: `", arg, MSG_INVALID_NAME);
 		*has_error = 1;
 	}
 	else if (!special_var && process_env_var(data, arg) != 0)
