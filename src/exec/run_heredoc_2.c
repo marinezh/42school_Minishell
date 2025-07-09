@@ -41,15 +41,13 @@ static int	handle_line(t_data *data, char *input, t_files *node, int *fds)
 		free(input);
 		return (1);
 	}
-	if (handle_exp(node, &input, data) == -1 ||
-		write_line_to_file(input, fds[1]) == -1)
+	if (handle_exp(node, &input, data) == -1 || write_line_to_file(input,
+			fds[1]) == -1)
 	{
 		if (input)
 			free(input);
-		if (fds[0] >= 0)
-			close (fds[0]);
 		if (fds[1] >= 0)
-			close (fds[1]);
+			close(fds[1]);
 		return (-1);
 	}
 	free(input);
@@ -66,6 +64,11 @@ static int	collect_input(t_files *node, int *fds, t_data *data)
 	while (1)
 	{
 		input = readline("> ");
+		if (g_sig_received)
+		{
+			free(input);
+			return (-1);
+		}
 		if (!input)
 		{
 			print_eof_warning(node, line_count);
@@ -73,12 +76,11 @@ static int	collect_input(t_files *node, int *fds, t_data *data)
 		}
 		res = handle_line(data, input, node, fds);
 		if (res == 1)
-			break ;
+			return (0);
 		else if (res == -1)
 			return (-1);
 		line_count++;
 	}
-	return (0);
 }
 
 void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data)
@@ -86,11 +88,20 @@ void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data)
 	int	exit_status;
 
 	exit_status = 0;
-	reset_signals_to_default();
-	if (collect_input(node, fds, data) == -1)
-		exit_status = 1;
-	cleanup_process_data(data);
+	set_heredoc_signals();
+	rl_event_hook = heredoc_signal_hook;
 	close(fds[0]);
+	if (collect_input(node, fds, data) == -1)
+	{
+		if (g_sig_received == SIGINT)
+		{
+			g_sig_received = 0;
+			exit_status = 130;
+		}
+		else
+			exit_status = 1;
+	}
+	cleanup_process_data(data);
 	close(fds[1]);
 	free_command_list(cmd);
 	exit(exit_status);
