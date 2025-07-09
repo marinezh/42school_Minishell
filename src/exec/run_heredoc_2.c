@@ -66,8 +66,7 @@ static int	collect_input(t_files *node, int *fds, t_data *data)
 		input = readline("> ");
 		if (g_sig_received)
 		{
-			if (input)
-				free(input);
+			free(input);
 			return (-1);
 		}
 		if (!input)
@@ -77,12 +76,11 @@ static int	collect_input(t_files *node, int *fds, t_data *data)
 		}
 		res = handle_line(data, input, node, fds);
 		if (res == 1)
-			break ;
+			return (0);
 		else if (res == -1)
 			return (-1);
 		line_count++;
 	}
-	return (0);
 }
 
 void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data)
