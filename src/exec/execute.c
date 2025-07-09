@@ -72,21 +72,20 @@ void	execute(t_data *data, t_command *cmd)
 	int	status;
 
 	status = 0;
-	if (!cmd)
-	{
-		data->status = 0;
-		return ;
-	}
-	if (!cmd->redirections && (!cmd->args || !cmd->args[0]))
+	if (!cmd || (!cmd->redirections && (!cmd->args || !cmd->args[0])))
 	{
 		data->status = 0;
 		return ;
 	}
 	if (has_heredoc(data, cmd) == -1)
 		return ;
+	data->is_pipe = 0;
 	cmd_count = count_commands(cmd);
 	if (cmd_count > 1)
+	{
+		data->is_pipe = 1;
 		status = run_pipes(data, cmd, cmd_count);
+	}
 	else
 		status = process_cmd(data, cmd);
 	data->status = status;

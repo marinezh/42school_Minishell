@@ -53,11 +53,11 @@ static int	wait_for_processes(pid_t *pids, int cmd_count)
 	wcount = cmd_count;
 	while (wcount--)
 	{
-		pid = waitpid(-1, &wstatus, 0);
+		pid = waitpid(0, &wstatus, 0);
 		if (pid != -1)
 		{
 			if (pid == pids[cmd_count -1])
-				exit_code = get_process_exit_code(wstatus);
+				exit_code = get_pipe_exit_code(wstatus);
 		}
 		else
 		{
