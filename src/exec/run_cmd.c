@@ -13,7 +13,8 @@ pid_t	create_process(void)
 	return (pid);
 }
 
-void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
+void	handle_child_process(t_data *data, t_command *cmd, char *path,
+		char **args)
 {
 	char	**envp;
 
@@ -36,50 +37,51 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path, char **args)
 
 int	get_pipe_exit_code(int wstatus)
 {
-    int exit_code = 0;
+	int	exit_code;
 
-    if (WIFEXITED(wstatus))
-        exit_code = WEXITSTATUS(wstatus);
+	exit_code = 0;
+	if (WIFEXITED(wstatus))
+		exit_code = WEXITSTATUS(wstatus);
 	if (exit_code == 130)
 	{
 		ft_putstr_fd("\n", STDERR_FILENO);
 	}
-	else if (exit_code == SIGQUIT)
+	else if (exit_code == 131)
 	{
 		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 	}
-    else
-        exit_code = ERR_GENERIC;
-    return exit_code;
+	else
+		exit_code = ERR_GENERIC;
+	return (exit_code);
 }
 int	get_heredoc_exit_code_2(int wstatus)
 {
-    int exit_code;
+	int	exit_code;
 
-    if (WIFEXITED(wstatus))
-        exit_code = WEXITSTATUS(wstatus);
-    else if (WIFSIGNALED(wstatus))
-    {
-        exit_code = 128 + WTERMSIG(wstatus);
-        if (WTERMSIG(wstatus) == SIGINT)
-            ft_putstr_fd("\n", STDERR_FILENO);
-        else if (WTERMSIG(wstatus) == SIGQUIT)
-            ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-    }
-    else
-        exit_code = ERR_GENERIC;
-    return exit_code;
+	if (WIFEXITED(wstatus))
+		exit_code = WEXITSTATUS(wstatus);
+	else if (WIFSIGNALED(wstatus))
+	{
+		exit_code = 128 + WTERMSIG(wstatus);
+		if (WTERMSIG(wstatus) == SIGINT)
+			ft_putstr_fd("\n", STDERR_FILENO);
+		else if (WTERMSIG(wstatus) == SIGQUIT)
+			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+	}
+	else
+		exit_code = ERR_GENERIC;
+	return (exit_code);
 }
 
 int	get_execve_exit_code(t_data *data, int wstatus)
 {
-    int exit_code;
+	int	exit_code;
 
-    if (WIFEXITED(wstatus))
-        exit_code = WEXITSTATUS(wstatus);
-    else if (WIFSIGNALED(wstatus))
-    {
-        exit_code = 128 + WTERMSIG(wstatus);
+	if (WIFEXITED(wstatus))
+		exit_code = WEXITSTATUS(wstatus);
+	else if (WIFSIGNALED(wstatus))
+	{
+		exit_code = 128 + WTERMSIG(wstatus);
 		if (!data->is_pipe)
 		{
 			if (WTERMSIG(wstatus) == SIGINT)
@@ -87,10 +89,10 @@ int	get_execve_exit_code(t_data *data, int wstatus)
 			else if (WTERMSIG(wstatus) == SIGQUIT)
 				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 		}
-    }
-    else
-        exit_code = ERR_GENERIC;
-    return exit_code;
+	}
+	else
+		exit_code = ERR_GENERIC;
+	return (exit_code);
 }
 
 int	handle_heredoc_parent(pid_t pid)

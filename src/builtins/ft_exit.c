@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-void	handle_numeric_arg_error(t_data * data, char *arg)
+void	handle_numeric_arg_error(t_data *data, char *arg)
 {
 	data->exit_f = 1;
-	data->status = 255;
-    ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-    ft_putstr_fd(arg, STDERR_FILENO);
-    ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+	data->status = 2;
+	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }
-long long process_string(char *str, int *error)
+long long	process_string(char *str, int *error)
 {
-	int	digit;
-	long long res;
+	int			digit;
+	long long	res;
 
 	res = 0;
 	while (*str)
@@ -33,7 +33,7 @@ long long process_string(char *str, int *error)
 	return (res);
 }
 
-long long custom_strtoll(char *str, int *error)
+long long	custom_strtoll(char *str, int *error)
 {
 	long long	res;
 	int			sign;
@@ -76,7 +76,7 @@ int	ft_exit(t_data *data, t_command *cmd)
 	if (error)
 	{
 		handle_numeric_arg_error(data, cmd->args[1]);
-		return(data->status);
+		return (data->status);
 	}
 	if (count_args(cmd->args) > 2)
 	{
@@ -86,5 +86,5 @@ int	ft_exit(t_data *data, t_command *cmd)
 	}
 	data->exit_f = 1;
 	data->status = (unsigned short int)exit_code % 256;
-	return(data->status);
+	return (data->status);
 }
