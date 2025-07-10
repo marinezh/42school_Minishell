@@ -93,6 +93,7 @@ struct							s_data
 	char						exit_f;
 	int							status;
 	int							is_pipe;
+	pid_t						*pids;
 };
 
 typedef struct s_exp_parts

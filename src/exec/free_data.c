@@ -59,5 +59,10 @@ void	cleanup_process_data(t_data *data)
 {
 	free_env_list(&data->envp_list);
 	free_double_array(data->envp);
+	if (data->pids)
+	{
+		free(data->pids);
+		data->pids = NULL;
+	}
 	rl_clear_history();
 }
