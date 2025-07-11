@@ -5,69 +5,69 @@ extern rl_hook_func_t *rl_event_hook;
 
 int	read_prompt(t_cmd_input *cmd)
 {
-	cmd->input = readline("minishell$ ");
-	if (g_sig_received)
-	{
-		g_sig_received = 0;
-		if (cmd->input)
-		{
-			free(cmd->input);
-			cmd->input = NULL;
-		}
-		return (-2);
-	}
-	if (!cmd->input)
-	{
-		printf("exit\n");
-		return (-1);
-	}
-	if (cmd->input[0] == '\0')
-	{
-		free(cmd->input);
-		cmd->input = NULL;
-		return (0);
-	}
- 	return (1);
-	///////////////////////////////////////////////////////
-	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
-	// char *line;
-	// if (isatty(STDIN_FILENO))
-	// {
-	// 	line = readline("minishell$ ");
-	// }
-	// else
-	// {
-	// 	line = get_next_line(STDIN_FILENO);
-	// 	if (line)
-	// 	{
-	// 		// Remove trailing newline added by get_next_line
-	// 		size_t len = ft_strlen(line);
-	// 		if (len > 0 && line[len - 1] == '\n')
-	// 			line[len - 1] = '\0';
-	// 	}
-	// }
-	// // Handle EOF or Ctrl+D
-	// if (!line)
-	// {
-	// 	if (isatty(STDIN_FILENO))
-	// 		printf("exit\n");
-	// 	return (-1);
-	// }
+	// cmd->input = readline("minishell$ ");
 	// if (g_sig_received)
 	// {
-	// 	free(line);
-	// 	cmd->input = NULL;
+	// 	g_sig_received = 0;
+	// 	if (cmd->input)
+	// 	{
+	// 		free(cmd->input);
+	// 		cmd->input = NULL;
+	// 	}
 	// 	return (-2);
 	// }
-	// // Empty line (e.g., user just pressed Enter)
-	// if (line[0] == '\0')
+	// if (!cmd->input)
 	// {
-	// 	free(line);
+	// 	printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (cmd->input[0] == '\0')
+	// {
+	// 	free(cmd->input);
 	// 	cmd->input = NULL;
 	// 	return (0);
 	// }
-	// cmd->input = line;
-	// return (1);
+ 	// return (1);
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	char *line;
+	if (isatty(STDIN_FILENO))
+	{
+		line = readline("minishell$ ");
+	}
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			// Remove trailing newline added by get_next_line
+			size_t len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
+	}
+	// Handle EOF or Ctrl+D
+	if (!line)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
+		return (-1);
+	}
+	if (g_sig_received)
+	{
+		free(line);
+		cmd->input = NULL;
+		return (-2);
+	}
+	// Empty line (e.g., user just pressed Enter)
+	if (line[0] == '\0')
+	{
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+	cmd->input = line;
+	return (1);
 // 	//END OF PART FOR BIG TESTER
 // 	///////////////////////////////////////////////////////////
 }
@@ -106,7 +106,6 @@ void	shell_loop(t_data *data)
 	t_cmd_input	cmd_input;
 	t_token		*tokens = NULL;
 	t_command	*commands = NULL;
-	char **split_input = NULL;
 	int		prompt_res;
 
 	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
@@ -126,9 +125,8 @@ void	shell_loop(t_data *data)
 		if (cmd_input.input && cmd_input.input[0] != '\0')
 			add_history(cmd_input.input);
 		commands = parse_input(commands, data, cmd_input.input);
-		//print_commands(commands);
 		free(cmd_input.input);
-		free_tokens(tokens);			// Free the tokens list
+		free_tokens(tokens);
 		execute(data, commands);
 		free_command_list(commands);
 	}
