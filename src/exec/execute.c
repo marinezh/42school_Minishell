@@ -7,12 +7,12 @@ int	count_commands(t_command *head)
 
 	cur = head;
 	count = 0;
-	while(cur)
+	while (cur)
 	{
 		count++;
 		cur = cur->next;
 	}
-	return(count);
+	return (count);
 }
 
 int	check_heredoc_limit(t_data *data, t_command *cmd)
@@ -30,7 +30,8 @@ int	check_heredoc_limit(t_data *data, t_command *cmd)
 		{
 			if (cur_redir->type == HEREDOC && ++count > 16)
 			{
-				ft_putstr_fd("minishell: maximum here-document count exceeded\n", 2);
+				ft_putstr_fd("minishell: maximum here-document count exceeded\n",
+					2);
 				data->exit_f = 1;
 				return (-1);
 			}
@@ -80,7 +81,7 @@ void	execute(t_data *data, t_command *cmd)
 	if (has_heredoc(data, cmd) == -1)
 		return ;
 	data->is_pipe = 0;
-	free(data->pids);
+	safe_free_pointer((void **)&data->pids);
 	cmd_count = count_commands(cmd);
 	if (cmd_count > 1)
 	{

@@ -50,5 +50,6 @@ void	reset_signals_to_default(void);
 int		rl_signal_handler(void);
 void	set_heredoc_signals(void);
 int		heredoc_signal_hook(void);
+void	safe_free_pointer(void **ptr);
 
 #endif
