@@ -1,102 +1,123 @@
 #include "minishell.h"
 
-t_files	*create_file_node(char *name, int type)
+t_files	*initialize_file_node(void)
 {
 	t_files	*new_file;
-	int len;
 
-	//printf("DEBUG create_file_node: Creating node type %d for name '%s'\n", type, name);
-	new_file = malloc(sizeof(t_files));
+	new_file = malloc(sizeof(t_files)); // CHECKED
 	if (!new_file)
 		return (NULL);
-
-	if (type == HEREDOC)
-	{
-		len = ft_strlen(name);
-		//printf("DEBUG: Checking heredoc delimiter '%s', length %d\n", name, len);
-		if (len >= 2 &&
- 				((name[0] == '\'' && name[len - 1] == '\'') ||
-    			(name[0] == '"' && name[len - 1] == '"')))
-
-		{
-			//printf("DEBUG: Found single quotes in heredoc delimiter\n");
-			char *unquoted_name = ft_substr(name, 1, len - 2);
-			if (!unquoted_name)
-			{
-				free(new_file);
-				return (NULL);
-			}
-			new_file->name = unquoted_name;
-			new_file->to_expand = 0;
-			//printf("DEBUG: Quoted heredoc delimiter: '%s', to_expand=0\n", new_file->name);
-		}
-		else
-		{
-			new_file->name = ft_strdup(name);
-			if (!new_file->name)
-			{
-				free(new_file);
-				return (NULL);
-			}
-			new_file->to_expand = 1;
-			//printf("DEBUG: Unquoted heredoc delimiter: '%s', to_expand=1\n", new_file->name);
-		}
-	}
-	else
-	{
-		new_file->name = ft_strdup(name);
-		if (!new_file->name)
-		{
-			free(new_file);
-			return (NULL);
-		}
-		new_file->to_expand = 0;  // default: no expansion for normal files
-	}
-
-	new_file->type = type;
+	new_file->type = -1;
 	new_file->fd = -1;
 	new_file->next = NULL;
-	//printf("DEBUG: Created file node with name '%s', expand_vars=%d\n", 
-           //new_file->name, new_file->to_expand);
+	new_file->to_expand = 0; // default: no expansion
+	new_file->name = NULL;
 	return (new_file);
 }
 
 
-void append_to_list(t_files **list, t_files *node)
+
+int	setup_heredoc_node(t_files *new_file, char *name)
 {
-	t_files *current;
-	
+	int		len;
+	char	*node_name;
+
+	len = ft_strlen(name);
+	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'')
+			|| (name[0] == '"' && name[len - 1] == '"')))
+	{
+		node_name = ft_substr(name, 1, len - 2); // CHECKED
+		if (!node_name)
+			return (0);
+		new_file->name = node_name;
+		new_file->to_expand = 0;
+	}
+	else
+	{
+		new_file->name = ft_strdup(name); // Checked
+		if (!new_file->name)
+			return (0);
+		new_file->to_expand = 1;
+	}
+	return (1);
+}
+
+int	setup_regular_node(t_files *new_file, char *name)
+{
+	(void)name;
+	new_file->name = ft_strdup(name); // checked
+	if (!new_file->name)
+		return (0);
+	new_file->to_expand = 0; // default: no expansion for normal files
+	return (1);
+}
+
+t_files	*create_file_node(char *name, int type)
+{
+	t_files	*new_file;
+
+	new_file = initialize_file_node();
+	if (!new_file)
+		return (NULL);
+	if (type == HEREDOC)
+	{
+		if (!setup_heredoc_node(new_file, name))
+		{
+			free(new_file);
+			return (NULL);
+		}
+	}
+	else
+	{
+		if (!setup_regular_node(new_file, name))
+		{
+			free(new_file);
+			return (NULL);
+		}
+	}
+	new_file->type = type;
+	return (new_file);
+}
+
+void	append_to_list(t_files **list, t_files *node)
+{
+	t_files	*current;
+
 	if (*list == NULL)
 	{
 		*list = node;
-		return;
+		return ;
 	}
 	current = *list;
 	while (current->next)
 		current = current->next;
 	current->next = node;
 }
-void add_redirection(t_command *cmd, char *filename, int type)
+
+int	add_redirection(t_command *cmd, char *filename, int type)
 {
 	t_files	*global_redir_node;
 	t_files	*typed_redir_node;
-	
+
 	if (!cmd || !filename)
-		return;
-	
-	global_redir_node = create_file_node(filename, type); 
+		return 0;
+	global_redir_node = create_file_node(filename, type); // checked
 	if (!global_redir_node)
-		return;
+	{
+		return 0;
+	}
+	
 	append_to_list(&(cmd->redirections), global_redir_node);
-	typed_redir_node = create_file_node(filename, type);
+	typed_redir_node = create_file_node(filename, type); //checked
 	if (!typed_redir_node)
 	{
-		free(global_redir_node->name);
-		free(global_redir_node);
-		return;
+		//free(global_redir_node->name);
+		//free(global_redir_node);
+		return 0;
 	}
 	if (type == REDIR_IN || type == HEREDOC)
 		append_to_list(&(cmd->in), typed_redir_node);
-	else 
+	else
 		append_to_list(&(cmd->out), typed_redir_node);
+	return 1;
 }

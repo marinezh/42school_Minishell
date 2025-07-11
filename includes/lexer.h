@@ -10,13 +10,14 @@
 
 int			getpwd(void);
 //char		**run_lexer(t_cmd_input *cmd);
-int			read_prompt(t_cmd_input *data);
+//int			read_prompt(t_cmd_input *cmd, t_data *data);
 //char		*add_space(t_cmd_input *cmd);
 char		**preprocess_input(char *input, t_data *data);
-char		*add_space(t_cmd_input *cmd, t_data *data);
+//char		*add_space(t_cmd_input *cmd, t_data *data);
 int			word_count(char *str);
 char		*word_dup(char *str, int len);
 int			is_whitespace(char c);
+int	skip_whitespaces(char *str, int j);
 
 char		**quote_safe_split(char *str);
 int			fmt_quotes(char *input, char *output, int *i, int *j, int copy);

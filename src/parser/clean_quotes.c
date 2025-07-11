@@ -1,154 +1,71 @@
 #include "minishell.h"
 
-
-void remove_outer_quotes(t_token *tokens)
+static int	remove_outer_quotes_from_string(t_qts_proc *p)
 {
-	t_token *current = tokens;
-	
+	if (!ft_strchr(p->str, '\'') && !ft_strchr(p->str, '"'))
+		return (1);
+	p->temp = malloc(ft_strlen(p->str) + 1); // CHECKED!!!!
+	if (!p->temp)
+		return (printf("malloc failed for [%s]\n", p->str), (0));
+	p->i = 0;
+	p->j = 0;
+	p->in_quote = 0;
+	while (p->str[p->i])
+	{
+		if ((p->str[p->i] == '\'' || p->str[p->i] == '"') && !p->in_quote)
+			p->in_quote = p->str[p->i++];
+		else if (p->str[p->i] == p->in_quote)
+		{
+			p->in_quote = 0;
+			p->i++;
+		}
+		else
+			p->temp[p->j++] = p->str[p->i++];
+	}
+	p->temp[p->j] = '\0';
+	ft_strlcpy(p->str, p->temp, ft_strlen(p->str) + 1);
+	free(p->temp);
+	return (1);
+}
+
+static int	remove_quotes_from_files(t_files *files)
+{
+	t_files		*current;
+	t_qts_proc	proc;
+
+	current = files;
 	while (current)
 	{
-		if (!current->value)
+		if (current->type != HEREDOC)
 		{
-			current = current->next;
-			continue;
+			proc.str = current->name;
+			if (!remove_outer_quotes_from_string(&proc))
+				return (0);
 		}
-		int i = 0, j = 0;
-		char *input = current->value;
-		char *result = malloc(ft_strlen(input) + 1);
-		if (!result)
-			return;
-	
-		while (input[i])
-		{
-			if (input[i] == '\'' || input[i] == '"')
-			{
-				char quote = input[i++];
-				while (input[i] && input[i] != quote)
-					result[j++] = input[i++];
-				if (input[i] == quote)
-					i++; // skip closing quote
-			}
-			else
-				result[j++] = input[i++];
-		}
-		result[j] = '\0';
-		free(current->value);
-		current->value = result;
 		current = current->next;
 	}
-}
-void remove_quotes_from_command_args(t_command *commands)
-{
-    t_command *current = commands;
-    
-    while (current)
-    {
-        // Remove quotes from arguments
-        if (current->args)
-        {
-            int i = 0;
-            while (current->args[i])
-            {
-                remove_outer_quotes_from_string(current->args[i]);
-                i++;
-            }
-        }
-        
-        // Remove quotes from file names (preserving heredoc behavior)
-        if (current->redirections)
-            remove_quotes_from_files(current->redirections);
-        if (current->in)
-            remove_quotes_from_files(current->in);
-        if (current->out)
-            remove_quotes_from_files(current->out);
-        
-        current = current->next;
-    }
+	return (1);
 }
 
-void remove_outer_quotes_from_string(char *str)
+int	remove_quotes_from_command_args(t_command *cmd, t_data *data)
 {
-    int i = 0;
-    int j = 0;
-    int len = ft_strlen(str);
-    char *temp = (char *)malloc(len + 1);
-    
-    if (!temp)
-        return;
-    
-    char in_quote = 0;
-    while (str[i])
-    {
-        if ((str[i] == '\'' || str[i] == '"') && !in_quote)
-        {
-            // Start of quote
-            in_quote = str[i];
-            i++;
-        }
-        else if (str[i] == in_quote)
-        {
-            // End of quote
-            in_quote = 0;
-            i++;
-        }
-        else
-        {
-            // Copy character
-            temp[j++] = str[i++];
-        }
-    }
-    temp[j] = '\0';
-    
-    // Copy back to original
-    ft_strlcpy(str, temp, len + 1);
-    free(temp);
-}
+	t_qts_proc	proc;
+	int			i;
 
-// void remove_quotes_from_files(t_files *files)
-// {
-//     t_files *current = files;
-    
-//     while (current)
-//     {
-//         // Skip if we want to preserve quotes for heredoc expansion check
-//         if (current->type == HEREDOC)
-//         {
-//             // For heredocs, we need to be careful:
-//             // 1. Check for quotes first to set expand_vars flag
-//             int len = ft_strlen(current->name);
-//             if (len >= 2 && current->name[0] == '\'' && current->name[len - 1] == '\'')
-//             {
-//                 // Single-quoted heredoc delimiter - don't expand variables
-//                 current->expand_vars = 0;
-//             }
-//             else
-//             {
-//                 // Unquoted or double-quoted delimiter - do expand variables
-//                 current->expand_vars = 1;
-//             }
-            
-//             // 2. Then remove the quotes
-//             //remove_outer_quotes_from_string(current->name);
-//         }
-//         else
-//         {
-//             // For regular files, just remove quotes
-//             remove_outer_quotes_from_string(current->name);
-//         }
-        
-//         current = current->next;
-//     }
-// }
-void remove_quotes_from_files(t_files *files)
-{
-    t_files *current = files;
-
-    while (current)
-    {
-        // For regular files, remove quotes
-        if (current->type != HEREDOC)
-            remove_outer_quotes_from_string(current->name);
-
-        current = current->next;
-    }
+	while (cmd)
+	{
+		i = 0;
+		while (cmd->args && cmd->args[i])
+		{
+			proc.str = cmd->args[i++];
+			if (!remove_outer_quotes_from_string(&proc))
+				return (data->status = ERR_GENERIC, 0);
+		}
+		if ((cmd->redirections && !remove_quotes_from_files(cmd->redirections))
+			|| (cmd->in && !remove_quotes_from_files(cmd->in)) || (cmd->out
+				&& !remove_quotes_from_files(cmd->out)))
+			return (0);
+		cmd = cmd->next;
+	}
+	return (1);
 }

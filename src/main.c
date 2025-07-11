@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	read_prompt(t_cmd_input *cmd)
+int	read_prompt(t_cmd_input *cmd, t_data *data)
 {
 	char	*line;
 	size_t	len;
@@ -22,7 +22,8 @@ int	read_prompt(t_cmd_input *cmd)
 	// }
 	// if (cmd->input[0] == '\0')
 	// {
-	// 	free(cmd->input);
+	// 	data->status = 0;
+	//	free(cmd->input);
 	// 	cmd->input = NULL;
 	// 	return (0);
 	// }
@@ -60,6 +61,7 @@ int	read_prompt(t_cmd_input *cmd)
 	// Empty line (e.g., user just pressed Enter)
 	if (line[0] == '\0')
 	{
+		data->status = 0;
 		free(line);
 		cmd->input = NULL;
 		return (0);
@@ -78,30 +80,23 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	split_input = preprocess_input(input, data);
 	if (!split_input)
 		return (NULL);
-	tokens = tokenize_input(split_input);
+	tokens = tokenize_input(split_input, data);
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
-	// print_tokens(tokens);
 	if (error_check(tokens, data))
 		return (free_tokens(tokens), NULL);
-	// print_tokens(tokens);
-	// printf("DATA STATUS %d\n", data->status);
 	if (!expand_variables(tokens, data, 1))
 		return (free_tokens(tokens), NULL);
-	// printf("//////////////////////////////\n");
-	// print_tokens(tokens);
-	// printf("DATA STATUS 2 %d\n", data->status);
 	tokens = handle_word_splitting(tokens);
 	if (!tokens)
 		return (NULL);
 	delete_empty_tokens(&tokens);
-	commands = parse_tokens(tokens);
-	print_commands(commands);
+	commands = parse_tokens(tokens, data);
 	if (!commands)
 		return (free_tokens(tokens), NULL);
-	remove_quotes_from_command_args(commands);
-	print_commands(commands);
+	if (!remove_quotes_from_command_args(commands, data))
+		return (free_tokens(tokens), free_command_list(commands), NULL);
 	free_tokens(tokens);
 	return (commands);
 }
@@ -113,12 +108,10 @@ void	shell_loop(t_data *data)
 	int			prompt_res;
 
 	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
-		// cmd_input initialization of cmd_input
-	// commands = NULL;
 	while (!data->exit_f)
 	{
 		sig_received = 0;
-		prompt_res = read_prompt(&cmd_input);
+		prompt_res = read_prompt(&cmd_input, data);
 		if (prompt_res == -1) // EOF (Cntl + D)/ exit
 			break ;
 		if (prompt_res == -2) // signal received
@@ -135,7 +128,7 @@ void	shell_loop(t_data *data)
 		if (!commands)
 			continue ;
 		execute(data, commands);
-		free_command_list(commands); // Free the commands list
+		free_command_list(commands);
 	}
 }
 

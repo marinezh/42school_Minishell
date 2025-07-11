@@ -4,7 +4,7 @@ t_command	*create_new_command(int index)
 {
 	t_command	*cmd;
 
-	cmd = malloc(sizeof(t_command));
+	cmd = malloc(sizeof(t_command)); // Checked
 	if (!cmd)
 		return (NULL);
 	cmd->index = index;
@@ -17,9 +17,10 @@ t_command	*create_new_command(int index)
 	return (cmd);
 }
 
-t_command *add_command_to_chain(t_command **head, t_command **tail, int *cmd_index)
+t_command	*add_command_to_chain(t_command **head, t_command **tail,
+		int *cmd_index)
 {
-	t_command *current;
+	t_command	*current;
 	
 	current = create_new_command((*cmd_index)++);
 	if (!current)
@@ -32,26 +33,23 @@ t_command *add_command_to_chain(t_command **head, t_command **tail, int *cmd_ind
 	return (current);
 }
 
-
-
-int process_token(t_command **current, t_token **token_list,
-		t_command **head, t_command **tail, int *cmd_index)
+int	process_token(t_command **current, t_token **token_list, t_cmd_chain *chain)
 {
-	if (!(*current)) // Create a new command if needed
+	if (!token_list)
+		return (0);
+	if (!(*current))
 	{
-		*current = add_command_to_chain(head, tail, cmd_index);
+		*current = add_command_to_chain(&chain->head, &chain->tail, //Checked
+				&chain->cmd_index);
 		if (!(*current))
 			return (0);
 	}
 	if ((*token_list)->type == PIPE)
-	{
 		handle_pipe(*current, token_list, current);
-	}
-	else if ((*token_list)->type == REDIR_IN || (*token_list)->type == HEREDOC ||
-			(*token_list)->type == REDIR_OUT || (*token_list)->type == REDIR_APPEND)
+	else if (is_redirect_type(*token_list))
 	{
 		if (!handle_redirection(*current, token_list))
-			return (1);  // Skip to next token but don't exit parsing
+			return (0);
 	}
 	else if ((*token_list)->type == WORD)
 	{
@@ -63,28 +61,25 @@ int process_token(t_command **current, t_token **token_list,
 	return (1);
 }
 
-t_command *parse_tokens(t_token *token_list)
+t_command	*parse_tokens(t_token *token_list, t_data *data)
 {
-	t_command *head;
-	t_command *tail;
-	t_command *current;
-	int command_index;
+	t_cmd_chain	chain;
+	t_command	*current;
 
-	head = NULL;
-	tail = NULL;
+	chain.head = NULL;
+	chain.tail = NULL;
 	current = NULL;
-	command_index = 0;
-	
+	chain.cmd_index = 0;
 	while (token_list)
 	{
-		 ///printf("Processing token: %s of type %d\n", token_list->value, token_list->type);
-		if (!process_token(&current, &token_list, &head, &tail, &command_index))
+		if (!process_token(&current, &token_list, &chain))
 		{
-			//printf("Error processing token, freeing resources\n");
-            free_command_list(head);
-            free_tokens(token_list);
-            return NULL;
+			free_command_list(chain.head);
+			//free_tokens(token_list);
+			printf("minishell: memory allocation failed\n");
+			data->status = ERR_GENERIC;
+			return (NULL);
 		}
 	}
-	return (head);
+	return (chain.head);
 }

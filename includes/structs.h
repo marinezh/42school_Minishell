@@ -38,6 +38,15 @@ typedef struct s_cmd_input
 	int					j;
 }						t_cmd_input;
 
+typedef struct s_qts_proc
+{
+	int i;
+	int j;
+	char	*temp;
+	char	*str;
+	char	in_quote;
+}	t_qts_proc;
+
 typedef struct s_token
 {
 	t_token_type		type;
@@ -68,6 +77,13 @@ typedef struct s_command
 	int					pipe; 
 	struct s_command	*next;
 }						t_command;
+
+typedef struct s_cmd_chain
+{
+    t_command   *head;
+    t_command   *tail;
+    int         cmd_index;
+} t_cmd_chain;
 
 // declaration of main exection struct
 typedef struct s_data	t_data;

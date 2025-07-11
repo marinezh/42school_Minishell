@@ -1,19 +1,19 @@
 #include <minishell.h>
 
-int word_count(char *str)
+int	word_count(char *str)
 {
-	int i = 0;
-	int count = 0;
-	int in_word = 0;
+	int	i;
+	int	count;
+	int	in_word;
 
+	i = 0;
+	count = 0;
+	in_word = 0;
 	if (!str || !*str)
-		return 0;
-	// Special case: if string has no delimiter, return 1
-	// if (!strchr(str, delimiter)) //double check , do i need this ?
-	// 	return 1;
+		return (0);
 	while (str[i])
 	{
-		if(is_whitespace(str[i]))
+		if (is_whitespace(str[i]))
 			in_word = 0;
 		else if (!in_word)
 		{
@@ -22,43 +22,36 @@ int word_count(char *str)
 		}
 		i++;
 	}
-	//printf("count %d\n", count);
-	return count;
+	return (count);
 }
-char *word_dup(char *str, int len)
+
+char	*word_dup(char *str, int len)
 {
-	int i = 0;
-	char *word = (char *)malloc(sizeof(char) * (len + 1));
+	int		i;
+	char	*word;
+
+	i = 0;
+	word = (char *)malloc(sizeof(char) * (len + 1));
 	if (!word)
-		return NULL;
-	while(i < len)
+		return (NULL);
+	while (i < len)
 	{
 		word[i] = str[i];
 		i++;
 	}
 	word[len] = '\0';
-	return word;
+	return (word);
 }
 
-// int skip_quoted_seg(char *input, int *i)
-// {
-// 	char quote; 
-	
-// 	quote = input[*i];
-// 	(*i)++; // skip openning quote
-// 	while (input[*i] && input[*i] != quote)
-// 		(*i)++;
-// 	if (!input[*i])
-// 	{
-// 		ft_putstr_fd("minishell:quotes are not closed", 2);
-// 		//ft_putstr_fd(ERR_QUOTES, 2);
-// 		return (-1);
-// 	}
-// 	(*i)++; // skip closing quote
-// 	return (0);
-// }
+int	is_whitespace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
+		|| c == '\f');
+}
 
-// void	error_msg(char *msg)
-// {
-// 	ft_putendl_fd(msg, 2);
-// }
+int	skip_whitespaces(char *str, int j)
+{
+	while (str[j] && (is_whitespace(str[j])))
+		j++;
+	return (j);
+}

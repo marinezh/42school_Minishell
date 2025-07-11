@@ -277,38 +277,7 @@ int expand_variables(t_token *tokens, t_data *data, int skip_after_heredoc)
 //     }
 // }
 
-void delete_empty_tokens(t_token **head)
-{
-	t_token *current = *head;
-	t_token *tmp;
 
-	while (current)
-	{
-		if (current->value && current->value[0] == '\0')
-		{
-			tmp = current;
-
-			// Fix links
-			if (current->prev)
-				current->prev->next = current->next;
-			else
-				*head = current->next;  // If we're deleting the head
-
-			if (current->next)
-				current->next->prev = current->prev;
-
-			current = current->next;
-
-			// Free memory
-			free(tmp->value);
-			free(tmp);
-		}
-		else
-		{
-			current = current->next;
-		}
-	}
-}
 // int	check_ambiguous_redirects(t_token *tokens, t_data *data)
 // {
 // 	t_token *curr = tokens;
