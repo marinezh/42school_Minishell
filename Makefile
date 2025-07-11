@@ -59,11 +59,11 @@ VPATH = $(SRCS_PATH) $(BUILTINS_PATH) $(LEXER_PATH) $(EXEC_PATH) $(PARSER_PATH) 
 # Files
 MAIN = main.c
 BUILTINS = ft_pwd.c ft_echo.c ft_env.c ft_export.c export_print.c utils_builtin.c ft_unset.c\
-			ft_cd.c ft_exit.c
+			ft_cd.c ft_exit.c free_utils.c
 LEXER = lexer.c operator_check.c split.c utils.c
 EXEC = init_data.c free_data.c execute.c utils_exec.c run_builtin.c run_external.c run_cmd.c\
 		handle_errors.c process_redir.c run_heredoc_1.c run_pipes_1.c run_pipes_2.c process_cmd.c\
-		run_heredoc_2.c
+		run_heredoc_2.c process_exit.c
 PARSER = parser.c tokenization.c print_delete.c error_check.c token_handlers.c redirect.c clean_quotes.c parser_utils.c
 UTILS = free.c
 SIGNALS = handler.c

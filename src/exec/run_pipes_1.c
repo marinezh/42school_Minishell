@@ -4,8 +4,7 @@ static int	setup_pipe(t_pipe *pdata)
 {
 	if (pipe(pdata->cur_pipe) == -1)
 	{
-		ft_putstr_fd("minishell: pipe: Too many open files\n",
-			STDERR_FILENO);
+		ft_putstr_fd("minishell: pipe: Too many open files\n", STDERR_FILENO);
 		if (pdata->in_pipe[0] != -1)
 			close(pdata->in_pipe[0]);
 		return (1);
@@ -15,8 +14,7 @@ static int	setup_pipe(t_pipe *pdata)
 
 static int	handle_fork_error(t_pipe pdata)
 {
-	ft_putstr_fd("minishell: fork: Cannot allocate memory\n",
-		STDERR_FILENO);
+	ft_putstr_fd("minishell: fork: Cannot allocate memory\n", STDERR_FILENO);
 	if (pdata.in_pipe[0] != -1)
 		close(pdata.in_pipe[0]);
 	if (pdata.cur_pipe[0] != -1)
@@ -53,11 +51,11 @@ static int	wait_for_processes(pid_t *pids, int cmd_count)
 	wcount = cmd_count;
 	while (wcount--)
 	{
-		pid = waitpid(-1, &wstatus, 0);
+		pid = waitpid(0, &wstatus, 0);
 		if (pid != -1)
 		{
-			if (pid == pids[cmd_count -1])
-				exit_code = get_process_exit_code(wstatus);
+			if (pid == pids[cmd_count - 1])
+				exit_code = get_pipe_exit_code(wstatus);
 		}
 		else
 		{
@@ -72,9 +70,10 @@ static int	wait_for_processes(pid_t *pids, int cmd_count)
 int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 {
 	t_pipe	pdata;
-	pid_t	pids[cmd_count];
+	pid_t	*pids;
 	int		i;
 
+	pids = data->pids;
 	init_pipe_data(&pdata, cmd, cmd_count);
 	i = 0;
 	while (pdata.cur_cmd && i < cmd_count)
@@ -91,5 +90,5 @@ int	run_pipes(t_data *data, t_command *cmd, int cmd_count)
 		pdata.cur_cmd = pdata.cur_cmd->next;
 		i++;
 	}
-	return(wait_for_processes(pids, cmd_count));
+	return (wait_for_processes(pids, cmd_count));
 }

@@ -62,7 +62,7 @@ static int	run_heredoc(t_data *data, t_command *cmd, t_files *node, int *fds)
 	if (pid == 0)
 		heredoc_child(node, cmd, fds, data);
 	else
-		exit_code = handle_parent_process(pid);
+		exit_code = handle_heredoc_parent(pid);
 	return (exit_code);
 }
 
