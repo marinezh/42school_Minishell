@@ -39,7 +39,5 @@ int	get_pipe_exit_code(int wstatus)
 		ft_putstr_fd("\n", STDERR_FILENO);
 	else if (exit_code == 131)
 		ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-	else
-		exit_code = ERR_GENERIC;
 	return (exit_code);
 }
