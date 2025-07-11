@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	copy_qtd_seg(char *input, char *output, int *i, int *j)
+static int	copy_qtd_seg(char *input, char *output, int *i, int *j)
 {
 	char	quote;
 
@@ -22,9 +22,19 @@ int	copy_qtd_seg(char *input, char *output, int *i, int *j)
 	return (1);
 }
 
+static int	process_qtd_seg(t_cmd_input *cmd, t_data *data)
+{
+	if (copy_qtd_seg(cmd->input, cmd->spaced, &cmd->i, &cmd->j) == -2)
+	{
+		free(cmd->spaced);
+		cmd->spaced = NULL;
+		data->status = 2;
+		return (-1);
+	}
+	return (0);
+}
 
-
-char	*add_space(t_cmd_input *cmd, t_data *data)
+static char	*add_space(t_cmd_input *cmd, t_data *data)
 {
 	cmd->i = 0;
 	cmd->j = 0;
@@ -36,13 +46,8 @@ char	*add_space(t_cmd_input *cmd, t_data *data)
 	{
 		if (cmd->input[cmd->i] == '\'' || cmd->input[cmd->i] == '\"')
 		{
-			if (copy_qtd_seg(cmd->input, cmd->spaced, &cmd->i, &cmd->j) == -2)
-			{
-				free(cmd->spaced);
-				cmd->spaced = NULL;
-				data->status = 2;
+			if (process_qtd_seg(cmd, data) == -1)
 				return (NULL);
-			}
 			continue ;
 		}
 		if (cmd->i + 1 < cmd->len && is_dbl_op(cmd->input, cmd->i) == 1)
@@ -56,6 +61,25 @@ char	*add_space(t_cmd_input *cmd, t_data *data)
 	return (cmd->spaced);
 }
 
+static char	*prepare_spaced_input(t_cmd_input *cmd, t_data *data)
+{
+	char	*spaced;
+
+	spaced = add_space(cmd, data);
+	if (!spaced)
+	{
+		if (data->status == 2)
+			printf("minishell: quotes not closed\n");
+		else
+		{
+			printf("minishell: memory allocation error\n");
+			data->status = ERR_GENERIC;
+		}
+		return (NULL);
+	}
+	return (spaced);
+}
+
 char	**preprocess_input(char *input, t_data *data)
 {
 	t_cmd_input	cmd;
@@ -65,24 +89,15 @@ char	**preprocess_input(char *input, t_data *data)
 	ft_memset(&cmd, 0, sizeof(t_cmd_input));
 	if (!input || input[0] == '\0')
 	{
-		data->status = 1; // Consider empty input as non-error (or choose 1)
+		data->status = 1;
 		return (NULL);
 	}
 	cmd.input = input;
-	spaced = add_space(&cmd, data);
+	spaced = prepare_spaced_input(&cmd, data);
 	if (!spaced)
-	{
-		if (data->status == 2)
-			printf("minishell: quotes not closed\n");
-		else
-		{
-			printf("minishell: memory allocation error\n");
-			data->status = ERR_GENERIC; // Only overwrite if not already 2
-		}
 		return (NULL);
-	}
 	split_input = quote_safe_split(spaced);
-	free(spaced); // correct position of free spaced, not later
+	free(spaced);
 	if (!split_input)
 	{
 		printf("minishell: memory allocation error\n");
@@ -91,7 +106,3 @@ char	**preprocess_input(char *input, t_data *data)
 	}
 	return (split_input);
 }
-// free(spaced);
-	// FOR DEBUGGIN , delete later
-	// for (int j = 0; split_input[j]; j++)
-	// printf("token[%d] = [%s]\n", j, split_input[j]);
