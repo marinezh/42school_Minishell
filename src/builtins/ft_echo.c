@@ -18,11 +18,11 @@ int	is_n_flag_valid(char *argv)
 
 int	ft_echo(t_data *data, t_command *cmd)
 {
-	int i;
+	int		i;
 	char	**argv;
-	int n_flag;
+	int		n_flag;
+	
 	(void)data;
-
 	argv = cmd->args;
 	n_flag = 0;
 	i = 1;
@@ -42,5 +42,3 @@ int	ft_echo(t_data *data, t_command *cmd)
 		ft_putchar('\n');
 	return(0);
 }
-
-//prints instead of "g   g" (which is stored in env var) this "g g" (single space)

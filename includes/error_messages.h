@@ -3,7 +3,7 @@
 
 # define MSG_NO_OPTIONS ": options not supported\n"
 # define MSG_NO_OPTS_ARGS ": options or arguments not supported\n"
-# define MSG_INVALID_NAME ": not a valid identifier\n"
+# define MSG_INVALID_NAME "': not a valid identifier\n"
 # define MSG_TOO_MANY_ARGS ": too many arguments\n"
 # define MSG_NO_PERM ": Permission denied\n"
 # define MSG_CMD_NOT_FOUND ": command not found\n"

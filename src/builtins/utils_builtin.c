@@ -1,33 +1,34 @@
 #include"minishell.h"
 
-int var_name_len(char *name)
+int count_name_len(char *name)
 {
-	int count;
+	int     count;
 
 	count = 0;
 	while (name[count] && name[count] != '=')
-		count++;
-	if (name[count] == '=')
 		count++;
 	return(count);
 }
 
 t_env *find_env_node(t_data *data, char *env_var)
 {
-    int name_len;
+    int     var_name_len;
+    int     cur_name_len;
     t_env	*cur;
 
-    name_len = var_name_len(env_var);
+    var_name_len = count_name_len(env_var);
     cur = data->envp_list;
     while (cur != NULL)
     {
-        if (ft_strncmp(cur->key, env_var, name_len) == 0 &&
-            (cur->key[name_len] == '\0' || cur->key[name_len] == '='))
+        cur_name_len = count_name_len(cur->key);
+        if (cur_name_len == var_name_len && 
+            ft_strncmp(cur->key, env_var, var_name_len) == 0)
             return (cur);
         cur = cur->next;
     }
     return (NULL);
 }
+
 int	count_args(char **args)
 {
 	int		count;
@@ -36,4 +37,21 @@ int	count_args(char **args)
 	while (args && args[count])
 		count++;
 	return (count);
+}
+
+void	node_add_last(t_env **envp_list, t_env *new_node)
+{
+	t_env	*ptr;
+
+	if (!envp_list || !new_node)
+		return ;
+	ptr = *envp_list;
+	if (*envp_list == NULL)
+	{
+		*envp_list = new_node;
+		return ;
+	}
+	while (ptr->next != NULL)
+		ptr = ptr->next;
+	ptr->next = new_node;
 }
