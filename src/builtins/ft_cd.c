@@ -8,7 +8,7 @@ int	set_pwd(t_data *data, char *env, char *old_pwd)
 	if (!old_pwd)
 		cwd = getcwd(NULL, 0);
 	else
-		cwd = strdup(old_pwd);
+		cwd = ft_strdup(old_pwd);
 	if (!cwd)
 		return (ERR_GENERIC);
 	env_ptr = find_env_node(data, env);
@@ -51,16 +51,16 @@ int	prepare_old_pwd(t_data *data)
 
 int	change_cur_dir(t_data *data, char *path)
 {
-	int		res;
+	int	res;
 
 	res = prepare_old_pwd(data);
 	if (res != 0)
 		return (ERR_GENERIC);
 	if (chdir(path) != 0)
 	{
-		if (errno == EACCES)	
+		if (errno == EACCES)
 			print_error("cd: ", path, MSG_NO_PERM);
-		else if (errno == ENOENT)	
+		else if (errno == ENOENT)
 			print_error("cd: ", path, MSG_NO_FILE);
 		else if (errno == ENOTDIR)
 			print_error("cd: ", path, ": Not a directory\n");
@@ -83,7 +83,7 @@ int	go_home(t_data *data)
 		print_error_msg("cd", ": HOME not set\n");
 		return (ERR_GENERIC);
 	}
-	return(change_cur_dir(data, home_ptr->value));
+	return (change_cur_dir(data, home_ptr->value));
 }
 
 int	ft_cd(t_data *data, t_command *cmd)
