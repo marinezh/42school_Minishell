@@ -71,8 +71,8 @@ int	read_prompt(t_cmd_input *cmd)
 }
 t_command	*parse_input(t_command *commands, t_data *data, char *input)
 {
-	char		**split_input;
-	t_token		*tokens;
+	char	**split_input;
+	t_token	*tokens;
 
 	tokens = NULL;
 	split_input = preprocess_input(input, data);
@@ -82,16 +82,16 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
-	//print_tokens(tokens);
+	// print_tokens(tokens);
 	if (error_check(tokens, data))
 		return (free_tokens(tokens), NULL);
-	//print_tokens(tokens);
-	//printf("DATA STATUS %d\n", data->status);
+	// print_tokens(tokens);
+	// printf("DATA STATUS %d\n", data->status);
 	if (!expand_variables(tokens, data, 1))
 		return (free_tokens(tokens), NULL);
-	//printf("//////////////////////////////\n");
-	//print_tokens(tokens);
-	//printf("DATA STATUS 2 %d\n", data->status);
+	// printf("//////////////////////////////\n");
+	// print_tokens(tokens);
+	// printf("DATA STATUS 2 %d\n", data->status);
 	tokens = handle_word_splitting(tokens);
 	if (!tokens)
 		return (NULL);
@@ -112,8 +112,9 @@ void	shell_loop(t_data *data)
 	t_command	*commands;
 	int			prompt_res;
 
-	ft_memset(&cmd_input, 0, sizeof(t_cmd_input)); // cmd_input initialization of cmd_input
-	//commands = NULL;
+	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
+		// cmd_input initialization of cmd_input
+	// commands = NULL;
 	while (!data->exit_f)
 	{
 		sig_received = 0;
