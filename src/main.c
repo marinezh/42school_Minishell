@@ -82,18 +82,26 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
+	//print_tokens(tokens);
 	if (error_check(tokens, data))
 		return (free_tokens(tokens), NULL);
+	//print_tokens(tokens);
+	//printf("DATA STATUS %d\n", data->status);
 	if (!expand_variables(tokens, data, 1))
 		return (free_tokens(tokens), NULL);
+	//printf("//////////////////////////////\n");
+	//print_tokens(tokens);
+	//printf("DATA STATUS 2 %d\n", data->status);
 	tokens = handle_word_splitting(tokens);
 	if (!tokens)
 		return (NULL);
 	delete_empty_tokens(&tokens);
 	commands = parse_tokens(tokens);
+	print_commands(commands);
 	if (!commands)
 		return (free_tokens(tokens), NULL);
 	remove_quotes_from_command_args(commands);
+	print_commands(commands);
 	free_tokens(tokens);
 	return (commands);
 }
