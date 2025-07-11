@@ -1,64 +1,97 @@
 #include "minishell.h"
 
-t_files	*create_file_node(char *name, int type)
+t_files *initialize_file_node(void)
 {
-	t_files	*new_file;
-	int len;
-
-	//printf("DEBUG create_file_node: Creating node type %d for name '%s'\n", type, name);
+	t_files *new_file;
+	
 	new_file = malloc(sizeof(t_files));
 	if (!new_file)
 		return (NULL);
-	if (type == HEREDOC)
+	
+	new_file->type = -1;
+	new_file->fd = -1;
+	new_file->next = NULL;
+	new_file->to_expand = 0; // default: no expansion
+	new_file->name = NULL;
+	
+	return (new_file);
+}
+
+char *extract_unquoted_name(char *name)
+{
+	char *unquoted_name;
+	int len;
+	
+	len = ft_strlen(name);
+	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'') ||
+					 (name[0] == '"' && name[len - 1] == '"')))
 	{
-		len = ft_strlen(name);
-		//printf("DEBUG: Checking heredoc delimiter '%s', length %d\n", name, len);
-		if (len >= 2 &&
- 				((name[0] == '\'' && name[len - 1] == '\'') ||
-    			(name[0] == '"' && name[len - 1] == '"')))
-		{
-			//printf("DEBUG: Found single quotes in heredoc delimiter\n");
-			char *unquoted_name = ft_substr(name, 1, len - 2);
-			if (!unquoted_name)
-			{
-				free(new_file);
-				return (NULL);
-			}
-			new_file->name = unquoted_name;
-			new_file->to_expand = 0;
-			//printf("DEBUG: Quoted heredoc delimiter: '%s', to_expand=0\n", new_file->name);
-		}
-		else
-		{
-			new_file->name = ft_strdup(name);
-			if (!new_file->name)
-			{
-				free(new_file);
-				return (NULL);
-			}
-			new_file->to_expand = 1;
-			//printf("DEBUG: Unquoted heredoc delimiter: '%s', to_expand=1\n", new_file->name);
-		}
+		unquoted_name = ft_substr(name, 1, len - 2);
+		return (unquoted_name);
+	}
+	return (ft_strdup(name));
+}
+
+int  setup_heredoc_node(t_files *new_file, char *name)
+{
+	int len;
+	char *node_name;
+	
+	len = ft_strlen(name);
+	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'') ||
+					 (name[0] == '"' && name[len - 1] == '"')))
+	{
+		node_name = ft_substr(name, 1, len - 2);
+		if (!node_name)
+			return (0);
+		new_file->name = node_name;
+		new_file->to_expand = 0;
 	}
 	else
 	{
 		new_file->name = ft_strdup(name);
 		if (!new_file->name)
+			return (0);
+		new_file->to_expand = 1;
+	}
+	return (1);
+}
+
+int setup_regular_node(t_files *new_file, char *name)
+{
+	new_file->name = ft_strdup(name);
+	if (!new_file->name)
+		return (0);
+	new_file->to_expand = 0;  // default: no expansion for normal files
+	return (1);
+}
+
+t_files *create_file_node(char *name, int type)
+{
+	t_files *new_file;
+	
+	new_file = initialize_file_node();
+	if (!new_file)
+		return (NULL);
+	if (type == HEREDOC)
+	{
+		if (!setup_heredoc_node(new_file, name))
 		{
 			free(new_file);
 			return (NULL);
 		}
-		new_file->to_expand = 0;  // default: no expansion for normal files
 	}
-
+	else
+	{
+		if (!setup_regular_node(new_file, name))
+		{
+			free(new_file);
+			return (NULL);
+		}
+	}
 	new_file->type = type;
-	new_file->fd = -1;
-	new_file->next = NULL;
-	//printf("DEBUG: Created file node with name '%s', expand_vars=%d\n", 
-           //new_file->name, new_file->to_expand);
 	return (new_file);
 }
-
 
 void append_to_list(t_files **list, t_files *node)
 {
