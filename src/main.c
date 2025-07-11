@@ -71,6 +71,35 @@ int	read_prompt(t_cmd_input *cmd)
 // 	//END OF PART FOR BIG TESTER
 // 	///////////////////////////////////////////////////////////
 }
+t_command	*parse_input(t_command *commands, t_data *data, char *input)
+{
+	char		**split_input;
+	t_token		*tokens;
+
+	tokens = NULL;
+	split_input = preprocess_input(input, data);
+	if (!split_input)
+		return (NULL);
+	tokens = tokenize_input(split_input);
+	//print_tokens(tokens);
+	free_split_input(split_input);
+	if (!tokens)
+		return (NULL);
+	if (error_check(tokens, data))
+		return (free_tokens(tokens), NULL);
+	if (!expand_variables(tokens, data, 1))
+		return (free_tokens(tokens), NULL);
+	tokens = handle_word_splitting(tokens);
+	if (!tokens)
+		return (NULL);
+	delete_empty_tokens(&tokens);
+	commands = parse_tokens(tokens);
+	if (!commands)
+		return (free_tokens(tokens), NULL);
+	remove_quotes_from_command_args(commands);
+	free_tokens(tokens);
+	return (commands);
+}
 
 void	shell_loop(t_data *data)
 {
@@ -80,6 +109,7 @@ void	shell_loop(t_data *data)
 	char **split_input = NULL;
 	int		prompt_res;
 
+	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
 	while (!data->exit_f)
 	{
 		g_sig_received = 0;
@@ -95,51 +125,12 @@ void	shell_loop(t_data *data)
 			continue ;
 		if (cmd_input.input && cmd_input.input[0] != '\0')
 			add_history(cmd_input.input);
-		// tokens_lexer = run_lexer(&cmd_input); and this?
-		split_input = preprocess_input(cmd_input.input, data);
-		if (!split_input) // This will be NULL if fmt_quotes found an error
-		{
-			free(cmd_input.input);
-			continue;
-		}
-		tokens = tokenize_input(split_input);
-		free_split_input(split_input); // after we tokenise we do not need split_input anymore
-		if (!tokens)
-		{
-			free(cmd_input.input);
-			continue;
-		}
-		// printf("PURE TOKENS\n");
-		//print_tokens(tokens);
-		//  files = parse_redir(tokens);
-		//  print_files_nodes(files);
-		if (error_check(tokens, data))
-		{
-			free_tokens(tokens);
-			free(cmd_input.input);
-			continue ; // skip to next input
-		}
-
-		if (!expand_variables(tokens, data, 1))
-		{
-			//fprintf(stderr, "Expansion failed due to memory error.\n");
-    		//data->status = 1;
-    		free_tokens(tokens);
-    		free(cmd_input.input);
-    		continue; // Skip to next prompt
-		}
-		tokens = handle_word_splitting(tokens);
-		//remove_outer_quotes(tokens);
-		commands = parse_tokens(tokens);
+		commands = parse_input(commands, data, cmd_input.input);
 		//print_commands(commands);
-		remove_quotes_from_command_args(commands); // New function
-		// printf("/////////////////////\n");
-		// print_commands(commands);
-		// printf("/////////////////////\n");
 		free(cmd_input.input);
 		free_tokens(tokens);			// Free the tokens list
 		execute(data, commands);
-		free_command_list(commands);	// Free the commands list
+		free_command_list(commands);
 	}
 }
 
