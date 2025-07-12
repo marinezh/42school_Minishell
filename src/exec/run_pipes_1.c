@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_pipes_1.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:37:04 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 11:02:49 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	setup_pipe(t_pipe *pdata)
@@ -25,7 +37,7 @@ static int	handle_fork_error(t_pipe pdata)
 	return (1);
 }
 
-void	handle_parent_pipe(t_pipe *pdata, int i, int count)
+static void	handle_parent_pipe(t_pipe *pdata, int i, int count)
 {
 	if (i > 0)
 	{

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:31:43 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:51:39 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	count_commands(t_command *head)
+static int	count_commands(t_command *head)
 {
 	t_command	*cur;
 	int			count;
@@ -15,7 +27,7 @@ int	count_commands(t_command *head)
 	return (count);
 }
 
-int	check_heredoc_limit(t_data *data, t_command *cmd)
+static int	check_heredoc_limit(t_data *data, t_command *cmd)
 {
 	int			count;
 	t_command	*cur_cmd;
@@ -42,7 +54,7 @@ int	check_heredoc_limit(t_data *data, t_command *cmd)
 	return (0);
 }
 
-int	has_heredoc(t_data *data, t_command *cmd)
+static int	has_heredoc(t_data *data, t_command *cmd)
 {
 	t_command	*cur_cmd;
 	t_files		*cur_redir;

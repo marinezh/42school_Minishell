@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_exec.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:38:30 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 11:05:32 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_env	*init_node(char *key, char *value)
+static t_env	*init_node(char *key, char *value)
 {
 	t_env	*ptr;
 
@@ -13,7 +25,7 @@ t_env	*init_node(char *key, char *value)
 	return (ptr);
 }
 
-int	create_key_value(char *str, char **key, char **value)
+static int	create_key_value(char *str, char **key, char **value)
 {
 	char	*ptr;
 	size_t	len;

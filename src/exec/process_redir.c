@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_redir.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:33:43 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:57:37 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	handle_file_error(t_data *data, char *file_name)
@@ -14,7 +26,7 @@ static int	handle_file_error(t_data *data, char *file_name)
 	return (-1);
 }
 
-int	process_redir_in(t_data *data, t_files *redir_in)
+static int	process_redir_in(t_data *data, t_files *redir_in)
 {
 	int		fd;
 	char	*file;
@@ -33,7 +45,7 @@ int	process_redir_in(t_data *data, t_files *redir_in)
 	return (data->status);
 }
 
-int	process_redir_out(t_data *data, t_files *redir_out)
+static int	process_redir_out(t_data *data, t_files *redir_out)
 {
 	int		type;
 	int		fd;

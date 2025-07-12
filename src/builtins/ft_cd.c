@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:40:50 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:47:13 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	set_pwd(t_data *data, char *env, char *old_pwd)
+static int	set_pwd(t_data *data, char *env, char *old_pwd)
 {
 	t_env	*env_ptr;
 	char	*cwd;
@@ -24,7 +36,7 @@ int	set_pwd(t_data *data, char *env, char *old_pwd)
 	return (0);
 }
 
-int	prepare_old_pwd(t_data *data)
+static int	prepare_old_pwd(t_data *data)
 {
 	char	*old_pwd;
 	t_env	*pwd_env;
@@ -49,7 +61,7 @@ int	prepare_old_pwd(t_data *data)
 	return (0);
 }
 
-int	change_cur_dir(t_data *data, char *path)
+static int	change_cur_dir(t_data *data, char *path)
 {
 	int	res;
 
@@ -73,7 +85,7 @@ int	change_cur_dir(t_data *data, char *path)
 	return (0);
 }
 
-int	go_home(t_data *data)
+static int	go_home(t_data *data)
 {
 	t_env	*home_ptr;
 
