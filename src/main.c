@@ -9,6 +9,7 @@ int	read_prompt(t_cmd_input *cmd, t_data *data)
 	if (g_sig_received)
 	{
 		g_sig_received = 0;
+        data->status = ERR_INTERUPTED_SIGINT;
 		if (cmd->input)
 		{
 			free(cmd->input);
@@ -114,12 +115,7 @@ void	shell_loop(t_data *data, t_command **commands)
 		prompt_res = read_prompt(&cmd_input, data);
 		if (prompt_res == -1)
 			break ;
-		if (prompt_res == -2)
-		{
-			data->status = ERR_INTERUPTED_SIGINT;
-			continue ;
-		}
-		if (prompt_res == 0)
+		if (prompt_res == -2 || prompt_res == 0)
 			continue ;
 		if (cmd_input.input && cmd_input.input[0] != '\0')
 			add_history(cmd_input.input);
