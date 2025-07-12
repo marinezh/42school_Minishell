@@ -36,12 +36,15 @@ static int	remove_quotes_from_files(t_files *files)
 	current = files;
 	while (current)
 	{
-		if (current->type != HEREDOC)
-		{
-			proc.str = current->name;
+		// if (current->type != HEREDOC)
+		// {
+		// 	proc.str = current->name;
+		// 	if (!remove_outer_quotes_from_string(&proc))
+		// 		return (0);
+		// }
+		proc.str = current->name;
 			if (!remove_outer_quotes_from_string(&proc))
 				return (0);
-		}
 		current = current->next;
 	}
 	return (1);

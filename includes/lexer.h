@@ -27,6 +27,7 @@ int			skip_quoted_seg(char *input, int *i);
 int			is_single_op(char *input, int i);
 int			is_dbl_op(char *input, int i);
 int			is_triple_op(char *input, int i);
+int			is_question_mark(char *input, int i);
 
 void		process_one(char *input, char *output, int *i, int *j);
 void		process_two(char *input, char *output, int *i, int *j);

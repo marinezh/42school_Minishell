@@ -219,7 +219,26 @@ int expand_variables(t_token *tokens, t_data *data, int skip_after_heredoc)
                     i++;
                     continue;
                 }
+				if (current->value[i] == '?' && !in_single && !in_double)
+    			{
+    			    // Only replace if it's alone or surrounded by whitespace
+      				if ((i == 0 || is_whitespace(current->value[i - 1])) &&
+      					(current->value[i + 1] == '\0' || is_whitespace(current->value[i + 1])))
+     				{
+          				char *status_str = ft_itoa(1);
+           				if (!status_str)
+          				{
+                			handle_error_arg(data, "memory", ": allocation failed\n", 1);
+                			return (0);
+            			}
 
+            		// Replace single '?' in token->value with status
+            			free(current->value);
+            			current->value = status_str;
+
+            			break; // Done with this token
+        			}
+    			}
                 // Handle variable expansion - using existing code
                 if (should_expand_variable(&current->value[i], in_single))
                 {

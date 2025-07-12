@@ -54,6 +54,8 @@ static char	*add_space(t_cmd_input *cmd, t_data *data)
 			process_two(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
 		else if (is_single_op(cmd->input, cmd->i) == 1)
 			process_one(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
+		else if (is_question_mark(cmd->input, cmd->i) == 1)
+			process_one(cmd->input, cmd->spaced, &cmd->i, &cmd->j);
 		else
 			cmd->spaced[cmd->j++] = cmd->input[cmd->i++];
 	}

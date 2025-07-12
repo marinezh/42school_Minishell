@@ -113,31 +113,31 @@ Syntax errors
 
 43 
 >echo>
-/bin/rm -f echo
+/bin/rm -f echo works!!!!
 
 46
  <echo<
-/bin/rm -f echo
+/bin/rm -f echo works !!!!
 
 49
 >>echo>>
-/bin/rm -f echo
+/bin/rm -f echo works !!!
 
 Parsing hell
 32
-cat << $USER
+cat << $USER works!!!
 why
 not
 $USER
 
 40
-cat << "$USER"
+cat << "$USER" works !!!
 why
 not
 $USER
 
 45
-cat << "$US"E"R"
+cat << "$US"E"R" works !!!
 because
 we
 love
