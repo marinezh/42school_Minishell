@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-// declared JUST for MacOS
+//declared JUST for MacOS
 extern rl_hook_func_t	*rl_event_hook;
 
 int	read_prompt(t_cmd_input *cmd, t_data *data)
@@ -102,23 +102,19 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	return (commands);
 }
 
-void	shell_loop(t_data *data)
+void	shell_loop(t_data *data, t_command **commands)
 {
 	t_cmd_input	cmd_input;
-	t_token		*tokens;
-	t_command	*commands;
 	int			prompt_res;
 
-	tokens = NULL;
-	commands = NULL;
 	ft_memset(&cmd_input, 0, sizeof(t_cmd_input));
 	while (!data->exit_f)
 	{
 		g_sig_received = 0;
 		prompt_res = read_prompt(&cmd_input, data);
-		if (prompt_res == -1) // EOF (Cntl + D)/ exit
+		if (prompt_res == -1)
 			break ;
-		if (prompt_res == -2) // signal received
+		if (prompt_res == -2)
 		{
 			data->status = ERR_INTERUPTED_SIGINT;
 			continue ;
@@ -127,24 +123,24 @@ void	shell_loop(t_data *data)
 			continue ;
 		if (cmd_input.input && cmd_input.input[0] != '\0')
 			add_history(cmd_input.input);
-		commands = parse_input(commands, data, cmd_input.input);
+		*commands = parse_input(*commands, data, cmd_input.input);
 		free(cmd_input.input);
-		free_tokens(tokens);
-		if (!commands)
+		if (!(*commands))
 			continue ;
-		execute(data, commands);
-		free_command_list(commands);
+		execute(data, *commands);
+		free_command_list(*commands);
 	}
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_data	data;
+	t_data		data;
+	t_command	*commands;
 
+	commands = NULL;
 	(void)av;
 	if (ac < 1)
 		return (1);
-	// init struct where env are stored
 	if (init_data(&data, env) != 0)
 	{
 		ft_putstr_fd("Error initializing shell environment\n", 2);
@@ -152,8 +148,7 @@ int	main(int ac, char **av, char **env)
 	}
 	set_prompt_signals();
 	rl_event_hook = rl_signal_handler;
-	shell_loop(&data);
-	// clean struct where env are stored
+	shell_loop(&data, &commands);
 	free_env_list(&data.envp_list);
 	free_double_array(data.envp);
 	rl_clear_history();
