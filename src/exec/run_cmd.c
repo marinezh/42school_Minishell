@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_cmd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:34:14 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:58:31 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 pid_t	create_process(void)
@@ -13,7 +25,7 @@ pid_t	create_process(void)
 	return (pid);
 }
 
-void	handle_child_process(t_data *data, t_command *cmd, char *path,
+static void	handle_child_process(t_data *data, t_command *cmd, char *path,
 		char **args)
 {
 	char	**envp;
@@ -35,7 +47,7 @@ void	handle_child_process(t_data *data, t_command *cmd, char *path,
 	}
 }
 
-int	get_execve_exit_code(t_data *data, int wstatus)
+static int	get_execve_exit_code(t_data *data, int wstatus)
 {
 	int	exit_code;
 
@@ -57,7 +69,7 @@ int	get_execve_exit_code(t_data *data, int wstatus)
 	return (exit_code);
 }
 
-int	handle_execve_parent(t_data *data, pid_t pid)
+static int	handle_execve_parent(t_data *data, pid_t pid)
 {
 	int	wstatus;
 	int	exit_code;

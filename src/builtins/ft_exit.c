@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:41:44 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:48:49 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	handle_numeric_arg_error(t_data *data, char *arg)
+static void	handle_numeric_arg_error(t_data *data, char *arg)
 {
 	data->exit_f = 1;
 	data->status = 2;
@@ -8,7 +20,7 @@ void	handle_numeric_arg_error(t_data *data, char *arg)
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }
-long long	process_string(char *str, int *error)
+static long long	process_string(char *str, int *error)
 {
 	int			digit;
 	long long	res;
@@ -33,7 +45,7 @@ long long	process_string(char *str, int *error)
 	return (res);
 }
 
-long long	custom_strtoll(char *str, int *error)
+static long long	custom_strtoll(char *str, int *error)
 {
 	long long	res;
 	int			sign;

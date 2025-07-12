@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_heredoc_1.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:36:05 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:36:08 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Heredoc implementation approach:
@@ -9,7 +21,7 @@
  */
 
 void	print_eof_warning(t_files *node, int line_num)
- {
+{
 	 char	full_msg[256];
 	 char	*number;
  
@@ -29,12 +41,13 @@ void	print_eof_warning(t_files *node, int line_num)
 
 static char	*create_new_name(void)
 {
-	static int	counter = 0;
+	static int	counter;
 	char		temp[1];
 	uintptr_t	addr_ptr;
 	char		*heredoc_num;
 	char		*heredoc_name;
 
+    counter = 0;
 	addr_ptr = (uintptr_t)&temp + counter++;
 	heredoc_num = ft_itoa((int)addr_ptr);
 	if (!heredoc_num)

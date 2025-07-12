@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_cmd.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:33:10 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:55:59 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	redirect_stream(t_data *data, int old_fd, int new_fd)
@@ -21,7 +33,7 @@ int	copy_stream(int fd)
 	return (saved_stream);
 }
 
-void	restore_streams(t_data *data, int orig_stdin, int orig_stdout)
+static void	restore_streams(t_data *data, int orig_stdin, int orig_stdout)
 {
 	if (orig_stdin != -1)
 	{
@@ -37,29 +49,29 @@ void	restore_streams(t_data *data, int orig_stdin, int orig_stdout)
 	}
 }
 
-int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
+static int	redirect_io(t_data *data, t_command *cmd, int *or_in, int *or_out)
 {
-	*orig_in = -1;
-	*orig_out = -1;
+	*or_in = -1;
+	*or_out = -1;
 	if (cmd->in)
 	{
-		*orig_in = copy_stream(0);
-		if (*orig_in == -1)
+		*or_in = copy_stream(0);
+		if (*or_in == -1)
 			return(-1);
 	}
 	if (cmd->out)
 	{
-		*orig_out = copy_stream(1);
-		if (*orig_out == -1)
+		*or_out = copy_stream(1);
+		if (*or_out == -1)
 		{
-			if (*orig_in != -1)
-				close(*orig_in);
+			if (*or_in != -1)
+				close(*or_in);
 			return(-1);
 		}
 	}
 	if (handle_redirs(data, cmd) == -1)
 	{
-		restore_streams(data, *orig_in, *orig_out);
+		restore_streams(data, *or_in, *or_out);
 		return (-1);
 	}
 	return (0);
@@ -67,7 +79,6 @@ int	redirect_io(t_data *data, t_command *cmd, int *orig_in, int *orig_out)
 
 int	process_cmd(t_data *data, t_command *cmd)
 {
-	// int	builtin_status;
 	int	orig_stdin;
 	int	orig_stdout;
 	int	is_redir;
