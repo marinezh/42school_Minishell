@@ -45,3 +45,35 @@
    ...
    fun:add_history
 }
+{
+   grep_definitely_lost_1
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:re_compile_internal
+   fun:re_compile_pattern
+}
+
+{
+   grep_indirectly_lost_1
+   Memcheck:Leak
+   match-leak-kinds: indirect
+   fun:malloc
+   fun:create_cd_newstate
+   fun:re_acquire_state_context
+   fun:re_compile_internal
+}
+
+{
+   grep_possibly_lost_1
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:realloc
+}
+
+{
+   grep_still_reachable_1
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+}

@@ -74,6 +74,7 @@ int	read_prompt(t_cmd_input *cmd, t_data *data)
 	// 	//END OF PART FOR BIG TESTER
 	// 	///////////////////////////////////////////////////////////
 }
+
 t_command	*parse_input(t_command *commands, t_data *data, char *input)
 {
 	char	**split_input;
@@ -83,7 +84,8 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	split_input = preprocess_input(input, data);
 	if (!split_input)
 		return (NULL);
-	tokens = tokenize_input(split_input);
+	tokens = tokenize_input(split_input, data);
+	//print_tokens(tokens);
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
@@ -95,10 +97,14 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	if (!tokens)
 		return (NULL);
 	delete_empty_tokens(&tokens);
-	commands = parse_tokens(tokens);
+	commands = parse_tokens(tokens, data);
+	// print_commands(commands);
 	if (!commands)
 		return (free_tokens(tokens), NULL);
-	remove_quotes_from_command_args(commands);
+	if (!remove_quotes_from_command_args(commands, data))
+		return (free_tokens(tokens), free_command_list(commands), NULL);
+	//printf("/////////////////////////////////\n");
+	//print_commands(commands);
 	free_tokens(tokens);
 	return (commands);
 }

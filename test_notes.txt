@@ -112,32 +112,32 @@ Syntax errors   - we do not implement ~
 ~
 
 43 
->echo>              gives the same result as our minishell
-/bin/rm -f echo
+>echo>
+/bin/rm -f echo works!!!!
 
 46
- <echo<              gives the same result as our minishell
-/bin/rm -f echo
+ <echo<
+/bin/rm -f echo works !!!!
 
 49
->>echo>>             gives the same result as our minishell
-/bin/rm -f echo
-/////////////////////////////////////////
+>>echo>>
+/bin/rm -f echo works !!!
+
 Parsing hell
 32
-cat << $USER
+cat << $USER works!!!
 why
 not
 $USER
 
 40
-cat << "$USER"
+cat << "$USER" works !!!
 why
 not
 $USER
 
 45
-cat << "$US"E"R"
+cat << "$US"E"R" works !!!
 because
 we
 love

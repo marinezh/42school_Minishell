@@ -1,10 +1,10 @@
 #include <minishell.h>
 
-t_command	*create_new_command(int index)
+static t_command	*create_new_command(int index)
 {
 	t_command	*cmd;
 
-	cmd = malloc(sizeof(t_command));
+	cmd = malloc(sizeof(t_command)); // Checked
 	if (!cmd)
 		return (NULL);
 	cmd->index = index;
@@ -17,7 +17,7 @@ t_command	*create_new_command(int index)
 	return (cmd);
 }
 
-t_command	*add_command_to_chain(t_command **head, t_command **tail,
+static t_command	*add_cmd_to_chain(t_command **head, t_command **tail,
 		int *cmd_index)
 {
 	t_command	*current;
@@ -33,27 +33,26 @@ t_command	*add_command_to_chain(t_command **head, t_command **tail,
 	return (current);
 }
 
-int	process_token(t_command **current, t_token **token_list, t_cmd_chain *chain)
+static int	process_token(t_command **cur, t_token **token_list, t_cmd_chain *chain)
 {
 	if (!token_list)
 		return (0);
-	if (!(*current))
+	if (!(*cur))
 	{
-		*current = add_command_to_chain(&chain->head, &chain->tail,
-				&chain->cmd_index);
-		if (!(*current))
+		*cur = add_cmd_to_chain(&chain->head, &chain->tail, &chain->cmd_index); //checked
+		if (!(*cur))
 			return (0);
 	}
 	if ((*token_list)->type == PIPE)
-		handle_pipe(*current, token_list, current);
+		handle_pipe(*cur, token_list, cur);
 	else if (is_redirect_type(*token_list))
 	{
-		if (!handle_redirection(*current, token_list))
-			return (1);
+		if (!handle_redirection(*cur, token_list))
+			return (0);
 	}
 	else if ((*token_list)->type == WORD)
 	{
-		if (!handle_word_token(*current, token_list))
+		if (!handle_word_token(*cur, token_list))
 			return (0);
 	}
 	else
@@ -61,7 +60,7 @@ int	process_token(t_command **current, t_token **token_list, t_cmd_chain *chain)
 	return (1);
 }
 
-t_command	*parse_tokens(t_token *token_list)
+t_command	*parse_tokens(t_token *token_list, t_data *data)
 {
 	t_cmd_chain	chain;
 	t_command	*current;
@@ -75,7 +74,9 @@ t_command	*parse_tokens(t_token *token_list)
 		if (!process_token(&current, &token_list, &chain))
 		{
 			free_command_list(chain.head);
-			free_tokens(token_list);
+			// free_tokens(token_list);
+			printf("minishell: memory allocation failed\n");
+			data->status = ERR_GENERIC;
 			return (NULL);
 		}
 	}

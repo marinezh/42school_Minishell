@@ -1,47 +1,30 @@
 #include "minishell.h"
 
-t_files *initialize_file_node(void)
+static t_files	*initialize_file_node(void)
 {
-	t_files *new_file;
-	
-	new_file = malloc(sizeof(t_files));
+	t_files	*new_file;
+
+	new_file = malloc(sizeof(t_files)); // CHECKED
 	if (!new_file)
 		return (NULL);
-	
 	new_file->type = -1;
 	new_file->fd = -1;
 	new_file->next = NULL;
 	new_file->to_expand = 0; // default: no expansion
 	new_file->name = NULL;
-	
 	return (new_file);
 }
 
-char *extract_unquoted_name(char *name)
+static int	setup_heredoc_node(t_files *new_file, char *name)
 {
-	char *unquoted_name;
-	int len;
-	
-	len = ft_strlen(name);
-	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'') ||
-					 (name[0] == '"' && name[len - 1] == '"')))
-	{
-		unquoted_name = ft_substr(name, 1, len - 2);
-		return (unquoted_name);
-	}
-	return (ft_strdup(name));
-}
+	int		len;
+	char	*node_name;
 
-int  setup_heredoc_node(t_files *new_file, char *name)
-{
-	int len;
-	char *node_name;
-	
 	len = ft_strlen(name);
-	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'') ||
-					 (name[0] == '"' && name[len - 1] == '"')))
+	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'')
+			|| (name[0] == '"' && name[len - 1] == '"')))
 	{
-		node_name = ft_substr(name, 1, len - 2);
+		node_name = ft_substr(name, 1, len - 2); // CHECKED
 		if (!node_name)
 			return (0);
 		new_file->name = node_name;
@@ -49,7 +32,7 @@ int  setup_heredoc_node(t_files *new_file, char *name)
 	}
 	else
 	{
-		new_file->name = ft_strdup(name);
+		new_file->name = ft_strdup(name); // Checked
 		if (!new_file->name)
 			return (0);
 		new_file->to_expand = 1;
@@ -57,19 +40,20 @@ int  setup_heredoc_node(t_files *new_file, char *name)
 	return (1);
 }
 
-int setup_regular_node(t_files *new_file, char *name)
+static int	setup_regular_node(t_files *new_file, char *name)
 {
-	new_file->name = ft_strdup(name);
+	(void)name;
+	new_file->name = ft_strdup(name); // checked
 	if (!new_file->name)
 		return (0);
-	new_file->to_expand = 0;  // default: no expansion for normal files
+	new_file->to_expand = 0; // default: no expansion for normal files
 	return (1);
 }
 
-t_files *create_file_node(char *name, int type)
+static t_files	*create_file_node(char *name, int type)
 {
-	t_files *new_file;
-	
+	t_files	*new_file;
+
 	new_file = initialize_file_node();
 	if (!new_file)
 		return (NULL);
@@ -93,41 +77,25 @@ t_files *create_file_node(char *name, int type)
 	return (new_file);
 }
 
-void append_to_list(t_files **list, t_files *node)
-{
-	t_files *current;
-	
-	if (*list == NULL)
-	{
-		*list = node;
-		return;
-	}
-	current = *list;
-	while (current->next)
-		current = current->next;
-	current->next = node;
-}
-
-void add_redirection(t_command *cmd, char *filename, int type)
+int	add_redirection(t_command *cmd, char *filename, int type)
 {
 	t_files	*global_redir_node;
 	t_files	*typed_redir_node;
-	
+
 	if (!cmd || !filename)
-		return;
-	global_redir_node = create_file_node(filename, type); 
+		return (0);
+	global_redir_node = create_file_node(filename, type); // checked
 	if (!global_redir_node)
-		return;
-	append_to_list(&(cmd->redirections), global_redir_node);
-	typed_redir_node = create_file_node(filename, type);
-	if (!typed_redir_node)
 	{
-		free(global_redir_node->name);
-		free(global_redir_node);
-		return;
+		return (0);
 	}
+	append_to_list(&(cmd->redirections), global_redir_node);
+	typed_redir_node = create_file_node(filename, type); // checked
+	if (!typed_redir_node)
+		return (0);
 	if (type == REDIR_IN || type == HEREDOC)
 		append_to_list(&(cmd->in), typed_redir_node);
-	else 
+	else
 		append_to_list(&(cmd->out), typed_redir_node);
+	return (1);
 }

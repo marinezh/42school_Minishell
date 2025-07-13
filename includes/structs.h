@@ -40,6 +40,15 @@ typedef struct s_cmd_input
 
 
 
+typedef struct s_qts_proc
+{
+	int i;
+	int j;
+	char	*temp;
+	char	*str;
+	char	in_quote;
+}	t_qts_proc;
+
 typedef struct s_token
 {
 	t_token_type				type;

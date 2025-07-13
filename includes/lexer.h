@@ -1,19 +1,20 @@
 #ifndef LEXER_H
 # define LEXER_H
 
-# define SPACING_FACTOR 4
+# include "minishell.h"
 
-#include "minishell.h"
+char	**preprocess_input(char *input, t_data *data);
 
-char		**preprocess_input(char *input, t_data *data);
-int			word_count(char *str);
-char		*word_dup(char *str, int len);
-int			is_whitespace(char c);
-int 		skip_whitespaces(char *str, int j);
-char		**quote_safe_split(char *str);
-int			is_single_op(char *input, int i);
-int			is_dbl_op(char *input, int i);
-void		process_one(char *input, char *output, int *i, int *j);
-void		process_two(char *input, char *output, int *i, int *j);
+int		word_count(char *str);
+char	*word_dup(char *str, int len);
+int		is_whitespace(char c);
+int		skip_whitespaces(char *str, int j);
+
+char	**quote_safe_split(char *str);
+
+int		is_single_op(char *input, int i);
+int		is_dbl_op(char *input, int i);
+void	process_one(char *input, char *output, int *i, int *j);
+void	process_two(char *input, char *output, int *i, int *j);
 
 #endif

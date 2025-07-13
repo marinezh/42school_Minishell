@@ -1,19 +1,16 @@
 #include "minishell.h"
 
-t_token	*create_token_node(char *value)
+static t_token	*create_token_node(char *value)
 {
 	t_token	*token;
-	//printf("initial value %s\n", value);
-	token = malloc(sizeof(t_token));
+
+	(void)value;
+	token = malloc(sizeof(t_token)); // Checked
 	if (!token)
-	{
-		printf("memory allocation failed\n");
 		return (NULL);
-	}
-	token->value = ft_strdup(value);
+	token->value = ft_strdup(value); // Checked
 	if (!token->value)
 	{
-		printf("memory allocation failed\n");
 		free(token);
 		return (NULL);
 	}
@@ -24,7 +21,7 @@ t_token	*create_token_node(char *value)
 	return (token);
 }
 
-void	append_token(t_token **head, t_token **tail, t_token *new_token)
+static void	append_token(t_token **head, t_token **tail, t_token *new_token)
 {
 	if (!*head)
 		*head = new_token;
@@ -36,7 +33,7 @@ void	append_token(t_token **head, t_token **tail, t_token *new_token)
 	*tail = new_token;
 }
 
-int determine_token_type(t_token *token, char *value)
+static int	determine_token_type(t_token *token, char *value)
 {
 	if (ft_strcmp(value, "|") == 0)
 		token->type = PIPE;
@@ -53,15 +50,16 @@ int determine_token_type(t_token *token, char *value)
 	return (1);
 }
 
-void update_file_name_tokens(t_token *head)
+static void	update_file_name_tokens(t_token *head)
 {
-	t_token *current = head;
-	
+	t_token	*current;
+
+	current = head;
 	while (current && current->next)
 	{
-		if ((current->type == REDIR_IN || current->type == REDIR_OUT || 
-			 current->type == REDIR_APPEND || current->type == HEREDOC) && 
-			current->next->type == WORD)
+		if ((current->type == REDIR_IN || current->type == REDIR_OUT
+				|| current->type == REDIR_APPEND || current->type == HEREDOC)
+			&& current->next->type == WORD)
 		{
 			current->next->type = FILE_NAME;
 		}
@@ -69,22 +67,23 @@ void update_file_name_tokens(t_token *head)
 	}
 }
 
-t_token *tokenize_input(char **split_input)
+t_token	*tokenize_input(char **split_input, t_data *data)
 {
-	t_token *head;
-	t_token *tail;
-	t_token *new_token;
-	int i;
+	t_token	*head;
+	t_token	*tail;
+	t_token	*new_token;
+	int		i;
 
 	head = NULL;
 	tail = NULL;
 	i = 0;
 	while (split_input[i])
 	{
-		new_token = create_token_node(split_input[i]);
+		new_token = create_token_node(split_input[i]); // CHECKED
 		if (!new_token)
 		{
-			printf("Memory allocation failed for a new token.\n");
+			printf("minishell: memory allocation failed\n");
+			data->status = ERR_GENERIC;
 			return (NULL);
 		}
 		determine_token_type(new_token, split_input[i]);
