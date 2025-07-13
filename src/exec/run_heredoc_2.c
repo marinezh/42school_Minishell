@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:36:41 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:36:43 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:16:15 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	heredoc_child(t_files *node, t_command *cmd, int *fds, t_data *data)
 		else
 			exit_status = 1;
 	}
-	cleanup_process_data(data);
+	cleanup_data(data);
 	close(fds[1]);
 	free_command_list(cmd);
 	exit(exit_status);

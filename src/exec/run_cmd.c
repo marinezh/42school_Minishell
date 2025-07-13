@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:34:14 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:58:31 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:16:15 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	handle_child_process(t_data *data, t_command *cmd, char *path,
 	if (execve(path, args, envp) == -1)
 	{
 		perror("execve");
-		cleanup_process_data(data);
+		cleanup_data(data);
 		free_command_list(cmd);
 		free(path);
 		if (errno == ENOENT)
