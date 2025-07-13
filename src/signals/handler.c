@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handler.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 11:05:51 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 11:09:13 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <readline/history.h>
 #include <readline/readline.h>
@@ -7,7 +19,7 @@ extern void				rl_replace_line(const char *text, int clear_undo);
 
 volatile sig_atomic_t	g_sig_received = 0;
 
-void	handler(int sig)
+static void	handler(int sig)
 {
 	g_sig_received = sig;
 }

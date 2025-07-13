@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_exit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:33:29 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:57:08 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include"minishell.h"
 
-int	get_heredoc_exit_code(int wstatus)
+static int	get_heredoc_exit_code(int wstatus)
 {
 	int	exit_code;
 

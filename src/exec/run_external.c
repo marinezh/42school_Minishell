@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_external.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:34:38 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 11:00:22 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*build_path(char *path, char *arg)
+static char	*build_path(char *path, char *arg)
 {
 	char	*tmp;
 	char	*res;
@@ -15,7 +27,7 @@ char	*build_path(char *path, char *arg)
 	return (res);
 }
 
-char	*process_path(t_data *data, char *path_str, char *arg)
+static char	*process_path(t_data *data, char *path_str, char *arg)
 {
 	char	*path;
 	int		access_res;
@@ -36,7 +48,7 @@ char	*process_path(t_data *data, char *path_str, char *arg)
 	return (NULL);
 }
 
-char	*parse_path_env(t_data *data, char *arg)
+static char	*parse_path_env(t_data *data, char *arg)
 {
 	t_env	*path_ptr;
 	char	**path_dirs;
@@ -65,7 +77,7 @@ char	*parse_path_env(t_data *data, char *arg)
 	return (path_res);
 }
 
-char	*process_binary(t_data *data, char *path)
+static char	*process_binary(t_data *data, char *path)
 {
 	int	access_res;
 
@@ -105,16 +117,3 @@ int	run_external(t_data *data, t_command *cmd)
 		free(path_to_free);
 	return (exit_status);
 }
-
-// bash command - test -x filename.c
-// cat: test.txt: Permission denied - 1
-// cat: adfas: No such file or directory - 1
-// asdlfkja bash: kjsahfhsdf: command not found - 127
-
-// 1) not exist = 0
-// 2) exist not executable = -1
-// 3) exist and executable = 1
-
-// bash make difference if (code the same 127)
-// asldkfjasldkf - command not found
-// or bin/adsfasdf - no such file or directory

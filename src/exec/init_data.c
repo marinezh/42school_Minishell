@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_data.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:32:44 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:54:43 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	build_envp_list(t_data *data, char **env)
+static int	build_envp_list(t_data *data, char **env)
 {
 	t_env	*node;
 	int		i;
@@ -23,7 +35,7 @@ int	build_envp_list(t_data *data, char **env)
 		return (-1);
 }
 
-char	**fill_envp_array(t_env *envp_list, int list_size)
+static char	**fill_envp_array(t_env *envp_list, int list_size)
 {
 	int		i;
 	t_env	*current;

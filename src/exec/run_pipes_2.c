@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_pipes_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 10:38:04 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/12 10:38:06 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_pipe_data(t_pipe *p_data, t_command *cmd, int cmd_count)
@@ -65,9 +77,8 @@ static int  setup_stdout_redir(t_pipe pdata, int i)
 
 void handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i)
 {
-	int			exit_code;
+	int exit_code;
 
-	// reset_signals_to_default();
 	close_unused_heredoc_fds(cmd, pdata.cur_cmd);
 	if (setup_stdin_redir(pdata, i))
 	{
