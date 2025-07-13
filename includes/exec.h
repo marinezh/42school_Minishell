@@ -33,7 +33,7 @@ int		run_pipes(t_data *data, t_command *cmd, int cmd_count);
 pid_t	create_process(void);
 int		process_cmd(t_data *data, t_command *cmd);
 int		handle_heredoc_parent(pid_t pid);
-void	cleanup_process_data(t_data *data);
+void	cleanup_data(t_data *data);
 void	free_env_node(t_env *node);
 int		get_pipe_exit_code(int wstatus);
 void	handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i);

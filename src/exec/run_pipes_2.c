@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:38:04 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:38:06 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:16:15 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,18 @@ void handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i)
 	close_unused_heredoc_fds(cmd, pdata.cur_cmd);
 	if (setup_stdin_redir(pdata, i))
 	{
-        cleanup_process_data(data);
+        cleanup_data(data);
         free_command_list(cmd);
         exit(1);
 	}
 	if (setup_stdout_redir(pdata, i))
 	{
-        cleanup_process_data(data);
+        cleanup_data(data);
         free_command_list(cmd);
         exit(1);
 	}
 	exit_code = process_cmd(data, pdata.cur_cmd);
-	cleanup_process_data(data);
+	cleanup_data(data);
 	free_command_list(cmd);
 	exit(exit_code);
 }
