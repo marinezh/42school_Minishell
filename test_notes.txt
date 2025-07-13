@@ -87,6 +87,18 @@
                                      ❌ 159   
                                      ✅ 2664   
 ///////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 810  LEAKING: 0 
+                     STD_OUT: 113  STD_ERR: 22  EXIT_CODE: 25  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 160   
+                                     ✅ 2663  
+///////////////////////////////////////////////////////////////////////////////////
+             TOTAL TEST COUNT: 941  TESTS PASSED: 787  LEAKING: 0 
+                     STD_OUT: 109  STD_ERR: 45  EXIT_CODE: 22  
+                         TOTAL FAILED AND PASSED CASES:
+                                     ❌ 176   
+                                     ✅ 2647
+///////////////////////////////////////////////////////////////////////////////////
 
 litte tester:
 126/146

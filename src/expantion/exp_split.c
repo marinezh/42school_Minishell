@@ -9,10 +9,10 @@ static t_token *create_token_list_from_split(char **split)
 
 	while (split[i])
 	{
-		t_token *new = malloc(sizeof(t_token));
+		t_token *new = NULL; //malloc(sizeof(t_token)); //checked
 		if (!new)
 		{
-			printf("failed during exp splitting\n"); // do i need quit after this error ?
+			printf("minishell: memory allocation failed\n"); 
 			return NULL;
 		}
 		new->value = ft_strdup(split[i]);
@@ -80,6 +80,8 @@ static t_token *process_splittable_token(t_token **tokens, t_token *current,
 	}
 	// Create new tokens with the same type as the original
 	t_token *new_tokens = create_token_list_from_split(split);
+	if(!new_tokens)
+		return NULL;
 	free_split_input(split);  // Free split array after use
 	if (!new_tokens)
 		return (next);
@@ -92,7 +94,7 @@ static t_token *process_splittable_token(t_token **tokens, t_token *current,
 }
 
 // Main function that handles word splitting
-t_token *handle_word_splitting(t_token *tokens)
+t_token *handle_word_splitting(t_token *tokens, t_data *data)
 {
 	t_token *current = tokens;
 	t_token *prev = NULL;
@@ -104,6 +106,11 @@ t_token *handle_word_splitting(t_token *tokens)
 		if (should_split_token(current))
 		{
 			t_token *last_processed = process_splittable_token(&tokens, current, prev, next);
+			if (!last_processed)
+			{
+				data->status = ERR_GENERIC;
+				return NULL;
+			}
 			prev = last_processed;
 			current = next;
 		}

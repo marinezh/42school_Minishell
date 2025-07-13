@@ -93,9 +93,9 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 		return (free_tokens(tokens), NULL);
 	if (!expand_variables(tokens, data, 1))
 		return (free_tokens(tokens), NULL);
-	tokens = handle_word_splitting(tokens);
+	tokens = handle_word_splitting(tokens, data);
 	if (!tokens)
-		return (NULL);
+			return (free_tokens(tokens), NULL);
 	delete_empty_tokens(&tokens);
 	commands = parse_tokens(tokens, data);
 	// print_commands(commands);
