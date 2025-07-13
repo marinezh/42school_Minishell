@@ -31,7 +31,7 @@ char	*word_dup(char *str, int len)
 	char	*word;
 
 	i = 0;
-	word = (char *)malloc(sizeof(char) * (len + 1));
+	word = (char *)malloc(sizeof(char) * (len + 1)); //checked 
 	if (!word)
 		return (NULL);
 	while (i < len)

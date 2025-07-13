@@ -1,74 +1,68 @@
 #include "minishell.h"
 
-void	remove_outer_quotes_from_string(char *str)
+static int	remove_outer_quotes_from_string(t_qts_proc *p)
 {
-	int		i;
-	int		j;
-	char	*temp;
-	char	in_quote;
-
-	i = 0;
-	j = 0;
-	temp = (char *)malloc(ft_strlen(str) + 1);
-	if (!temp)
-		return ;
-	in_quote = 0;
-	while (str[i])
+	if (!ft_strchr(p->str, '\'') && !ft_strchr(p->str, '"'))
+		return (1);
+	p->temp = malloc(ft_strlen(p->str) + 1); // CHECKED!!!!
+	if (!p->temp)
+		return (printf("malloc failed for [%s]\n", p->str), (0));
+	p->i = 0;
+	p->j = 0;
+	p->in_quote = 0;
+	while (p->str[p->i])
 	{
-		if ((str[i] == '\'' || str[i] == '"') && !in_quote)
+		if ((p->str[p->i] == '\'' || p->str[p->i] == '"') && !p->in_quote)
+			p->in_quote = p->str[p->i++];
+		else if (p->str[p->i] == p->in_quote)
 		{
-			in_quote = str[i]; 			// Start of quote
-			i++;
-		}
-		else if (str[i] == in_quote)
-		{
-			in_quote = 0; // End of quote
-			i++;
+			p->in_quote = 0;
+			p->i++;
 		}
 		else
-			temp[j++] = str[i++]; // Copy character
+			p->temp[p->j++] = p->str[p->i++];
 	}
-	temp[j] = '\0';
-	ft_strlcpy(str, temp, ft_strlen(str) + 1); // Copy back to original
-	free(temp);
+	p->temp[p->j] = '\0';
+	ft_strlcpy(p->str, p->temp, ft_strlen(p->str) + 1);
+	free(p->temp);
+	return (1);
 }
 
-void	remove_quotes_from_files(t_files *files)
+static int	remove_quotes_from_files(t_files *files)
 {
-	t_files	*current;
+	t_files		*current;
+	t_qts_proc	proc;
 
 	current = files;
 	while (current)
 	{
-		if (current->type != HEREDOC)
-			remove_outer_quotes_from_string(current->name);
+		proc.str = current->name;
+		if (!remove_outer_quotes_from_string(&proc))
+			return (0);
 		current = current->next;
 	}
+	return (1);
 }
 
-void	remove_quotes_from_command_args(t_command *commands)
+int	remove_quotes_from_command_args(t_command *cmd, t_data *data)
 {
-	t_command	*current;
+	t_qts_proc	proc;
 	int			i;
 
-	current = commands;
-	while (current)
+	while (cmd)
 	{
-		if (current->args)
+		i = 0;
+		while (cmd->args && cmd->args[i])
 		{
-			i = 0;
-			while (current->args[i])
-			{
-				remove_outer_quotes_from_string(current->args[i]);
-				i++;
-			}
+			proc.str = cmd->args[i++];
+			if (!remove_outer_quotes_from_string(&proc))
+				return (data->status = ERR_GENERIC, 0);
 		}
-		if (current->redirections)
-			remove_quotes_from_files(current->redirections);
-		if (current->in)
-			remove_quotes_from_files(current->in);
-		if (current->out)
-			remove_quotes_from_files(current->out);
-		current = current->next;
+		if ((cmd->redirections && !remove_quotes_from_files(cmd->redirections))
+			|| (cmd->in && !remove_quotes_from_files(cmd->in)) || (cmd->out
+				&& !remove_quotes_from_files(cmd->out)))
+			return (0);
+		cmd = cmd->next;
 	}
+	return (1);
 }

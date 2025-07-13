@@ -39,7 +39,7 @@ static char	*add_space(t_cmd_input *cmd, t_data *data)
 	cmd->i = 0;
 	cmd->j = 0;
 	cmd->len = ft_strlen(cmd->input);
-	cmd->spaced = malloc(cmd->len * 10 + 1);
+	cmd->spaced = malloc(cmd->len * 10 + 1); // checked !!!
 	if (!cmd->spaced)
 		return (NULL);
 	while (cmd->i < cmd->len)

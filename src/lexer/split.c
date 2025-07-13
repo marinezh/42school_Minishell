@@ -57,11 +57,11 @@ char	**quote_safe_split(char *str)
 	char			**res;
 	t_split_data	pos;
 
-	res = (char **)malloc(sizeof(char *) * (word_count(str) + 1));
-	pos.i = 0;
-	pos.j = 0;
+	res = (char **)malloc(sizeof(char *) * (word_count(str) + 1)); //checked
 	if (!res)
 		return (NULL);
+	pos.i = 0;
+	pos.j = 0;
 	while (str[pos.j])
 	{
 		pos.j = skip_whitespaces(str, pos.j);

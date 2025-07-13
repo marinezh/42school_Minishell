@@ -28,8 +28,8 @@ char	**fill_envp_array(t_env *envp_list, int list_size)
 	int		i;
 	t_env	*current;
 	char	**envp_arr;
-
-	envp_arr = ft_calloc(list_size + 1, sizeof(char *));
+	(void)list_size;
+	envp_arr = ft_calloc(list_size + 1, sizeof(char *)); //memory leaks
 	if (!envp_arr)
 		return NULL;
 	current = envp_list;
