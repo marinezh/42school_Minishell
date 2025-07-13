@@ -9,7 +9,7 @@ static t_token *create_token_list_from_split(char **split)
 
 	while (split[i])
 	{
-		t_token *new = NULL; //malloc(sizeof(t_token)); //checked
+		t_token *new = malloc(sizeof(t_token)); //checked
 		if (!new)
 		{
 			printf("minishell: memory allocation failed\n"); 

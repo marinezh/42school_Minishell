@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_heredoc_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:36:41 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:36:43 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 02:10:06 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static int	handle_exp(t_files *node, char **input, t_data *data)
 	{
 		expanded = expand_heredoc_line(*input, data);
 		if (!expanded)
+		{
+			printf("minishell: memory allocation failed\n");
 			return (-1);
+		}
 		free(*input);
 		*input = expanded;
 	}

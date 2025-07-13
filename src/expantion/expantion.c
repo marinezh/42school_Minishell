@@ -74,7 +74,7 @@ int should_expand_variable(const char *str, int in_single)
 	return (0);
 }
 
-static int	handle_status_var(t_token *token, int status, int *i)
+int	handle_status_var(t_token *token, int status, int *i)
 {
 	t_exp_parts	parts;
 
@@ -185,166 +185,167 @@ static int	handle_status_var(t_token *token, int status, int *i)
 // Check if expansion will cause ambiguous redirect - updated to not use ft_tlsize
 static int is_ambiguous_redirect(t_token *current, t_env *env_node)
 {
-    // Remove the ft_tlsize check since we're just checking if prev exists
-    if (current->prev &&
-        (current->prev->type == REDIR_OUT || 
-         current->prev->type == REDIR_APPEND ||
-         current->prev->type == REDIR_IN) &&
-        (ft_strchr(env_node->value, ' ') || env_node->value[0] == '\0'))
-    {
-        return 1;
-    }
-    return 0;
+	// Remove the ft_tlsize check since we're just checking if prev exists
+	if (current->prev &&
+		(current->prev->type == REDIR_OUT || 
+		 current->prev->type == REDIR_APPEND ||
+		 current->prev->type == REDIR_IN) &&
+		(ft_strchr(env_node->value, ' ') || env_node->value[0] == '\0'))
+	{
+		return 1;
+	}
+	return 0;
 }
 
 // Handle variable expansion when variable is found
 static int process_found_variable(t_token *current, t_env *node, 
-                                 char *var_name, int *i, t_data *data)
+								 char *var_name, int *i, t_data *data)
 {
-    // Check for ambiguous redirect case
-    if (is_ambiguous_redirect(current, node))
-    {
-        handle_error_arg(data, var_name, ERR_AMB_RED, 1);
-        return 0;
-    }
-    
-    // Replace the variable with its value
-    if (!replace_variable(current, *i, ft_strlen(var_name), node->value))
-    {
-        handle_error_arg(data, "memory", ": allocation failed\n", 1);
-        return 0;
-    }
-    
-    return 1;
+	// Check for ambiguous redirect case
+	if (is_ambiguous_redirect(current, node))
+	{
+		handle_error_arg(data, var_name, ERR_AMB_RED, 1);
+		return 0;
+	}
+	
+	// Replace the variable with its value
+	if (!replace_variable(current, *i, ft_strlen(var_name), node->value))
+	{
+		handle_error_arg(data, "memory", ": allocation failed\n", 1);
+		return 0;
+	}
+	
+	return 1;
 }
 
 // Handle undefined variable case
 static int process_undefined_variable(t_token *current, 
-                                     char *var_name, int *i, t_data *data)
+									 char *var_name, int *i, t_data *data)
 {
-    if (!replace_undefined_variable(current, *i, ft_strlen(var_name)))
-    {
-        handle_error_arg(data, "memory", ": allocation failed\n", 1);
-        return 0;
-    }
-    
-    return 1;
+	if (!replace_undefined_variable(current, *i, ft_strlen(var_name)))
+	{
+		handle_error_arg(data, "memory", ": allocation failed\n", 1);
+		return 0;
+	}
+	
+	return 1;
 }
 
 // Main expansion handler function - removed the unused tokens parameter
-static int handle_expantion(t_token *cur, t_data *data, int *i)
+int handle_expantion(t_token *cur, t_data *data, int *i)
 {
-    char *var_name;
-    t_env *node;
-    int result;
+	char *var_name;
+	t_env *node;
+	int result;
 
-    // Extract variable name from token
-    var_name = extract_variable_name(&cur->value[*i + 1]);
-    if (!var_name || var_name[0] == '\0')
-    {
-        (*i)++;
-        return 1;
-    }
-    
-    // Find variable in environment
-    node = find_env_node(data, var_name);
-    
-    // Process based on whether variable was found
-    if (node && node->value)
-        result = process_found_variable(cur, node, var_name, i, data);
-    else
-        result = process_undefined_variable(cur, var_name, i, data);
-    
-    free(var_name);
-    return result;
+	// Extract variable name from token
+	var_name = extract_variable_name(&cur->value[*i + 1]);
+	if (!var_name || var_name[0] == '\0')
+	{
+		(*i)++;
+		return 1;
+	}
+	
+	// Find variable in environment
+	node = find_env_node(data, var_name);
+	
+	// Process based on whether variable was found
+	if (node && node->value)
+		result = process_found_variable(cur, node, var_name, i, data);
+	else
+		result = process_undefined_variable(cur, var_name, i, data);
+	
+	free(var_name);
+	return result;
 }
 
 int expand_variables(t_token *tokens, t_data *data, int skip_after_heredoc)
 {
-    t_token *current;
-    int i;
-    int in_single;
-    int in_double;
-    int in_dollar_quote;  // New flag to track $"..." construct
+	t_token *current;
+	int i;
+	int in_single;
+	int in_double;
+	int in_dollar_quote;  // New flag to track $"..." construct
 
-    current = tokens;
-    while (current)
-    {
-      if ((!skip_after_heredoc || !current->prev || current->prev->type != HEREDOC) &&
-            (current->type == WORD || current->type == FILE_NAME))
+	current = tokens;
+	while (current)
+	{
+	  if ((!skip_after_heredoc || !current->prev || current->prev->type != HEREDOC) &&
+			(current->type == WORD || current->type == FILE_NAME))
 
-        {
-            i = 0;
-            in_single = 0;
-            in_double = 0;
-            in_dollar_quote = 0;  // Initialize new flag
+		{
+			i = 0;
+			in_single = 0;
+			in_double = 0;
+			in_dollar_quote = 0;  // Initialize new flag
 
-            // Special handling for tokens that start with $"
-            if (current->value[0] == '$' && (current->value[1] == '\"' || current->value[1] == '\''))
-            {
-                // Remove the leading $ by shifting everything left
-                ft_memmove(current->value, current->value + 1, strlen(current->value));
-                in_dollar_quote = 1;  // Mark that we're in a $" construct
-            }
+			// Special handling for tokens that start with $"
+			if (current->value[0] == '$' && (current->value[1] == '\"' || current->value[1] == '\''))
+			{
+				// Remove the leading $ by shifting everything left
+				ft_memmove(current->value, current->value + 1, strlen(current->value));
+				in_dollar_quote = 1;  // Mark that we're in a $" construct
+			}
 
-            while (current->value[i])
-            {
-                // Check for embedded $" patterns (not at start)
-                if (i > 0 && current->value[i] == '$' && (current->value[i+1] == '\"' || current->value[i+1] == '\'')
-                    && !in_single && !in_double)
-                {
-                    // Remove the $ by shifting everything after it to the left
-                    memmove(&current->value[i], &current->value[i+1], 
-                           strlen(&current->value[i+1]) + 1);
-                    in_dollar_quote = 1;
-                    continue;  // Re-process the current position (now a quote)
-                }
+			while (current->value[i])
+			{
+				// Check for embedded $" patterns (not at start)
+				if (i > 0 && current->value[i] == '$' && (current->value[i+1] == '\"' || current->value[i+1] == '\'')
+					&& !in_single && !in_double)
+				{
+					// Remove the $ by shifting everything after it to the left
+					memmove(&current->value[i], &current->value[i+1], 
+						   strlen(&current->value[i+1]) + 1);
+					in_dollar_quote = 1;
+					continue;  // Re-process the current position (now a quote)
+				}
 
-                // Toggle quote state
-                if (current->value[i] == '\'' && !in_double)
-                {
-                    in_single = !in_single;
-                    i++;
-                    continue;
-                }
-                else if (current->value[i] == '\"' && !in_single)
-                {
-                    in_double = !in_double;
-                    if (!in_double && in_dollar_quote)
-                        in_dollar_quote = 0;  // Exit $"..." construct
-                    i++;
-                    continue;
-                }
+				// Toggle quote state
+				if (current->value[i] == '\'' && !in_double)
+				{
+					in_single = !in_single;
+					i++;
+					continue;
+				}
+				else if (current->value[i] == '\"' && !in_single)
+				{
+					in_double = !in_double;
+					if (!in_double && in_dollar_quote)
+						in_dollar_quote = 0;  // Exit $"..." construct
+					i++;
+					continue;
+				}
 
-                // Handle variable expansion - using existing code
-                if (should_expand_variable(&current->value[i], in_single))
-                {
-                    // Handle special case of $?
-                    if (current->value[i + 1] == '?')
-                    {
-                        if (!handle_status_var(current, data->status, &i))
-                        {
-                            handle_error_arg(data, "memory", ": allocation failed\n", 1);
-                            return (0);
-                        }
-                    }
-                    // Handle regular environment variables
-                    else
-                    {
-                        if (!handle_expantion(current, data, &i))
-                            return (0);
-                    }
-                    continue;
-                }
+				// Handle variable expansion - using existing code
+				if (should_expand_variable(&current->value[i], in_single))
+				{
+					// Handle special case of $?
+					if (current->value[i + 1] == '?')
+					{
+						if (!handle_status_var(current, data->status, &i))
+						{
+							handle_error_arg(data, "memory", ": allocation failed\n", 1);
+							return (0);
+						}
+					}
+					// Handle regular environment variables
+					else
+					{
+						if (!handle_expantion(current, data, &i))
+							return (0);
+					}
+					continue;
+				}
 
-                // If no expansion, just move forward
-                i++;
-            }
-        }
-        current = current->next;
-    }
-    return (1);
+				// If no expansion, just move forward
+				i++;
+			}
+		}
+		current = current->next;
+	}
+	return (1);
 }
+
 // void delete_empty_tokens(t_token **head)
 // {
 //     t_token *current = *head;
