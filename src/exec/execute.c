@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:31:43 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:51:39 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/13 23:51:10 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	execute(t_data *data, t_command *cmd)
 	int	status;
 
 	status = 0;
-	if (!cmd || (!cmd->redirections && (!cmd->args || !cmd->args[0])))
+	if (!cmd) 
 	{
 		data->status = 0;
 		return ;
