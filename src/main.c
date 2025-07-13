@@ -2,8 +2,6 @@
 
 int	read_prompt(t_cmd_input *cmd, t_data *data)
 {
-	char	*line;
-	size_t	len;
 
 	// cmd->input = readline("minishell$ ");
 	// if (g_sig_received)
@@ -31,6 +29,9 @@ int	read_prompt(t_cmd_input *cmd, t_data *data)
 	// return (1);
 	///////////////////////////////////////////////////////
 	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	char	*line;
+	size_t	len;
+
 	if (isatty(STDIN_FILENO))
 	{
 		line = readline("minishell$ ");
