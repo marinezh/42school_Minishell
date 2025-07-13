@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Change if you store the tester in another PATH
-export MINISHELL_PATH=/home/mzhivoto/42cursus/PROJECTS/GitHub/42school_Minishell
+export MINISHELL_PATH=./
 export EXECUTABLE=minishell
 RUNDIR=$HOME/42_minishell_tester
 
