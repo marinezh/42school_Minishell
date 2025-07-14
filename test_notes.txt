@@ -183,3 +183,6 @@ mzhivoto@c1r5p3 ~ % echo $?
 mzhivoto@c1r5p3:~/42cursus/PROJECTS/GitHub/42school_Minishell$ >| echo sure
 Command 'sure' not found, but can be installed with:
 apt install python3-sure
+
+
+echo $USER '$USER' "$USER" $?echo

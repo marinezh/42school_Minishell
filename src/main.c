@@ -91,7 +91,7 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 		return (NULL);
 	if (error_check(tokens, data))
 		return (free_tokens(tokens), NULL);
-	if (!expand_variables(tokens, data, 1))
+	if (!expand_variables(tokens, data))
 		return (free_tokens(tokens), NULL);
 	tokens = handle_word_splitting(tokens, data);
 	if (!tokens)

@@ -67,7 +67,7 @@ EXEC = init_data.c free_data.c execute.c utils_exec.c run_builtin.c run_external
 PARSER = parser.c tokenization.c print_delete.c error_check.c parser_handlers.c redirect.c clean_quotes.c parser_utils.c
 UTILS = free.c
 SIGNALS = handler.c
-EXPANTION = expantion.c exp_utils.c exp_split.c exp_heredoc.c
+EXPANTION = expantion.c exp_utils.c exp_split.c exp_heredoc.c exp_handlers.c
 
 LIBFT := $(LIBFT_PATH)/libft.a
 

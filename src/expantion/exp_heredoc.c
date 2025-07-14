@@ -1,24 +1,5 @@
 #include "minishell.h"
 
-static int process_status_var(t_token *token, t_data *data, int *i)
-{
-    if (!handle_status_var(token, data->status, i))
-    {
-        handle_error_arg(data, "memory", ": allocation failed\n", 1);
-        return (0);
-    }
-    return (1);
-}
-
-static int process_expantion(t_token *token, t_data *data, int *i)
-{
-	if (!handle_expantion(token, data, i))
-	{
-		handle_error_arg(data, "memory", ": allocation failed\n", 1);
-		return (0);
-	}
-	return (1);
-}
 static int process_token_variables(t_token *token, t_data *data)
 {
 	int i;
@@ -46,7 +27,6 @@ static int process_token_variables(t_token *token, t_data *data)
 	return (1);
 }
 
-// Main function to expand variables in token list
 int expand_heredoc_file(t_token *tokens, t_data *data)
 {
 	t_token *current;

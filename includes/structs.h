@@ -87,11 +87,29 @@ typedef struct s_cmd_chain
     int         cmd_index;
 } t_cmd_chain;
 
+// Structure to group expansion parameters
+
+
 // declaration of main exection struct
 typedef struct s_data			t_data;
 // function pointer type declaration
 typedef int						(*t_bltin)(t_data *, t_command *);
+typedef struct s_exp_params
+{
+    t_token *token;      // Current token
+    int *index;          // Position in the token
+    t_data *data;        // Data structure
+    char *var_name;      // Variable name
+} t_exp_params;
 
+// Structure to hold expansion state
+typedef struct s_exp_state
+{
+    int in_single;
+    int in_double;
+    int in_dollar_quote;
+    int i;
+} t_exp_state;
 // struct for one environment variable (as linked list)
 typedef struct s_env
 {
@@ -122,6 +140,16 @@ typedef struct s_exp_parts
 	char						*new_value;
 	char						*final_value;
 }								t_exp_parts;
+
+// Structure to hold token connection parameters
+typedef struct s_token_connection
+{
+    t_token **tokens_head;  // Pointer to the head of tokens list
+    t_token *prev;          // Previous token
+    t_token *new_tokens;    // New tokens to connect
+    t_token *next;          // Next token
+    t_token *current;       // Current token to replace
+} t_token_connection;
 
 // typedef struct s_word_pos
 // {
