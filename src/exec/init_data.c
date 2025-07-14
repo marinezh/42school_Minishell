@@ -6,7 +6,7 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:32:44 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/14 10:54:49 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/07/14 23:25:31 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ static char	**fill_envp_array(t_env *envp_list, int list_size)
 	int		i;
 	t_env	*current;
 	char	**envp_arr;
-	(void)list_size;
-	envp_arr = ft_calloc(list_size + 1, sizeof(char *)); //memory leaks
+	
+	envp_arr = ft_calloc(list_size + 1, sizeof(char *)); 
 	if (!envp_arr)
 		return NULL;
 	current = envp_list;

@@ -54,16 +54,16 @@ int	handle_status_var(t_token *token, int status, int *i)
 	parts.status_str = ft_itoa(status);
 	if (!parts.status_str)
 		return (0);
-	parts.prefix = ft_substr(token->value, 0, *i);
+	parts.prefix = ft_substr(token->value, 0, *i);  //checked
 	if (!parts.prefix)
 		return (free_exp_parts(&parts), 0);
-	parts.suffix = ft_strdup(&token->value[*i + 2]);
+	parts.suffix = ft_strdup(&token->value[*i + 2]); // cheched 
 	if (!parts.suffix)
 		return (free_exp_parts(&parts), 0);
-	parts.new_value = ft_strjoin(parts.prefix, parts.status_str);
+	parts.new_value = ft_strjoin(parts.prefix, parts.status_str); //checked
 	if (!parts.new_value)
 		return (free_exp_parts(&parts), 0);
-	parts.final_value = ft_strjoin(parts.new_value, parts.suffix);
+	parts.final_value = ft_strjoin(parts.new_value, parts.suffix); //checked
 	if (!parts.final_value)
 		return (free_exp_parts(&parts), 0);
 	free(token->value);

@@ -42,11 +42,10 @@ static int	setup_heredoc_node(t_files *new_file, char *name)
 
 static int	setup_regular_node(t_files *new_file, char *name)
 {
-	(void)name;
 	new_file->name = ft_strdup(name); // checked
 	if (!new_file->name)
 		return (0);
-	new_file->to_expand = 0; // default: no expansion for normal files
+	new_file->to_expand = 0;
 	return (1);
 }
 

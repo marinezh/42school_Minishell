@@ -47,11 +47,12 @@ char	*expand_heredoc_line(char *input, t_data *data)
 {
 	t_token	temp;
 
-	temp.value = ft_strdup(input);
+	temp.value = ft_strdup(input); //checked
 	if (!temp.value)
 		return (NULL);
 	temp.type = WORD;
 	temp.next = NULL;
+	temp.prev = NULL;
 	if (!expand_heredoc_file(&temp, data))
 	{
 		free(temp.value);

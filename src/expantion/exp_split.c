@@ -57,8 +57,7 @@ static void	connect_new_tokens(t_token_connection *conn)
 	free(conn->current);
 }
 
-// Process single token for splitting (simplified with structure)
-static t_token	*pr_spl_tok(t_token **tok, t_token *cur,t_token *prev, t_token *next)
+t_token	*pr_spl_tok(t_token **tok, t_token *cur,t_token *prev, t_token *next)
 {
 	t_token_connection	conn;
 	char				**split;
