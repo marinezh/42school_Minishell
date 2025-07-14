@@ -21,7 +21,7 @@ static t_token *create_token_list_from_split(char **split)
 
 	while (split[i])
 	{
-		t_token *new = malloc(sizeof(t_token)); 
+		t_token *new = NULL; //malloc(sizeof(t_token)); 
 		if (!new)
 		{
 			printf("minishell: memory allocation failed\n");
@@ -109,8 +109,8 @@ static t_token *process_spl_tok(t_token **tokens, t_token *current,
     if (!conn.new_tokens)
 	{
     	
-		//free(current->value);
-    	//free(current);
+		free(current->value);
+    	free(current);
     	return NULL;
 	}
     conn.tokens_head = tokens;  // Set up the connection parameters

@@ -96,9 +96,9 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 		return (free_tokens(tokens), NULL);
 
 	new_tokens = handle_word_splitting(tokens, data);
-	free_tokens(tokens);
+	//free_tokens(tokens);
 	if (!new_tokens)
-			return (free_tokens(new_tokens), NULL);
+			return (NULL);
 	// free_tokens(tokens);      // free original
 	// tokens = new_tokens; 
 	// tokens = handle_word_splitting(tokens, data);
