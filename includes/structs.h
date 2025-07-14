@@ -167,6 +167,21 @@ typedef struct s_split_data
 	int end;   // End position of current word
 }								t_split_data;
 
+typedef struct s_splitted_tok
+{
+	t_token	*head;
+	t_token	*last;
+	t_token	*new;
+}			t_splitted_tok;
+
+typedef struct s_splitted_word
+{
+	t_token	*cur;
+	t_token	*prev;
+	t_token	*next;
+	t_token *last;
+}			t_splitted_word;
+
 typedef struct s_pipe
 {
 	t_command					*cur_cmd;
