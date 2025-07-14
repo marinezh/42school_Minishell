@@ -6,16 +6,16 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:42:35 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:42:36 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:36:51 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
 static void	delete_env_var(t_data *data, char *name)
 {
 	t_env	*env_node;
-	t_env 	*cur;
+	t_env	*cur;
 	t_env	*tmp_next;
 
 	env_node = find_env_node(data, name);
@@ -32,7 +32,7 @@ static void	delete_env_var(t_data *data, char *name)
 			if (cur->next == env_node)
 			{
 				cur->next = tmp_next;
-				break;
+				break ;
 			}
 			cur = cur->next;
 		}
@@ -61,8 +61,8 @@ static int	is_name_valid(char *name)
 
 int	ft_unset(t_data *data, t_command *cmd)
 {
-	int		i;
-	int		exit_status;
+	int	i;
+	int	exit_status;
 
 	i = 1;
 	exit_status = 0;
@@ -71,7 +71,7 @@ int	ft_unset(t_data *data, t_command *cmd)
 	if (cmd->args[i][0] == '-' && cmd->args[i][1] != '\0')
 	{
 		print_error_msg("unset", MSG_NO_OPTIONS);
-		return(ERR_GENERIC);
+		return (ERR_GENERIC);
 	}
 	while (cmd->args[i])
 	{

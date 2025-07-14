@@ -6,11 +6,11 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:41:09 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:47:49 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:36:20 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
 static int	is_n_flag_valid(char *argv)
 {
@@ -19,7 +19,7 @@ static int	is_n_flag_valid(char *argv)
 	i = 1;
 	if (argv[0] != '-' || argv[1] == '\0')
 		return (0);
-	while(argv[i])
+	while (argv[i])
 	{
 		if (argv[i] != 'n')
 			return (0);
@@ -33,7 +33,7 @@ int	ft_echo(t_data *data, t_command *cmd)
 	int		i;
 	char	**argv;
 	int		n_flag;
-	
+
 	(void)data;
 	argv = cmd->args;
 	n_flag = 0;
@@ -52,5 +52,5 @@ int	ft_echo(t_data *data, t_command *cmd)
 	}
 	if (!n_flag)
 		ft_putchar('\n');
-	return(0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:31:43 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/13 23:51:10 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:46:36 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static int	check_heredoc_limit(t_data *data, t_command *cmd)
 		{
 			if (cur_redir->type == HEREDOC && ++count > 16)
 			{
-				ft_putstr_fd("minishell: maximum here-document count exceeded\n",
-					2);
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd("maximum here-document count exceeded\n", 2);
 				data->exit_f = 1;
 				return (-1);
 			}
@@ -85,7 +85,7 @@ void	execute(t_data *data, t_command *cmd)
 	int	status;
 
 	status = 0;
-	if (!cmd) 
+	if (!cmd)
 	{
 		data->status = 0;
 		return ;

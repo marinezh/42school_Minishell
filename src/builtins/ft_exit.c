@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:41:44 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:48:49 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:03:44 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	handle_numeric_arg_error(t_data *data, char *arg)
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 }
+
 static long long	process_string(char *str, int *error)
 {
 	int			digit;

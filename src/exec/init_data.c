@@ -6,7 +6,11 @@
 /*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:32:44 by ikozhina          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/07/14 23:25:31 by mzhivoto         ###   ########.fr       */
+=======
+/*   Updated: 2025/07/14 14:37:56 by ikozhina         ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +44,15 @@ static char	**fill_envp_array(t_env *envp_list, int list_size)
 	int		i;
 	t_env	*current;
 	char	**envp_arr;
+<<<<<<< HEAD
 	
 	envp_arr = ft_calloc(list_size + 1, sizeof(char *)); 
+=======
+
+	envp_arr = ft_calloc(list_size + 1, sizeof(char *));
+>>>>>>> main
 	if (!envp_arr)
-		return NULL;
+		return (NULL);
 	current = envp_list;
 	i = 0;
 	while (current)
@@ -56,7 +65,7 @@ static char	**fill_envp_array(t_env *envp_list, int list_size)
 		{
 			free_double_array(envp_arr);
 			envp_arr = NULL;
-			return NULL;
+			return (NULL);
 		}
 		i++;
 		current = current->next;
@@ -73,7 +82,7 @@ int	rebuild_envp_array(t_data *data, t_env *envp_list)
 	envp_arr = fill_envp_array(envp_list, list_size);
 	if (!envp_arr)
 	{
-        ft_putstr_fd("Error: Memory allocation failed\n", 2);
+		ft_putstr_fd("Error: Memory allocation failed\n", 2);
 		return (-1);
 	}
 	if (data->envp)

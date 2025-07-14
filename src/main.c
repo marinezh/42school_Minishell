@@ -1,11 +1,61 @@
 #include "minishell.h"
 
-//declared JUST for MacOS
-extern rl_hook_func_t	*rl_event_hook;
-
 int	read_prompt(t_cmd_input *cmd, t_data *data)
 {
+<<<<<<< HEAD
 	// cmd->input = readline("minishell$ ");
+=======
+	cmd->input = readline("minishell$ ");
+	if (g_sig_received)
+	{
+		g_sig_received = 0;
+		data->status = ERR_INTERUPTED_SIGINT;
+		if (cmd->input)
+		{
+			free(cmd->input);
+			cmd->input = NULL;
+		}
+		return (-2);
+	}
+	if (!cmd->input)
+	{
+		printf("exit\n");
+		return (-1);
+	}
+	if (cmd->input[0] == '\0')
+	{
+		data->status = 0;
+		free(cmd->input);
+		cmd->input = NULL;
+		return (0);
+	}
+	return (1);
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	// char *line;
+	// if (isatty(STDIN_FILENO))
+	// {
+	// 	line = readline("minishell$ ");
+	// }
+	// else
+	// {
+	// 	line = get_next_line(STDIN_FILENO);
+	// 	if (line)
+	// 	{
+	// 		// Remove trailing newline added by get_next_line
+	// 		size_t len = ft_strlen(line);
+	// 		if (len > 0 && line[len - 1] == '\n')
+	// 			line[len - 1] = '\0';
+	// 	}
+	// }
+	// // Handle EOF or Ctrl+D
+	// if (!line)
+	// {
+	// 	if (isatty(STDIN_FILENO))
+	// 		printf("exit\n");
+	// 	return (-1);
+	// }
+>>>>>>> main
 	// if (g_sig_received)
 	// {
 	// 	g_sig_received = 0;
@@ -84,6 +134,10 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	if (!split_input)
 		return (NULL);
 	tokens = tokenize_input(split_input, data);
+<<<<<<< HEAD
+=======
+	// print_tokens(tokens);
+>>>>>>> main
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
@@ -97,8 +151,15 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	commands = parse_tokens(tokens, data);
 	if (!commands)
 		return (free_tokens(tokens), NULL);
+<<<<<<< HEAD
 	if (remove_quotes_from_command_args(commands, data) == -1)
 		return (free_tokens(tokens),free_command_list(commands), NULL);
+=======
+	if (!remove_quotes_from_command_args(commands, data))
+		return (free_tokens(tokens), free_command_list(commands), NULL);
+	// printf("/////////////////////////////////\n");
+	// print_commands(commands);
+>>>>>>> main
 	free_tokens(tokens);
 	return (commands);
 }
@@ -139,12 +200,12 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	if (init_data(&data, env) != 0)
 	{
-		ft_putstr_fd("Error initializing shell environment\n", 2);
+		cleanup_data(&data);
 		return (1);
 	}
 	set_prompt_signals();
 	rl_event_hook = rl_signal_handler;
 	shell_loop(&data, &commands);
-    cleanup_data(&data);
+	cleanup_data(&data);
 	return (data.status);
 }

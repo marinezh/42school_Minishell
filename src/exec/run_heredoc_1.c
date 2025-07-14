@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:36:05 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:36:08 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:39:24 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@
 
 void	print_eof_warning(t_files *node, int line_num)
 {
-	 char	full_msg[256];
-	 char	*number;
- 
-	 number = ft_itoa(line_num);
-	 if (!number)
-		 return ;
-	 ft_strlcpy(full_msg, "minishell: warning: here-document at line ",
-		 sizeof(full_msg));
-	 ft_strlcat(full_msg, number, sizeof(full_msg));
-	 ft_strlcat(full_msg, " delimited by end-of-file (wanted `",
-		 sizeof(full_msg));
-	 ft_strlcat(full_msg, node->name, sizeof(full_msg));
-	 ft_strlcat(full_msg, "')\n", sizeof(full_msg));
-	 ft_putstr_fd(full_msg, 2);
-	 free(number);
+	char	full_msg[256];
+	char	*number;
+
+	number = ft_itoa(line_num);
+	if (!number)
+		return ;
+	ft_strlcpy(full_msg, "minishell: warning: here-document at line ",
+		sizeof(full_msg));
+	ft_strlcat(full_msg, number, sizeof(full_msg));
+	ft_strlcat(full_msg, " delimited by end-of-file (wanted `",
+		sizeof(full_msg));
+	ft_strlcat(full_msg, node->name, sizeof(full_msg));
+	ft_strlcat(full_msg, "')\n", sizeof(full_msg));
+	ft_putstr_fd(full_msg, 2);
+	free(number);
 }
 
 static char	*create_new_name(void)
@@ -47,8 +47,7 @@ static char	*create_new_name(void)
 	char		*heredoc_num;
 	char		*heredoc_name;
 
-    counter = 0;
-	addr_ptr = (uintptr_t)&temp + counter++;
+	addr_ptr = ((uintptr_t) & temp) + counter++;
 	heredoc_num = ft_itoa((int)addr_ptr);
 	if (!heredoc_num)
 		return (NULL);
@@ -79,7 +78,7 @@ static int	run_heredoc(t_data *data, t_command *cmd, t_files *node, int *fds)
 	return (exit_code);
 }
 
-static int	 setup_heredoc_fds(int *fds)
+static int	setup_heredoc_fds(int *fds)
 {
 	char	*heredoc_name;
 
