@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:39:03 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:43:18 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static t_token	*create_token_node(char *value)
@@ -5,10 +17,10 @@ static t_token	*create_token_node(char *value)
 	t_token	*token;
 
 	(void)value;
-	token = malloc(sizeof(t_token)); // Checked
+	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->value = ft_strdup(value); // Checked
+	token->value = ft_strdup(value);
 	if (!token->value)
 	{
 		free(token);
@@ -79,7 +91,7 @@ t_token	*tokenize_input(char **split_input, t_data *data)
 	i = 0;
 	while (split_input[i])
 	{
-		new_token = create_token_node(split_input[i]); // CHECKED
+		new_token = create_token_node(split_input[i]);
 		if (!new_token)
 		{
 			printf("minishell: memory allocation failed\n");

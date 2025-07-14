@@ -1,109 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 01:08:08 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 01:09:55 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	read_prompt(t_cmd_input *cmd, t_data *data)
 {
-	cmd->input = readline("minishell$ ");
-	if (g_sig_received)
-	{
-		g_sig_received = 0;
-		data->status = ERR_INTERUPTED_SIGINT;
-		if (cmd->input)
-		{
-			free(cmd->input);
-			cmd->input = NULL;
-		}
-		return (-2);
-	}
-	if (!cmd->input)
-	{
-		printf("exit\n");
-		return (-1);
-	}
-	if (cmd->input[0] == '\0')
-	{
-		data->status = 0;
-		free(cmd->input);
-		cmd->input = NULL;
-		return (0);
-	}
-	return (1);
-	///////////////////////////////////////////////////////
-	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
-	// char *line;
-	// if (isatty(STDIN_FILENO))
-	// {
-	// 	line = readline("minishell$ ");
-	// }
-	// else
-	// {
-	// 	line = get_next_line(STDIN_FILENO);
-	// 	if (line)
-	// 	{
-	// 		// Remove trailing newline added by get_next_line
-	// 		size_t len = ft_strlen(line);
-	// 		if (len > 0 && line[len - 1] == '\n')
-	// 			line[len - 1] = '\0';
-	// 	}
-	// }
-	// // Handle EOF or Ctrl+D
-	// if (!line)
-	// {
-	// 	if (isatty(STDIN_FILENO))
-	// 		printf("exit\n");
-	// 	return (-1);
-	// }
+	// cmd->input = readline("minishell$ ");
 	// if (g_sig_received)
 	// {
-	// 	free(line);
-	// 	cmd->input = NULL;
+	// 	g_sig_received = 0;
+	// 	data->status = ERR_INTERUPTED_SIGINT;
+	// 	if (cmd->input)
+	// 	{
+	// 		free(cmd->input);
+	// 		cmd->input = NULL;
+	// 	}
 	// 	return (-2);
 	// }
-	// // Empty line (e.g., user just pressed Enter)
-	// if (line[0] == '\0')
+	// if (!cmd->input)
+	// {
+	// 	printf("exit\n");
+	// 	return (-1);
+	// }
+	// if (cmd->input[0] == '\0')
 	// {
 	// 	data->status = 0;
-	// 	free(line);
+	// 	free(cmd->input);
 	// 	cmd->input = NULL;
 	// 	return (0);
 	// }
-	// cmd->input = line;
 	// return (1);
+	///////////////////////////////////////////////////////
+	// PART FOR BIG TESTER, COMMENT IT IF DON'T NEED
+	char *line;
+	if (isatty(STDIN_FILENO))
+	{
+		line = readline("minishell$ ");
+	}
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			size_t len = ft_strlen(line);
+			if (len > 0 && line[len - 1] == '\n')
+				line[len - 1] = '\0';
+		}
+	}
+	if (!line)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
+		return (-1);
+	}
+	if (g_sig_received)
+	{
+		free(line);
+		cmd->input = NULL;
+		return (-2);
+	}
+	if (line[0] == '\0')
+	{
+		data->status = 0;
+		free(line);
+		cmd->input = NULL;
+		return (0);
+	}
+	cmd->input = line;
+	return (1);
 	// 	//END OF PART FOR BIG TESTER
 	// 	///////////////////////////////////////////////////////////
-}
-
-t_command	*parse_input(t_command *commands, t_data *data, char *input)
-{
-	char	**split_input;
-	t_token	*tokens;
-
-	tokens = NULL;
-	split_input = preprocess_input(input, data);
-	if (!split_input)
-		return (NULL);
-	tokens = tokenize_input(split_input, data);
-	// print_tokens(tokens);
-	free_split_input(split_input);
-	if (!tokens)
-		return (NULL);
-	if (error_check(tokens, data))
-		return (free_tokens(tokens), NULL);
-	if (!expand_variables(tokens, data, 1))
-		return (free_tokens(tokens), NULL);
-	tokens = handle_word_splitting(tokens);
-	if (!tokens)
-		return (NULL);
-	delete_empty_tokens(&tokens);
-	commands = parse_tokens(tokens, data);
-	// print_commands(commands);
-	if (!commands)
-		return (free_tokens(tokens), NULL);
-	if (!remove_quotes_from_command_args(commands, data))
-		return (free_tokens(tokens), free_command_list(commands), NULL);
-	// printf("/////////////////////////////////\n");
-	// print_commands(commands);
-	free_tokens(tokens);
-	return (commands);
 }
 
 void	shell_loop(t_data *data, t_command **commands)

@@ -1,16 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirect.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:38:55 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:43:02 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static t_files	*initialize_file_node(void)
 {
 	t_files	*new_file;
 
-	new_file = malloc(sizeof(t_files)); // CHECKED
+	new_file = malloc(sizeof(t_files));
 	if (!new_file)
 		return (NULL);
 	new_file->type = -1;
 	new_file->fd = -1;
 	new_file->next = NULL;
-	new_file->to_expand = 0; // default: no expansion
+	new_file->to_expand = 0;
 	new_file->name = NULL;
 	return (new_file);
 }
@@ -24,7 +36,7 @@ static int	setup_heredoc_node(t_files *new_file, char *name)
 	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'')
 			|| (name[0] == '"' && name[len - 1] == '"')))
 	{
-		node_name = ft_substr(name, 1, len - 2); // CHECKED
+		node_name = ft_substr(name, 1, len - 2);
 		if (!node_name)
 			return (0);
 		new_file->name = node_name;
@@ -32,7 +44,7 @@ static int	setup_heredoc_node(t_files *new_file, char *name)
 	}
 	else
 	{
-		new_file->name = ft_strdup(name); // Checked
+		new_file->name = ft_strdup(name);
 		if (!new_file->name)
 			return (0);
 		new_file->to_expand = 1;
@@ -42,11 +54,10 @@ static int	setup_heredoc_node(t_files *new_file, char *name)
 
 static int	setup_regular_node(t_files *new_file, char *name)
 {
-	(void)name;
-	new_file->name = ft_strdup(name); // checked
+	new_file->name = ft_strdup(name);
 	if (!new_file->name)
 		return (0);
-	new_file->to_expand = 0; // default: no expansion for normal files
+	new_file->to_expand = 0;
 	return (1);
 }
 
@@ -84,13 +95,13 @@ int	add_redirection(t_command *cmd, char *filename, int type)
 
 	if (!cmd || !filename)
 		return (0);
-	global_redir_node = create_file_node(filename, type); // checked
+	global_redir_node = create_file_node(filename, type);
 	if (!global_redir_node)
 	{
 		return (0);
 	}
 	append_to_list(&(cmd->redirections), global_redir_node);
-	typed_redir_node = create_file_node(filename, type); // checked
+	typed_redir_node = create_file_node(filename, type);
 	if (!typed_redir_node)
 		return (0);
 	if (type == REDIR_IN || type == HEREDOC)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:40:19 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:40:31 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 int	word_count(char *str)
@@ -31,7 +43,7 @@ char	*word_dup(char *str, int len)
 	char	*word;
 
 	i = 0;
-	word = (char *)malloc(sizeof(char) * (len + 1)); //checked 
+	word = (char *)malloc(sizeof(char) * (len + 1));
 	if (!word)
 		return (NULL);
 	while (i < len)

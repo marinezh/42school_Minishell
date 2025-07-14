@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_handlers.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:38:20 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 01:06:53 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**realloc_args(char **args, int count, char *value)
@@ -6,7 +18,7 @@ char	**realloc_args(char **args, int count, char *value)
 	char	**new_args;
 
 	i = 0;
-	new_args = malloc(sizeof(char *) * (count + 2)); // checked
+	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (NULL);
 	while (i < count)
@@ -21,15 +33,14 @@ char	**realloc_args(char **args, int count, char *value)
 	return (new_args);
 }
 
-void	handle_pipe(t_command *current, t_token **token_list,
-		t_command **current_cmd)
+void	handle_pipe(t_command *cur, t_token **token_list, t_command **cur_cmd)
 {
-	current->pipe = 1;
-	*current_cmd = NULL;
+	cur->pipe = 1;
+	*cur_cmd = NULL;
 	*token_list = (*token_list)->next;
 }
 
-int	handle_redirection(t_command *current, t_token **token_list)
+int	handle_redirection(t_command *cur, t_token **token_list)
 {
 	int	redir_type;
 
@@ -38,7 +49,7 @@ int	handle_redirection(t_command *current, t_token **token_list)
 	if (*token_list && ((*token_list)->type == WORD
 			|| (*token_list)->type == FILE_NAME))
 	{
-		if (!add_redirection(current, (*token_list)->value, redir_type))
+		if (!add_redirection(cur, (*token_list)->value, redir_type))
 		{
 			return (0);
 		}
@@ -48,16 +59,15 @@ int	handle_redirection(t_command *current, t_token **token_list)
 	return (1);
 }
 
-int	handle_word_token(t_command *current, t_token **token_list)
+int	handle_word_token(t_command *cur, t_token **token_list)
 {
 	int	argc;
 
 	argc = 0;
-	while (current->args && current->args[argc])
+	while (cur->args && cur->args[argc])
 		argc++;
-	current->args = realloc_args(current->args, argc, (*token_list)->value);
-		// Checked
-	if (!current->args)
+	cur->args = realloc_args(cur->args, argc, (*token_list)->value);
+	if (!cur->args)
 		return (0);
 	*token_list = (*token_list)->next;
 	return (1);
@@ -65,15 +75,15 @@ int	handle_word_token(t_command *current, t_token **token_list)
 
 void	append_to_list(t_files **list, t_files *node)
 {
-	t_files	*current;
+	t_files	*cur;
 
 	if (*list == NULL)
 	{
 		*list = node;
 		return ;
 	}
-	current = *list;
-	while (current->next)
-		current = current->next;
-	current->next = node;
+	cur = *list;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = node;
 }

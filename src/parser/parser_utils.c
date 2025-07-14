@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:38:32 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:42:05 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	is_redirect_type(t_token *token)
@@ -10,21 +22,6 @@ int	is_redirect_type(t_token *token)
 	else
 		return (0);
 }
-
-// char	*extract_unquoted_name(char *name)
-// {
-// 	char	*unquoted_name;
-// 	int		len;
-
-// 	len = ft_strlen(name);
-// 	if (len >= 2 && ((name[0] == '\'' && name[len - 1] == '\'')
-// 			|| (name[0] == '"' && name[len - 1] == '"')))
-// 	{
-// 		unquoted_name = ft_substr(name, 1, len - 2);
-// 		return (unquoted_name);
-// 	}
-// 	return (ft_strdup(name));
-// }
 
 void	delete_empty_tokens(t_token **head)
 {
