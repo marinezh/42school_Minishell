@@ -21,17 +21,17 @@ static t_token *create_token_list_from_split(char **split)
 
 	while (split[i])
 	{
-		t_token *new = malloc(sizeof(t_token));
+		t_token *new = malloc(sizeof(t_token)); 
 		if (!new)
 		{
 			printf("minishell: memory allocation failed\n");
 			free_token_list_on_error(head);
 			return NULL;
 		}
-		new->value = ft_strdup(split[i]);
+		new->value = ft_strdup(split[i]); // checked
 		if (!new->value)
 		{
-			printf("minishell: strdup failed\n");
+			printf("minishell: memory allocation failed\n");
 			free(new);
 			free_token_list_on_error(head);
 			return NULL;
@@ -55,9 +55,14 @@ static int should_split_token(t_token *token)
 		return (0);
 		
 	// Only split WORD or FILE_NAME tokens that contain spaces
+	
 	if ((token->type == WORD || token->type == FILE_NAME) && 
 		ft_strchr(token->value, ' '))
-		return (1);
+		{
+			printf("SHOULD SPLIT\n");
+			return (1);
+		}
+		
 		
 	return (0);
 }
@@ -102,7 +107,12 @@ static t_token *process_spl_tok(t_token **tokens, t_token *current,
     conn.new_tokens = create_token_list_from_split(split); // Create new tokens with the same type as the original
     free_split_input(split);  // Free split array after use
     if (!conn.new_tokens)
-        return (NULL);
+	{
+    	
+		//free(current->value);
+    	//free(current);
+    	return NULL;
+	}
     conn.tokens_head = tokens;  // Set up the connection parameters
     conn.prev = prev;
     conn.next = next;
