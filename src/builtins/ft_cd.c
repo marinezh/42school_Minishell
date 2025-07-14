@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:40:50 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:47:13 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:57:13 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	set_pwd(t_data *data, char *env, char *old_pwd)
 	if (!cwd)
 		return (ERR_GENERIC);
 	env_ptr = find_env_node(data, env);
-	if (!env_ptr)
+	if (!env_ptr || key_has_equals(env_ptr) == 1)
 	{
 		free(cwd);
 		return (ERR_GENERIC);
