@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:33:53 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:33:55 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:37:38 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ int	run_bltin(t_data *data, t_command *cmd)
 		}
 		i++;
 	}
-	return(-1);
+	return (-1);
 }
-

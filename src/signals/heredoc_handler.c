@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   handler.c                                          :+:      :+:    :+:   */
+/*   heredoc_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/12 11:05:51 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/14 14:59:34 by ikozhina         ###   ########.fr       */
+/*   Created: 2025/07/14 14:59:05 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/14 15:02:45 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-volatile sig_atomic_t	g_sig_received = 0;
-
-void	handler(int sig)
-{
-	g_sig_received = sig;
-}
-
-void	set_prompt_signals(void)
+void	set_heredoc_signals(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
 	ft_memset(&sa_int, 0, sizeof(sa_int));
 	sa_int.sa_handler = handler;
-	sa_int.sa_flags = SA_RESTART;
+	sa_int.sa_flags = 0;
 	sigemptyset(&sa_int.sa_mask);
 	sigaction(SIGINT, &sa_int, NULL);
 	ft_memset(&sa_quit, 0, sizeof(sa_quit));
@@ -35,25 +28,10 @@ void	set_prompt_signals(void)
 	sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
-void	reset_signals_to_default(void)
-{
-	struct sigaction	sa;
-
-	ft_memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = SIG_DFL;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-}
-
-int	rl_signal_handler(void)
+int	heredoc_signal_hook(void)
 {
 	if (g_sig_received == SIGINT)
 	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
 		rl_done = 1;
 		return (1);
 	}

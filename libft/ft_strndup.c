@@ -6,19 +6,19 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 21:14:21 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/04/29 22:23:31 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 15:36:38 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char *ft_strndup(const char *s, size_t n)
+char	*ft_strndup(const char *s, size_t n)
 {
 	char	*dest;
-	size_t		len;
+	size_t	len;
 
 	len = 0;
-	while(s[len] && len < n)
+	while (s[len] && len < n)
 		len++;
 	dest = malloc(sizeof(char) * (len + 1));
 	if (dest == NULL)
@@ -28,6 +28,7 @@ char *ft_strndup(const char *s, size_t n)
 	return (dest);
 }
 
-// The strndup() function is similar to strdup(), but copies at most n bytes.  If s is
+// The strndup() function is similar to strdup(),
+// but copies at most n bytes.  If s is
 // longer than n, only n bytes are copied, and  a  terminating  null  byte
 // ('\0') is added.

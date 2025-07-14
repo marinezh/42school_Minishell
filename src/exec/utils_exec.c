@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:38:30 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 11:05:32 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:38:31 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static int	create_key_value(char *str, char **key, char **value)
 	else
 	{
 		*key = ft_strdup(str);
-        if (!*key)
-            return (0);
-        *value = NULL;
+		if (!*key)
+			return (0);
+		*value = NULL;
 	}
 	return (1);
 }
@@ -97,7 +97,7 @@ int	check_file_access(char *path)
 	if (dir)
 	{
 		closedir(dir);
-		return(-2);
+		return (-2);
 	}
 	if (access(path, X_OK) != 0)
 		return (-1);

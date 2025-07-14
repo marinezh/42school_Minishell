@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:40:50 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/14 12:14:27 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:35:55 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static int	prepare_old_pwd(t_data *data)
 {
 	char	*old_pwd;
 	t_env	*pwd_env;
-
 
 	pwd_env = find_env_node(data, "PWD");
 	if (pwd_env && !pwd_env->value)
