@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:32:10 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:52:57 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/13 22:16:15 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,11 @@ void	free_double_array(char **arr)
 	free(arr);
 }
 
-// void	free_fds(int **fds, int i)
-// {
-// 	while (i >= 0)
-// 	{
-// 		close(fds[i][0]);
-// 		close(fds[i][1]);
-// 		free(fds[i]);
-// 		i--;
-// 	}
-// 	free(fds);
-// }
-
-void	cleanup_process_data(t_data *data)
+void	cleanup_data(t_data *data)
 {
 	free_env_list(&data->envp_list);
 	free_double_array(data->envp);
-	if (data->pids)
-	{
-		free(data->pids);
-		data->pids = NULL;
-	}
+    safe_free_pointer((void **)&data->pids);
 	rl_clear_history();
 }
 

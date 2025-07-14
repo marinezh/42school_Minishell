@@ -151,8 +151,6 @@ int	main(int ac, char **av, char **env)
 	set_prompt_signals();
 	rl_event_hook = rl_signal_handler;
 	shell_loop(&data, &commands);
-	free_env_list(&data.envp_list);
-	free_double_array(data.envp);
-	rl_clear_history();
+    cleanup_data(&data);
 	return (data.status);
 }
