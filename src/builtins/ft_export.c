@@ -6,18 +6,18 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:42:01 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/14 11:56:48 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:36:39 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
 static int	update_var_value(t_data *data, t_env *env_var, char *arg)
 {
 	char	*ptr;
 	char	*dup_str;
 
-	ptr	= ft_strchr(arg, '=');
+	ptr = ft_strchr(arg, '=');
 	if (!ptr)
 		return (0);
 	if (key_has_equals(env_var) == 1)
@@ -38,11 +38,11 @@ static int	is_var_name_valid(char *arg, int *special_var)
 {
 	int	i;
 
-    if (arg[0] == '_' && (arg[1] == '\0' || arg[1] == '='))
-    {
-        *special_var = 1;
-        return(1);
-    }
+	if (arg[0] == '_' && (arg[1] == '\0' || arg[1] == '='))
+	{
+		*special_var = 1;
+		return (1);
+	}
 	if (!(ft_isalpha(arg[0]) || arg[0] == '_'))
 		return (0);
 	i = 1;
@@ -55,15 +55,15 @@ static int	is_var_name_valid(char *arg, int *special_var)
 	return (1);
 }
 
-static int    process_env_var(t_data *data, char *env_var)
+static int	process_env_var(t_data *data, char *env_var)
 {
-    t_env   *cur_env;
+	t_env	*cur_env;
 	t_env	*n_node;
 
-    cur_env = find_env_node(data, env_var);
-    if (cur_env)
+	cur_env = find_env_node(data, env_var);
+	if (cur_env)
 	{
-        if (update_var_value(data, cur_env, env_var) != 0)
+		if (update_var_value(data, cur_env, env_var) != 0)
 		{
 			free_env_list(&data->envp_list);
 			return (1);
@@ -83,7 +83,7 @@ static int    process_env_var(t_data *data, char *env_var)
 
 static int	process_export_arg(t_data *data, char *arg, int *has_error)
 {
-	int		special_var;
+	int	special_var;
 
 	special_var = 0;
 	if (arg[0] == '-')
@@ -106,8 +106,8 @@ static int	process_export_arg(t_data *data, char *arg, int *has_error)
 
 int	ft_export(t_data *data, t_command *cmd)
 {
-	int		i;
-	int		has_error;
+	int	i;
+	int	has_error;
 
 	if (!cmd->args[1])
 		return (print_current_envp(data, cmd));

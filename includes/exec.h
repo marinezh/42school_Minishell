@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/14 14:39:25 by ikozhina          #+#    #+#             */
+/*   Updated: 2025/07/14 15:00:03 by ikozhina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXEC_H
 # define EXEC_H
 
@@ -47,5 +59,6 @@ void	set_heredoc_signals(void);
 int		heredoc_signal_hook(void);
 void	safe_free_pointer(void **ptr);
 int		key_has_equals(t_env *env_node);
+void	handler(int sig);
 
 #endif

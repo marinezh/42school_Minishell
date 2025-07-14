@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:38:04 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/13 22:16:15 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:38:25 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,53 +44,53 @@ static void	close_unused_heredoc_fds(t_command *cmd, t_command *cur_cmd)
 	}
 }
 
-static int  setup_stdin_redir(t_pipe pdata, int i)
+static int	setup_stdin_redir(t_pipe pdata, int i)
 {
 	if (i > 0)
 	{
 		if (dup2(pdata.in_pipe[0], STDIN_FILENO) == -1)
 		{
 			perror("dup2");
-            return (1);
+			return (1);
 		}
 		close(pdata.in_pipe[0]);
 	}
-    return (0);
+	return (0);
 }
 
-static int  setup_stdout_redir(t_pipe pdata, int i)
+static int	setup_stdout_redir(t_pipe pdata, int i)
 {
-    if (i < pdata.cmd_count - 1)
+	if (i < pdata.cmd_count - 1)
 	{
 		if (dup2(pdata.cur_pipe[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2");
 			close(pdata.cur_pipe[0]);
 			close(pdata.cur_pipe[1]);
-            return (1);
+			return (1);
 		}
 		close(pdata.cur_pipe[1]);
 		close(pdata.cur_pipe[0]);
 	}
-    return (0);
+	return (0);
 }
 
-void handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i)
+void	handle_child_pipe(t_data *data, t_command *cmd, t_pipe pdata, int i)
 {
-	int exit_code;
+	int	exit_code;
 
 	close_unused_heredoc_fds(cmd, pdata.cur_cmd);
 	if (setup_stdin_redir(pdata, i))
 	{
-        cleanup_data(data);
-        free_command_list(cmd);
-        exit(1);
+		cleanup_data(data);
+		free_command_list(cmd);
+		exit(1);
 	}
 	if (setup_stdout_redir(pdata, i))
 	{
-        cleanup_data(data);
-        free_command_list(cmd);
-        exit(1);
+		cleanup_data(data);
+		free_command_list(cmd);
+		exit(1);
 	}
 	exit_code = process_cmd(data, pdata.cur_cmd);
 	cleanup_data(data);

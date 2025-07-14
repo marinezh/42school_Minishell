@@ -6,22 +6,22 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:41:19 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:41:21 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:36:25 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
-int ft_env(t_data *data, t_command *cmd)
+int	ft_env(t_data *data, t_command *cmd)
 {
 	int	i;
 
 	i = 0;
-    if (cmd->args[1])
-    {
-        print_error_msg("env", MSG_NO_OPTS_ARGS);
-        return(ERR_GENERIC);
-    }
+	if (cmd->args[1])
+	{
+		print_error_msg("env", MSG_NO_OPTS_ARGS);
+		return (ERR_GENERIC);
+	}
 	if (data->envp_f)
 	{
 		if (rebuild_envp_array(data, data->envp_list) == -1)
@@ -37,5 +37,5 @@ int ft_env(t_data *data, t_command *cmd)
 			i++;
 		}
 	}
-	return(0);
+	return (0);
 }

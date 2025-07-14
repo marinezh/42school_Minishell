@@ -6,13 +6,13 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:40:10 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:40:12 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:35:10 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void sort_envp_by_key(char **envp)
+static void	sort_envp_by_key(char **envp)
 {
 	int		i;
 	int		swap;
@@ -82,7 +82,7 @@ int	print_current_envp(t_data *data, t_command *cmd)
 		if (rebuild_envp_array(data, data->envp_list) == -1)
 		{
 			ft_putstr_fd("export: Error rebuilding environment array\n", 2);
-            return (1); 
+			return (1);
 		}
 		data->envp_f = 0;
 	}

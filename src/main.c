@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-// declared JUST for MacOS
-extern rl_hook_func_t	*rl_event_hook;
-
 int	read_prompt(t_cmd_input *cmd, t_data *data)
 {
 	cmd->input = readline("minishell$ ");

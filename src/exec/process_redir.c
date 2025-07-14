@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:33:43 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:57:37 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:37:34 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ static int	process_redir_out(t_data *data, t_files *redir_out)
 
 int	handle_redirs(t_data *data, t_command *cmd)
 {
-	t_files *cur_redir;
-	int res;
+	t_files	*cur_redir;
+	int		res;
 
 	res = 0;
 	cur_redir = cmd->redirections;
@@ -87,7 +87,8 @@ int	handle_redirs(t_data *data, t_command *cmd)
 		}
 		else if (cur_redir->type == REDIR_IN)
 			res = process_redir_in(data, cur_redir);
-		else if (cur_redir->type == REDIR_OUT || cur_redir->type == REDIR_APPEND)
+		else if (cur_redir->type == REDIR_OUT
+			|| cur_redir->type == REDIR_APPEND)
 			res = process_redir_out(data, cur_redir);
 		if (res == -1)
 			break ;

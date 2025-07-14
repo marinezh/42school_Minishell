@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:33:10 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:55:59 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 14:37:27 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	redirect_io(t_data *data, t_command *cmd, int *or_in, int *or_out)
 	{
 		*or_in = copy_stream(0);
 		if (*or_in == -1)
-			return(-1);
+			return (-1);
 	}
 	if (cmd->out)
 	{
@@ -66,7 +66,7 @@ static int	redirect_io(t_data *data, t_command *cmd, int *or_in, int *or_out)
 		{
 			if (*or_in != -1)
 				close(*or_in);
-			return(-1);
+			return (-1);
 		}
 	}
 	if (handle_redirs(data, cmd) == -1)
@@ -82,7 +82,7 @@ int	process_cmd(t_data *data, t_command *cmd)
 	int	orig_stdin;
 	int	orig_stdout;
 	int	is_redir;
-	int exit_status;
+	int	exit_status;
 
 	exit_status = 0;
 	is_redir = 0;
