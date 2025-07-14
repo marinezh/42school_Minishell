@@ -113,9 +113,9 @@ int expand_variables(t_token *tokens, t_data *data)
             current->value)
         {
             if (!process_token(current, data))
-                return (0);
+                return (-1);
         }
         current = current->next;
     }
-    return (1);
+    return (0);
 }

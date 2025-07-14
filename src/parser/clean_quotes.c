@@ -61,8 +61,8 @@ int	remove_quotes_from_command_args(t_command *cmd, t_data *data)
 		if ((cmd->redirections && !remove_quotes_from_files(cmd->redirections))
 			|| (cmd->in && !remove_quotes_from_files(cmd->in)) || (cmd->out
 				&& !remove_quotes_from_files(cmd->out)))
-			return (0);
+			return (-1);
 		cmd = cmd->next;
 	}
-	return (1);
+	return (0);
 }

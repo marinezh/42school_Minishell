@@ -57,7 +57,7 @@ static int should_split_token(t_token *token)
 	if ((token->type == WORD || token->type == FILE_NAME) &&
 		ft_strchr(token->value, ' '))
 	{
-		printf("SHOULD SPLIT\n");
+		//printf("SHOULD SPLIT\n");
 		return 1;
 	}
 	return 0;

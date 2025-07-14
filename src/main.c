@@ -79,43 +79,27 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 {
 	char	**split_input;
 	t_token	*tokens;
-	t_token *new_tokens;
 
-	tokens = NULL;
 	split_input = preprocess_input(input, data);
 	if (!split_input)
 		return (NULL);
 	tokens = tokenize_input(split_input, data);
-	print_tokens(tokens);
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
 	if (error_check(tokens, data))
 		return (free_tokens(tokens), NULL);
-	if (!expand_variables(tokens, data))
+	if (expand_variables(tokens, data) == -1)
 		return (free_tokens(tokens), NULL);
-
-	new_tokens = handle_word_splitting(tokens, data);
-	//free_tokens(tokens);
-	if (!new_tokens)
-			return (NULL);
-	// free_tokens(tokens);      // free original
-	// tokens = new_tokens; 
-	// tokens = handle_word_splitting(tokens, data);
-	// if (!tokens)
-	//  		return (free_tokens(tokens), NULL);
-	printf("/////////////////////////////////\n");
-	print_tokens(new_tokens);
-	delete_empty_tokens(&new_tokens);
-	commands = parse_tokens(new_tokens, data);
-	// print_commands(commands);
+	if (handle_word_splitting(&tokens, data) == -1)
+		return (free_tokens(tokens), NULL);
+	delete_empty_tokens(&tokens);
+	commands = parse_tokens(tokens, data);
 	if (!commands)
-		return (free_tokens(new_tokens), NULL);
-	if (!remove_quotes_from_command_args(commands, data))
-		return (free_tokens(new_tokens), free_command_list(commands), NULL);
-	
-	//print_commands(commands);
-	free_tokens(new_tokens);
+		return (free_tokens(tokens), NULL);
+	if (remove_quotes_from_command_args(commands, data) == -1)
+		return (free_tokens(tokens),free_command_list(commands), NULL);
+	free_tokens(tokens);
 	return (commands);
 }
 
