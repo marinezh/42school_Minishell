@@ -6,44 +6,44 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:44:23 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:50:37 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:53:45 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"minishell.h"
+#include "minishell.h"
 
-static int count_name_len(char *name)
+static int	count_name_len(char *name)
 {
-	int     count;
+	int	count;
 
 	count = 0;
 	while (name[count] && name[count] != '=')
 		count++;
-	return(count);
+	return (count);
 }
 
-t_env *find_env_node(t_data *data, char *env_var)
+t_env	*find_env_node(t_data *data, char *env_var)
 {
-    int     var_name_len;
-    int     cur_name_len;
-    t_env	*cur;
+	int		var_name_len;
+	int		cur_name_len;
+	t_env	*cur;
 
-    var_name_len = count_name_len(env_var);
-    cur = data->envp_list;
-    while (cur != NULL)
-    {
-        cur_name_len = count_name_len(cur->key);
-        if (cur_name_len == var_name_len && 
-            ft_strncmp(cur->key, env_var, var_name_len) == 0)
-            return (cur);
-        cur = cur->next;
-    }
-    return (NULL);
+	var_name_len = count_name_len(env_var);
+	cur = data->envp_list;
+	while (cur != NULL)
+	{
+		cur_name_len = count_name_len(cur->key);
+		if (cur_name_len == var_name_len && ft_strncmp(cur->key, env_var,
+				var_name_len) == 0)
+			return (cur);
+		cur = cur->next;
+	}
+	return (NULL);
 }
 
 int	count_args(char **args)
 {
-	int		count;
+	int	count;
 
 	count = 0;
 	while (args && args[count])
@@ -66,4 +66,19 @@ void	node_add_last(t_env **envp_list, t_env *new_node)
 	while (ptr->next != NULL)
 		ptr = ptr->next;
 	ptr->next = new_node;
+}
+
+int	key_has_equals(t_env *env_node)
+{
+	char	*newkey;
+
+	if (env_node && !ft_strchr(env_node->key, '='))
+	{
+		newkey = ft_strjoin(env_node->key, "=");
+		if (!newkey)
+			return (1);
+		free(env_node->key);
+		env_node->key = newkey;
+	}
+	return (0);
 }

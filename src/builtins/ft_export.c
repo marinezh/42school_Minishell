@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:42:01 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/12 10:42:03 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:56:48 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,12 @@ static int	update_var_value(t_data *data, t_env *env_var, char *arg)
 {
 	char	*ptr;
 	char	*dup_str;
-	char	*newkey;
 
 	ptr	= ft_strchr(arg, '=');
 	if (!ptr)
 		return (0);
-	if (!ft_strchr(env_var->key, '='))
-	{
-		newkey = ft_strjoin(env_var->key, "=");
-		if (!newkey)
-			return (1);
-		free(env_var->key);
-		env_var->key = newkey;
-	}
+	if (key_has_equals(env_var) == 1)
+		return (1);
 	if (*(ptr + 1) == '\0')
 		dup_str = ft_strdup("");
 	else
