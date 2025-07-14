@@ -16,12 +16,13 @@ void	free_tokens(t_token *tokens)
 {
 	t_token	*tmp;
 
-	while (tokens != NULL)
+	while (tokens)
 	{
-		tmp = tokens;
-		tokens = tokens->next;
-		free(tmp->value); // Free the value
-		free(tmp);        // Free the token itself
+		tmp = tokens->next;
+		if (tokens->value)
+			free(tokens->value);
+		free(tokens);
+		tokens = tmp;
 	}
 }
 
