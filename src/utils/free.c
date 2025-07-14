@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:39:35 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:43:37 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	free_tokens(t_token *tokens)
@@ -29,6 +41,7 @@ void	free_file_list(t_files *files)
 		free(tmp);
 	}
 }
+
 void	free_command_list(t_command *commands)
 {
 	t_command	*tmp;
@@ -66,6 +79,7 @@ void	free_split_input(char **split)
 	}
 	free(split);
 }
+
 void	free_split_result(char **result, int i)
 {
 	int	k;

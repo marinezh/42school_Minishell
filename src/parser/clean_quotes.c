@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   clean_quotes.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:37:59 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:57:19 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	remove_outer_quotes_from_string(t_qts_proc *p)
 {
 	if (!ft_strchr(p->str, '\'') && !ft_strchr(p->str, '"'))
 		return (1);
-	p->temp = malloc(ft_strlen(p->str) + 1); // CHECKED!!!!
+	p->temp = malloc(ft_strlen(p->str) + 1);
 	if (!p->temp)
 		return (printf("malloc failed for [%s]\n", p->str), (0));
 	p->i = 0;

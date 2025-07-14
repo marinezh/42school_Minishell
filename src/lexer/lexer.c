@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:40:49 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:40:57 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	copy_qtd_seg(char *input, char *output, int *i, int *j)
@@ -39,7 +51,7 @@ static char	*add_space(t_cmd_input *cmd, t_data *data)
 	cmd->i = 0;
 	cmd->j = 0;
 	cmd->len = ft_strlen(cmd->input);
-	cmd->spaced = malloc(cmd->len * 10 + 1); // checked !!!
+	cmd->spaced = malloc(cmd->len * 10 + 1);
 	if (!cmd->spaced)
 		return (NULL);
 	while (cmd->i < cmd->len)

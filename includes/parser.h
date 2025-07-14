@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:26:38 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:34:26 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_H
 # define PARSER_H
 
 # include "minishell.h"
 
+t_command	*parse_input(t_command *commands, t_data *data, char *input);
 t_token		*tokenize_input(char **split_input, t_data *data);
 t_command	*parse_tokens(t_token *token_list, t_data *data);
 int			error_check(t_token *token, t_data *data);

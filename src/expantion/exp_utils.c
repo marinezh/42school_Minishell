@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:48:06 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 01:04:16 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*extract_variable_name(const char *input)
@@ -54,16 +66,16 @@ int	handle_status_var(t_token *token, int status, int *i)
 	parts.status_str = ft_itoa(status);
 	if (!parts.status_str)
 		return (0);
-	parts.prefix = ft_substr(token->value, 0, *i);  //checked
+	parts.prefix = ft_substr(token->value, 0, *i);
 	if (!parts.prefix)
 		return (free_exp_parts(&parts), 0);
-	parts.suffix = ft_strdup(&token->value[*i + 2]); // cheched 
+	parts.suffix = ft_strdup(&token->value[*i + 2]);
 	if (!parts.suffix)
 		return (free_exp_parts(&parts), 0);
-	parts.new_value = ft_strjoin(parts.prefix, parts.status_str); //checked
+	parts.new_value = ft_strjoin(parts.prefix, parts.status_str);
 	if (!parts.new_value)
 		return (free_exp_parts(&parts), 0);
-	parts.final_value = ft_strjoin(parts.new_value, parts.suffix); //checked
+	parts.final_value = ft_strjoin(parts.new_value, parts.suffix);
 	if (!parts.final_value)
 		return (free_exp_parts(&parts), 0);
 	free(token->value);

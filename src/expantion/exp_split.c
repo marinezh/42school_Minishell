@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_split.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:47:24 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:53:58 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static t_token	*create_token_list_from_split(char **split)
@@ -10,10 +22,10 @@ static t_token	*create_token_list_from_split(char **split)
 	i = 0;
 	while (split[i])
 	{
-		tok.new = malloc(sizeof(t_token)); // checked
+		tok.new = malloc(sizeof(t_token));
 		if (!tok.new)
 			return (printf("minishell: memory allocation failed\n"), NULL);
-		tok.new->value = ft_strdup(split[i]); // checked
+		tok.new->value = ft_strdup(split[i]);
 		if (!tok.new->value)
 			return (printf("minishell: memory error\n"), free(tok.new), NULL);
 		tok.new->type = WORD;
@@ -57,13 +69,13 @@ static void	connect_new_tokens(t_token_connection *conn)
 	free(conn->current);
 }
 
-t_token	*pr_spl_tok(t_token **tok, t_token *cur,t_token *prev, t_token *next)
+t_token	*pr_spl_tok(t_token **tok, t_token *cur, t_token *prev, t_token *next)
 {
 	t_token_connection	conn;
 	char				**split;
 	t_token				*last_new;
 
-	split = quote_safe_split(cur->value); // checked
+	split = quote_safe_split(cur->value);
 	if (!split || !split[0])
 	{
 		if (split)
@@ -71,7 +83,7 @@ t_token	*pr_spl_tok(t_token **tok, t_token *cur,t_token *prev, t_token *next)
 		printf("minishell: memory allocation failed\n");
 		return (NULL);
 	}
-	conn.new_tokens = create_token_list_from_split(split); // checked
+	conn.new_tokens = create_token_list_from_split(split);
 	free_split_input(split);
 	if (!conn.new_tokens)
 		return (printf("minishell: memory allocation failed\n"), NULL);
@@ -97,7 +109,7 @@ int	handle_word_splitting(t_token **tokens, t_data *data)
 		word.next = word.cur->next;
 		if (should_split_token(word.cur))
 		{
-			word.last = pr_spl_tok(tokens, word.cur, word.prev,word.next); // checked
+			word.last = pr_spl_tok(tokens, word.cur, word.prev, word.next);
 			if (!word.last)
 			{
 				data->status = ERR_GENERIC;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:27:25 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:30:10 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
@@ -6,14 +18,14 @@ extern int						rl_done;
 
 typedef enum e_token_type
 {
-	NONE,         // 0
-	WORD,         // 1
-	PIPE,         // 2
-	REDIR_OUT,    // 3 >
-	REDIR_APPEND, // 4 >>
-	REDIR_IN,     // 5 <
-	HEREDOC,      // 6 <<
-	FILE_NAME     // 7
+	NONE,
+	WORD,
+	PIPE,
+	REDIR_OUT,
+	REDIR_APPEND,
+	REDIR_IN,
+	HEREDOC,
+	FILE_NAME
 }								t_token_type;
 
 typedef enum e_error_code
@@ -23,11 +35,9 @@ typedef enum e_error_code
 	ERR_PERM_DENIED = 126,
 	ERR_CMD_NOT_FOUND = 127,
 	ERR_INTERUPTED_SIGINT = 130,
-	//ERR_INVALID_EXIT_CODE = 255,
 	ERR_INVALID_EXIT_CODE = 2,
 	ERR_AMB_RED = 1,
-   // ERR_PARSER_MEMORY = 12,		// Memory allocation failure during parsing DOUBLE CHECK
-}						t_error_code;
+}								t_error_code;
 
 typedef struct s_cmd_input
 {
@@ -38,16 +48,14 @@ typedef struct s_cmd_input
 	int							j;
 }								t_cmd_input;
 
-
-
 typedef struct s_qts_proc
 {
-	int i;
-	int j;
-	char	*temp;
-	char	*str;
-	char	in_quote;
-}	t_qts_proc;
+	int							i;
+	int							j;
+	char						*temp;
+	char						*str;
+	char						in_quote;
+}								t_qts_proc;
 
 typedef struct s_token
 {
@@ -58,37 +66,32 @@ typedef struct s_token
 	struct s_token				*next;
 }								t_token;
 
-// osibilities for code improvement
 typedef struct s_files
 {
-	int fd;               // File descriptor for the opened file
-	char *name;           // File name or heredoc delimiter
-	t_token_type type;    // Type of redirection: > >> < <<
-	int to_expand;        // Flag to control variable expansion in heredocs
-	struct s_files *next; // Pointer to the next redirection
+	int							fd;
+	char						*name;
+	t_token_type				type;
+	int							to_expand;
+	struct s_files				*next;
 }								t_files;
 
-// linked list of structs split by pipe
 typedef struct s_command
 {
 	int							index;
 	char						**args;
 	t_files						*in;
 	t_files						*out;
-	t_files						*redirections; // think about creation arr of pointers
+	t_files						*redirections;
 	int							pipe;
 	struct s_command			*next;
 }								t_command;
 
 typedef struct s_cmd_chain
 {
-    t_command   *head;
-    t_command   *tail;
-    int         cmd_index;
-} t_cmd_chain;
-
-// Structure to group expansion parameters
-
+	t_command					*head;
+	t_command					*tail;
+	int							cmd_index;
+}								t_cmd_chain;
 
 // declaration of main exection struct
 typedef struct s_data			t_data;
@@ -96,21 +99,20 @@ typedef struct s_data			t_data;
 typedef int						(*t_bltin)(t_data *, t_command *);
 typedef struct s_exp_params
 {
-    t_token *token;      // Current token
-    int *index;          // Position in the token
-    t_data *data;        // Data structure
-    char *var_name;      // Variable name
-} t_exp_params;
+	t_token						*token;
+	int							*index;
+	t_data						*data;
+	char						*var_name;
+}								t_exp_params;
 
-// Structure to hold expansion state
 typedef struct s_exp_state
 {
-    int in_single;
-    int in_double;
-    int in_dollar_quote;
-    int i;
-} t_exp_state;
-// struct for one environment variable (as linked list)
+	int							in_single;
+	int							in_double;
+	int							in_dollar_quote;
+	int							i;
+}								t_exp_state;
+
 typedef struct s_env
 {
 	char						*key;
@@ -118,7 +120,6 @@ typedef struct s_env
 	struct s_env				*next;
 }								t_env;
 
-// main data struct for execution
 struct							s_data
 {
 	char						*cmd_names[7];
@@ -141,46 +142,38 @@ typedef struct s_exp_parts
 	char						*final_value;
 }								t_exp_parts;
 
-// Structure to hold token connection parameters
 typedef struct s_token_connection
 {
-    t_token **tokens_head;  // Pointer to the head of tokens list
-    t_token *prev;          // Previous token
-    t_token *new_tokens;    // New tokens to connect
-    t_token *next;          // Next token
-    t_token *current;       // Current token to replace
-} t_token_connection;
+	t_token						**tokens_head;
+	t_token						*prev;
+	t_token						*new_tokens;
+	t_token						*next;
+	t_token						*current;
+}								t_token_connection;
 
-// typedef struct s_word_pos
-// {
-//     int start;
-//     int end;
-// } t_word_pos;
-
-// Define a struct for position tracking
 typedef struct s_split_data
 {
 	char						**result;
-	int i;     // Current position in result array
-	int j;     // Current position in input string
-	int start; // Start position of current word
-	int end;   // End position of current word
+	int							i;
+	int							j;
+	int							start;
+	int							end;
 }								t_split_data;
 
 typedef struct s_splitted_tok
 {
-	t_token	*head;
-	t_token	*last;
-	t_token	*new;
-}			t_splitted_tok;
+	t_token						*head;
+	t_token						*last;
+	t_token						*new;
+}								t_splitted_tok;
 
 typedef struct s_splitted_word
 {
-	t_token	*cur;
-	t_token	*prev;
-	t_token	*next;
-	t_token *last;
-}			t_splitted_word;
+	t_token						*cur;
+	t_token						*prev;
+	t_token						*next;
+	t_token						*last;
+}								t_splitted_word;
 
 typedef struct s_pipe
 {
@@ -191,5 +184,3 @@ typedef struct s_pipe
 }								t_pipe;
 
 #endif
-
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_heredoc.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:47:13 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:53:24 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	process_token_variables(t_token *tok, t_data *data)
@@ -47,7 +59,7 @@ char	*expand_heredoc_line(char *input, t_data *data)
 {
 	t_token	temp;
 
-	temp.value = ft_strdup(input); //checked
+	temp.value = ft_strdup(input);
 	if (!temp.value)
 		return (NULL);
 	temp.type = WORD;

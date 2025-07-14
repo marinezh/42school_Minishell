@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_handlers.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:38:20 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 01:06:53 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**realloc_args(char **args, int count, char *value)
@@ -6,7 +18,7 @@ char	**realloc_args(char **args, int count, char *value)
 	char	**new_args;
 
 	i = 0;
-	new_args = malloc(sizeof(char *) * (count + 2)); // checked
+	new_args = malloc(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (NULL);
 	while (i < count)
@@ -55,7 +67,6 @@ int	handle_word_token(t_command *cur, t_token **token_list)
 	while (cur->args && cur->args[argc])
 		argc++;
 	cur->args = realloc_args(cur->args, argc, (*token_list)->value);
-		// Checked
 	if (!cur->args)
 		return (0);
 	*token_list = (*token_list)->next;

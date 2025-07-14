@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_handlers.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:46:43 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:53:11 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	replace_variable(t_token *token, int i, int var_len, const char *value)
@@ -7,16 +19,16 @@ int	replace_variable(t_token *token, int i, int var_len, const char *value)
 	char	*new_value;
 	char	*final_value;
 
-	prefix = ft_substr(token->value, 0, i); // checked
+	prefix = ft_substr(token->value, 0, i);
 	if (!prefix)
 		return (0);
-	new_value = ft_strjoin(prefix, value); //checked
+	new_value = ft_strjoin(prefix, value);
 	if (!new_value)
 		return (free_strings(prefix, NULL), 0);
-	suffix = ft_strdup(&token->value[i + var_len + 1]); // checked
+	suffix = ft_strdup(&token->value[i + var_len + 1]);
 	if (!suffix)
 		return (free_strings(prefix, new_value, NULL), 0);
-	final_value = ft_strjoin(new_value, suffix);  //checked
+	final_value = ft_strjoin(new_value, suffix);
 	if (!final_value)
 		return (free_strings(prefix, suffix, new_value, NULL), 0);
 	free(token->value);
@@ -31,10 +43,10 @@ int	replace_undefined_variable(t_token *token, int i, int var_len)
 	char	*suffix;
 	char	*final_value;
 
-	prefix = ft_substr(token->value, 0, i); // checked
+	prefix = ft_substr(token->value, 0, i);
 	if (!prefix)
 		return (0);
-	suffix = ft_strdup(&token->value[i + var_len + 1]); 
+	suffix = ft_strdup(&token->value[i + var_len + 1]);
 	if (!suffix)
 		return (free_strings(prefix, NULL), 0);
 	final_value = ft_strjoin(prefix, suffix);

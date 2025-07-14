@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   split.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/15 00:40:12 by mzhivoto          #+#    #+#             */
+/*   Updated: 2025/07/15 00:40:39 by mzhivoto         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <minishell.h>
 
 static int	process_quote_segment(char *str, int *j, int *in_quote,
@@ -57,7 +69,7 @@ char	**quote_safe_split(char *str)
 	char			**res;
 	t_split_data	pos;
 
-	res = (char **)malloc(sizeof(char *) * (word_count(str) + 1)); //checked
+	res = (char **)malloc(sizeof(char *) * (word_count(str) + 1));
 	if (!res)
 		return (NULL);
 	pos.i = 0;
