@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//declared JUST for MacOS
+// declared JUST for MacOS
 extern rl_hook_func_t	*rl_event_hook;
 
 int	read_prompt(t_cmd_input *cmd, t_data *data)
@@ -9,7 +9,7 @@ int	read_prompt(t_cmd_input *cmd, t_data *data)
 	if (g_sig_received)
 	{
 		g_sig_received = 0;
-        data->status = ERR_INTERUPTED_SIGINT;
+		data->status = ERR_INTERUPTED_SIGINT;
 		if (cmd->input)
 		{
 			free(cmd->input);
@@ -85,7 +85,7 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 	if (!split_input)
 		return (NULL);
 	tokens = tokenize_input(split_input, data);
-	//print_tokens(tokens);
+	// print_tokens(tokens);
 	free_split_input(split_input);
 	if (!tokens)
 		return (NULL);
@@ -103,8 +103,8 @@ t_command	*parse_input(t_command *commands, t_data *data, char *input)
 		return (free_tokens(tokens), NULL);
 	if (!remove_quotes_from_command_args(commands, data))
 		return (free_tokens(tokens), free_command_list(commands), NULL);
-	//printf("/////////////////////////////////\n");
-	//print_commands(commands);
+	// printf("/////////////////////////////////\n");
+	// print_commands(commands);
 	free_tokens(tokens);
 	return (commands);
 }
@@ -145,12 +145,12 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	if (init_data(&data, env) != 0)
 	{
-		ft_putstr_fd("Error initializing shell environment\n", 2);
+		cleanup_data(&data);
 		return (1);
 	}
 	set_prompt_signals();
 	rl_event_hook = rl_signal_handler;
 	shell_loop(&data, &commands);
-    cleanup_data(&data);
+	cleanup_data(&data);
 	return (data.status);
 }
