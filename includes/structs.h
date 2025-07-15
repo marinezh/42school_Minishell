@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 00:27:25 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/07/15 10:35:09 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:53:05 by mzhivoto         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef enum e_error_code
 	ERR_CMD_NOT_FOUND = 127,
 	ERR_INTERUPTED_SIGINT = 130,
 	ERR_INVALID_EXIT_CODE = 2,
-	ERR_AMB_RED = 1,
 }								t_error_code;
 
 typedef struct s_cmd_input
