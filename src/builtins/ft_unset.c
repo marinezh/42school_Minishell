@@ -6,7 +6,7 @@
 /*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 10:42:35 by ikozhina          #+#    #+#             */
-/*   Updated: 2025/07/14 14:36:51 by ikozhina         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:11:34 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,6 @@ static void	delete_env_var(t_data *data, char *name)
 	data->envp_f = 1;
 }
 
-static int	is_name_valid(char *name)
-{
-	int	i;
-
-	if (!(ft_isalpha(name[0]) || name[0] == '_'))
-		return (0);
-	i = 1;
-	while (name[i])
-	{
-		if (name[i] == '=')
-			return (0);
-		if (!(ft_isalpha(name[i]) || ft_isdigit(name[i]) || name[i] == '_'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 int	ft_unset(t_data *data, t_command *cmd)
 {
 	int	i;
@@ -75,13 +57,7 @@ int	ft_unset(t_data *data, t_command *cmd)
 	}
 	while (cmd->args[i])
 	{
-		if (!is_name_valid(cmd->args[i]))
-		{
-			print_error("unset: `", cmd->args[i], MSG_INVALID_NAME);
-			exit_status = ERR_GENERIC;
-		}
-		else
-			delete_env_var(data, cmd->args[i]);
+		delete_env_var(data, cmd->args[i]);
 		i++;
 	}
 	return (exit_status);
