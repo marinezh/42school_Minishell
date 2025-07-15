@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzhivoto <mzhivoto@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ikozhina <ikozhina@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 00:27:25 by mzhivoto          #+#    #+#             */
-/*   Updated: 2025/07/15 00:30:10 by mzhivoto         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:35:09 by ikozhina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,7 @@ typedef struct s_cmd_chain
 	int							cmd_index;
 }								t_cmd_chain;
 
-// declaration of main exection struct
 typedef struct s_data			t_data;
-// function pointer type declaration
 typedef int						(*t_bltin)(t_data *, t_command *);
 typedef struct s_exp_params
 {
