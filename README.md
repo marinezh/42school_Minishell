@@ -69,7 +69,7 @@ username is at /home/username
 ## Installation
 
 ```bash
-git clone https://github.com/marinezh/42school_Minishell.git
+git clone https://github.com/marinezh/42school_Minishell.git minishell
 cd minishell
 make
 ```
